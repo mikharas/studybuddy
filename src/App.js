@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   EventDashboard,
   EventsExplorer,
@@ -9,13 +9,17 @@ import {
 import './App.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <div className="App">
-      <EventsExplorer />
-      <EventDashboard />
-      <HomePage />
-      <Login />
-      <StudentDashboard />
+      {isLoggedIn ? (
+        <>
+          <HomePage />
+          <EventsExplorer />
+        </>
+      ) : (
+        <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      )}
     </div>
   );
 }

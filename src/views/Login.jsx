@@ -48,6 +48,7 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
     } else if (user.password !== password) {
       alert('incorrect password');
     } else {
+      setIsLoggedIn(true);
       alert('successfully logged in!');
     }
   };

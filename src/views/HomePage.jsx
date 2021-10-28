@@ -1,6 +1,13 @@
 import React from 'react';
-import './styles/homePage.css';
+import { css } from '@emotion/css';
 
-const HomePage = () => <div>HomePage</div>;
+const HomePage = () => {
+  const hi = '';
+  return (
+    <div>
+      <h1>Find your study buddy today!</h1>
+    </div>
+  );
+};
 
 export default HomePage;
