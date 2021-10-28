@@ -17,8 +17,11 @@
   "plugins": ["react", "react-hooks", "jsx-a11y", "prettier"],
   "extends": ["plugin:react/recommended", "airbnb", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "no-param-reassign": 0,
+    "no-unused-vars": 0,
+    "prettier/prettier": 1,
     "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": 0,
     "react/prop-types": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
