@@ -12,7 +12,7 @@ const InputBox = ({ label, value, handleChange }) => (
   />
 );
 
-const Login = ({ isLoggedIn }) => {
+const Login = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [users, setUsers] = useState([
     {
@@ -21,9 +21,36 @@ const Login = ({ isLoggedIn }) => {
     },
   ]);
   const [input, setInput] = useState([
-    { name: 'Username', value: 'sds' },
-    { name: 'Password', value: 'asd' },
+    { name: 'Username', value: '' },
+    { name: 'Password', value: '' },
   ]);
+
+  const addUser = (username, password) => {
+    const userExists = users.find((user) => user.username === username);
+    if (userExists) {
+      alert('Username taken');
+    } else {
+      setUsers([
+        ...users,
+        {
+          username,
+          password,
+        },
+      ]);
+      alert('Successfully created user, please log in!');
+    }
+  };
+
+  const authenticateUser = (username, password) => {
+    const user = users.find((u) => u.username === username);
+    if (!user) {
+      alert('no user');
+    } else if (user.password !== password) {
+      alert('incorrect password');
+    } else {
+      alert('successfully logged in!');
+    }
+  };
 
   const handleChange = (e, name) =>
     setInput(
@@ -35,19 +62,14 @@ const Login = ({ isLoggedIn }) => {
       }),
     );
 
-  const isValidUser = () => {
+  const handleFormSubmit = () => {
     const usernameInput = input.find((item) => item.name === 'Username');
     const passwordInput = input.find((item) => item.name === 'Password');
-    const user = users.find((u) => u.username === usernameInput.value);
-    if (!user) return false;
-    return user.password === passwordInput.value;
-  };
 
-  const authenticateUser = () => {
-    if (isValidUser()) {
-      console.log('valid!');
+    if (isLoginMode) {
+      authenticateUser(usernameInput.value, passwordInput.value);
     } else {
-      console.log('invalid!');
+      addUser(usernameInput.value, passwordInput.value);
     }
   };
 
@@ -99,7 +121,7 @@ const Login = ({ isLoggedIn }) => {
                 box-shadow: none;
               `}
               variant="contained"
-              onClick={authenticateUser}
+              onClick={handleFormSubmit}
             >
               {isLoginMode ? 'Login' : 'Signup'}
             </Button>
