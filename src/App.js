@@ -1,34 +1,31 @@
 import React, { useState } from 'react';
-import AuthContext from './authContext';
+import { connect } from 'react-redux';
 import {
   EventDashboard,
   EventsExplorer,
   HomePage,
-  Login,
+  Auth,
   StudentDashboard,
 } from './views';
 import './App.css';
 
-function App() {
-  const [auth, setAuth] = useState({
-    userId: null,
-    isAdmin: false,
-  });
-
+function App({ isLoggedIn }) {
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
-      <div className="App">
-        {auth.userId ? (
-          <>
-            <HomePage />
-            <EventsExplorer />
-          </>
-        ) : (
-          <Login />
-        )}
-      </div>
-    </AuthContext.Provider>
+    <div className="App">
+      {isLoggedIn ? (
+        <>
+          <HomePage />
+          <EventsExplorer />
+        </>
+      ) : (
+        <Auth />
+      )}
+    </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.auth.isLoggedIn,
+});
+
+export default connect(mapStateToProps)(App);
