@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, TextField } from '@mui/material';
 import { css } from '@emotion/css';
+import authContext from '../authContext';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -12,8 +13,9 @@ const InputBox = ({ label, value, handleChange }) => (
   />
 );
 
-const Login = ({ isLoggedIn, setIsLoggedIn }) => {
+const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const { setAuth } = useContext(authContext);
   const [users, setUsers] = useState([
     {
       username: 'sarah',
@@ -44,12 +46,15 @@ const Login = ({ isLoggedIn, setIsLoggedIn }) => {
   const authenticateUser = (username, password) => {
     const user = users.find((u) => u.username === username);
     if (!user) {
-      alert('no user');
+      alert('no such user');
     } else if (user.password !== password) {
       alert('incorrect password');
     } else {
-      setIsLoggedIn(true);
       alert('successfully logged in!');
+      setAuth({
+        userId: username,
+        isAdmin: false,
+      });
     }
   };
 

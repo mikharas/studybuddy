@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AuthContext from './authContext';
 import {
   EventDashboard,
   EventsExplorer,
@@ -9,18 +10,24 @@ import {
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [auth, setAuth] = useState({
+    userId: null,
+    isAdmin: false,
+  });
+
   return (
-    <div className="App">
-      {isLoggedIn ? (
-        <>
-          <HomePage />
-          <EventsExplorer />
-        </>
-      ) : (
-        <Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      )}
-    </div>
+    <AuthContext.Provider value={{ auth, setAuth }}>
+      <div className="App">
+        {auth.userId ? (
+          <>
+            <HomePage />
+            <EventsExplorer />
+          </>
+        ) : (
+          <Login />
+        )}
+      </div>
+    </AuthContext.Provider>
   );
 }
 
