@@ -1,0 +1,121 @@
+li {
+    list-style-type: none;
+}
+.profilePage {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: white;
+    border: 10px solid rgb(59, 58, 58);
+    border-radius: 0.5%;
+}
+
+.bottomContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    align-content: flex-start;
+    justify-content: space-evenly;
+}
+
+.user {
+    width: 400px;
+    height: 40vh;
+    align-self: center;
+}
+
+.avatar {
+    margin: 20px;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+}
+
+.userInfo {
+    font-size: 15px;
+    text-align: left;
+    margin-left: 20px;
+}
+
+.editIcon {
+    transform: scale(0.2);
+}
+
+.listHeader {
+    text-align: left;
+}
+
+.eventsContainer {
+    width: 600px;
+}
+
+.userEventList {
+    bottom: 10px;
+    width: 550px;
+    max-height: 500px;
+    border-top: 2px solid lightgrey;
+    
+}
+
+.userEvent {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 135px;
+    padding: 5px;
+    border-bottom: 2px solid lightgrey;
+}
+
+
+
+.eventThumbnailContainer {
+    width: 160px;
+}
+
+.eventThumbnail {
+    width: 150px;
+    height: 85px;
+    border-radius: 10%;
+    margin: 5px;
+}
+
+.eventContent {
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+}
+
+.eventDate {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-left: 5px;
+}
+
+.eventText {
+    margin-bottom: 3px;
+    margin-top: 3px;
+    margin-left: 5px;
+
+}
+
+.eventAttendees {
+    margin-left: 5px;
+}
+
+.removeButton {
+    margin-left: 90px;
+    width: 10px;
+    height: 10px;
+}
+
+.following {
+    width: 600px;
+    padding-left: 100px;
+
+}
+
+.grey {
+    color: grey;
+}
