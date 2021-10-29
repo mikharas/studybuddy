@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AuthContext from './authContext';
+import AuthContext from './contexts/authContext';
 import {
   EventDashboard,
   EventsExplorer,

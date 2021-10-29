@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button } from '@mui/material';
-import authContext from '../authContext';
+import authContext from '../contexts/authContext';
 
 const HomePage = () => {
   const hi = '';

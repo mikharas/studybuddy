@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
-import authContext from '../authContext';
+import authContext from '../contexts/authContext';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -20,14 +20,16 @@ const Login = () => {
     {
       username: 'sarah',
       password: 'sarah',
+      isAdmin: true,
     },
   ]);
-  const [input, setInput] = useState([
-    { name: 'Username', value: '' },
-    { name: 'Password', value: '' },
-  ]);
+  const [input, setInput] = useState({
+    username: '',
+    password: '',
+    isAdmin: false,
+  });
 
-  const addUser = (username, password) => {
+  const addUser = (username, password, isAdmin) => {
     const userExists = users.find((user) => user.username === username);
     if (userExists) {
       alert('Username taken');
@@ -37,6 +39,7 @@ const Login = () => {
         {
           username,
           password,
+          isAdmin,
         },
       ]);
       alert('Successfully created user, please log in!');
@@ -52,30 +55,29 @@ const Login = () => {
     } else {
       alert('successfully logged in!');
       setAuth({
-        userId: username,
-        isAdmin: false,
+        userId: user.username,
+        isAdmin: user.isAdmin,
       });
     }
   };
 
-  const handleChange = (e, name) =>
-    setInput(
-      input.map((item) => {
-        if (item.name === name) {
-          item.value = e.target.value;
-        }
-        return item;
-      }),
-    );
+  const changeUsernameInput = (e) =>
+    setInput({ ...input, username: e.target.value });
+
+  const changePasswordInput = (e) =>
+    setInput({ ...input, password: e.target.value });
+
+  const toggleAdminInput = () => {
+    setInput({ ...input, isAdmin: !input.isAdmin });
+  };
 
   const handleFormSubmit = () => {
-    const usernameInput = input.find((item) => item.name === 'Username');
-    const passwordInput = input.find((item) => item.name === 'Password');
+    const { username, password, admin } = input;
 
     if (isLoginMode) {
-      authenticateUser(usernameInput.value, passwordInput.value);
+      authenticateUser(username, password);
     } else {
-      addUser(usernameInput.value, passwordInput.value);
+      addUser(username, password, admin);
     }
   };
 
@@ -107,13 +109,24 @@ const Login = () => {
             flex-direction: column;
           `}
         >
-          {input.map((item) => (
-            <InputBox
-              label={item.name}
-              value={item.value}
-              handleChange={handleChange}
+          <InputBox
+            label="Username"
+            value={input.username}
+            handleChange={changeUsernameInput}
+          />
+          <InputBox
+            label="Password"
+            value={input.password}
+            handleChange={changePasswordInput}
+          />
+          {!isLoginMode && (
+            <FormControlLabel
+              control={
+                <Checkbox value={input.isAdmin} onClick={toggleAdminInput} />
+              }
+              label="Admin"
             />
-          ))}
+          )}
           <div
             className={css`
               display: flex;
