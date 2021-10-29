@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
-import authContext from '../contexts/authContext';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -13,53 +12,13 @@ const InputBox = ({ label, value, handleChange }) => (
   />
 );
 
-const Login = () => {
+const Auth = ({ login, register }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const { setAuth } = useContext(authContext);
-  const [users, setUsers] = useState([
-    {
-      username: 'sarah',
-      password: 'sarah',
-      isAdmin: true,
-    },
-  ]);
   const [input, setInput] = useState({
     username: '',
     password: '',
     isAdmin: false,
   });
-
-  const addUser = (username, password, isAdmin) => {
-    const userExists = users.find((user) => user.username === username);
-    if (userExists) {
-      alert('Username taken');
-    } else {
-      setUsers([
-        ...users,
-        {
-          username,
-          password,
-          isAdmin,
-        },
-      ]);
-      alert('Successfully created user, please log in!');
-    }
-  };
-
-  const authenticateUser = (username, password) => {
-    const user = users.find((u) => u.username === username);
-    if (!user) {
-      alert('no such user');
-    } else if (user.password !== password) {
-      alert('incorrect password');
-    } else {
-      alert('successfully logged in!');
-      setAuth({
-        userId: user.username,
-        isAdmin: user.isAdmin,
-      });
-    }
-  };
 
   const changeUsernameInput = (e) =>
     setInput({ ...input, username: e.target.value });
@@ -72,12 +31,11 @@ const Login = () => {
   };
 
   const handleFormSubmit = () => {
-    const { username, password, admin } = input;
-
+    const { username, password, isAdmin } = input;
     if (isLoginMode) {
-      authenticateUser(username, password);
+      login(username, password);
     } else {
-      addUser(username, password, admin);
+      register(username, password, isAdmin);
     }
   };
 
@@ -158,4 +116,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;

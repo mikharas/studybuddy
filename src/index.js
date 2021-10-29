@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import './index.css';
 import { OverrideMaterialUICss } from 'override-material-ui-css';
 import App from './App';
+import store from './store';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <OverrideMaterialUICss>
       <App />
     </OverrideMaterialUICss>
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById('root'),
 );
