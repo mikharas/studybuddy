@@ -1,9 +1,13 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const initialData = [
   {
+    id: 1,
     title: 'Admin gathering!',
     description: 'A gathering for admins',
     host: 'admin',
     location: 'bahen',
+    maxSpots: 5,
     date: 1,
     attendees: [],
   },
@@ -15,6 +19,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       return [
         ...state,
         {
+          id: uuidv4(),
           title: payload.title,
           description: payload.description,
           host: payload.title,
@@ -26,7 +31,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       ];
     case 'ADD_ATTENDEE':
       return state.map((e) => {
-        if (e.title === payload.title) {
+        if (e.id === payload.eventID) {
           const newAttendees = e.attendees.slice();
           newAttendees.push(payload.attendee);
           return {
@@ -38,7 +43,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       });
     case 'REMOVE_ATTENDEE':
       return state.map((e) => {
-        if (e.title === payload.title) {
+        if (e.id === payload.eventID) {
           const newAttendees = e.attendees.filter(
             (a) => a !== payload.attendee,
           );

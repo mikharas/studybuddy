@@ -1,6 +1,6 @@
 import HomePage from './HomePage/index';
 import EventsExplorer from './EventsExplorer';
-import EventDashboard from './EventDashboard';
+import EventDashboard from './EventDashboard/index';
 import Auth from './Auth/index';
 import StudentDashboard from './StudentDashboard';
 

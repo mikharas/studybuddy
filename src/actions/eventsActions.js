@@ -19,21 +19,21 @@ export const createEvent =
     });
   };
 
-export const addAttendee = (title, attendee) => (dispatch, getState) => {
+export const addAttendee = (eventID, attendee) => (dispatch, getState) => {
   dispatch({
     type: 'ADD_ATTENDEE',
     payload: {
-      title,
+      eventID,
       attendee,
     },
   });
 };
 
-export const removeAttendee = (title, attendee) => (dispatch, getState) => {
+export const removeAttendee = (eventID, attendee) => (dispatch, getState) => {
   dispatch({
     type: 'REMOVE_ATTENDEE',
     payload: {
-      title,
+      eventID,
       attendee,
     },
   });
