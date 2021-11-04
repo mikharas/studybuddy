@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
 
@@ -12,7 +12,7 @@ const InputBox = ({ label, value, handleChange }) => (
   />
 );
 
-const Auth = ({ login, register }) => {
+const Auth = ({ isLoggedIn, login, register }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [input, setInput] = useState({
     username: '',

@@ -25,8 +25,10 @@ function App({ isLoggedIn }) {
                 <Route exact path="/" component={() => <HomePage />} />
                 <Route
                   exact
-                  path="/EventDashboard"
-                  component={() => <EventDashboard />}
+                  path="/EventDashboard/:eventID"
+                  render={({ match }) => (
+                    <EventDashboard eventID={match.params.eventID} />
+                  )}
                 />
                 <Route
                   exact

@@ -2,7 +2,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 const initialData = [
   {
-    id: 1,
+    id: '1',
+    title: 'Admin gathering!',
+    description: 'A gathering for admins',
+    host: 'admin',
+    location: 'bahen',
+    maxSpots: 5,
+    date: 1,
+    attendees: [],
+  },
+  {
+    id: '2',
+    title: 'Event 2',
+    description: 'Study with me',
+    host: 'user',
+    location: 'campus',
+    maxSpots: 5,
+    date: 2,
+    attendees: [],
+  },
+  {
+    id: '3',
     title: 'Admin gathering!',
     description: 'A gathering for admins',
     host: 'admin',

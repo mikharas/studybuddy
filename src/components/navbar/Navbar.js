@@ -60,16 +60,6 @@ function Navbar({ logout }) {
                 <Typography variant="h6">Profile</Typography>
               </Link>
             </li>
-            <li className="nav-item">
-              <Link
-                to="/eventdashboard"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <Typography variant="h6">Events</Typography>
-              </Link>
-            </li>
-
             <li>
               <Link to="/" className="nav-links-mobile" onClick={handleLogout}>
                 Logout

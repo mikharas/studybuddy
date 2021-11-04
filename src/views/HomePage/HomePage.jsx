@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/css';
 import { Button } from '@mui/material';
+import EventsExplorer from '../EventsExplorer';
 
 const HomePage = ({ logout, user }) => {
   const handleLogout = () => logout();
@@ -16,7 +17,7 @@ const HomePage = ({ logout, user }) => {
           ADMIN
         </h2>
       )}
-      <Button onClick={handleLogout}>Logout</Button>
+      <EventsExplorer />
     </div>
   );
 };
