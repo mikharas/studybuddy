@@ -1,8 +1,11 @@
 const initialUsersData = [
   {
+    userSchool: 'University of Toronto',
     username: 'admin',
+    fullName: 'Johnny',
     password: 'admin',
     isAdmin: true,
+    following: [],
   },
 ];
 
@@ -12,9 +15,12 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
       return [
         ...state,
         {
+          userSchool: 'University of Toronto',
           username: payload.username,
+          fullName: payload.username,
           password: payload.password,
           isAdmin: payload.isAdmin,
+          following: [],
         },
       ];
     default:

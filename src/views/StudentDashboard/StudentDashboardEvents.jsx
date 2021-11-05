@@ -1,12 +1,12 @@
 import React from 'react';
-import './styles/studentDashboard.css';
+import '../styles/studentDashboard.css';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class EventsList extends React.Component {
   render() {
-    const { events, removeEvent } = this.props;
+    const { events, removeAttendee } = this.props;
     return (
       <div className="eventsContainer">
         <h3 className="listHeader"> Attending Events: </h3>
@@ -38,7 +38,7 @@ class EventsList extends React.Component {
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={() => removeEvent(userEvent)}
+                  onClick={() => removeAttendee(userEvent.id)}
                 >
                   <DeleteIcon />
                 </IconButton>
