@@ -37,8 +37,10 @@ function App({ isLoggedIn }) {
               />
               <Route
                 exact
-                path="/Profile"
-                component={() => <StudentDashboard />}
+                path="/profile/:userID"
+                render={({ match }) => (
+                  <StudentDashboard userID={match.params.userID} />
+                )}
               />
             </Switch>
           </Router>

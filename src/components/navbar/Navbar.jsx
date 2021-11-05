@@ -22,7 +22,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function Navbar({ logout, isLoggedIn }) {
+function Navbar({ logout, isLoggedIn, user }) {
   const classes = useStyle();
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
@@ -75,7 +75,7 @@ function Navbar({ logout, isLoggedIn }) {
             <>
               <div className={classes.profileIconButton}>
                 <IconButton>
-                  <Link to="/profile">
+                  <Link to={`/profile/${user.username}`}>
                     <PersonIcon
                       fontSize="large"
                       className={classes.profileIcon}

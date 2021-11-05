@@ -2,10 +2,18 @@ const initialUsersData = [
   {
     userSchool: 'University of Toronto',
     username: 'admin',
-    fullName: 'Johnny',
+    fullName: 'Admin',
     password: 'admin',
     isAdmin: true,
-    following: [],
+    following: ['sarah'],
+  },
+  {
+    userSchool: 'University of Toronto',
+    username: 'sarah',
+    fullName: 'Sarah Kim',
+    password: 'sarah',
+    isAdmin: false,
+    following: ['admin'],
   },
 ];
 

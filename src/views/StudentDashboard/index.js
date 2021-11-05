@@ -3,10 +3,13 @@ import { getUserEvents, getUserData } from '../../actions/usersActions';
 import { removeAttendee } from '../../actions/eventsActions';
 import StudentDashboard from './StudentDashboard';
 
-const mapStateToProps = (state) => ({
-  isLoggedIn: state.auth.isLoggedIn,
-  user: state.auth.user,
-});
+const mapStateToProps = (state, ownProps) => {
+  const { isLoggedIn } = state.auth;
+  return {
+    isLoggedIn,
+    editable: isLoggedIn && state.auth.user.username === ownProps.userID,
+  };
+};
 
 export default connect(mapStateToProps, {
   getUserEvents,

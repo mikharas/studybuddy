@@ -1,15 +1,18 @@
 /* eslint-disable max-classes-per-file */
 import React, { useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import Divider from '@mui/material/Divider';
+import {
+  CardActionArea,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Divider,
+} from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import IconButton from '@mui/material/IconButton';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import profilePic from '../../images/default-avatar.png';
 import robarts from '../../images/robarts.jpg';
 import EventsList from './StudentDashboardEvents';
@@ -35,10 +38,11 @@ const userFollowingList = [
 
 const StudentDashboard = ({
   isLoggedIn,
-  user,
+  userID,
   getUserEvents,
   getUserData,
   removeAttendee,
+  editable,
 }) => {
   const [userData, setUserData] = useState({
     fullName: '',
@@ -49,8 +53,8 @@ const StudentDashboard = ({
   });
   const refreshUserData = () => {
     if (isLoggedIn) {
-      const userEvents = getUserEvents(user.username);
-      const userDataS = getUserData(user.username);
+      const userEvents = getUserEvents(userID);
+      const userDataS = getUserData(userID);
       setUserData({
         ...userDataS,
         userEvents,
@@ -59,16 +63,16 @@ const StudentDashboard = ({
   };
 
   const handleRemoveAttendee = (eventID) => {
-    removeAttendee(eventID, user.username);
+    removeAttendee(eventID, userID);
     refreshUserData();
   };
 
   useEffect(() => {
     refreshUserData();
-  }, []);
+  }, [userID]);
 
   if (!isLoggedIn) {
-    alert("You aren't logged in!");
+    alert('You must log in to perform this action!');
     return <Redirect to="/" />;
   }
   return (
@@ -81,21 +85,27 @@ const StudentDashboard = ({
           </li>
           <li>
             <b>Username:</b> {userData.username}
-            <IconButton aria-label="Edit username">
-              <EditTwoToneIcon style={{ fontSize: 'small' }} />
-            </IconButton>
+            {editable && (
+              <IconButton aria-label="Edit username">
+                <EditTwoToneIcon style={{ fontSize: 'small' }} />
+              </IconButton>
+            )}
           </li>
           <li>
             <b>School:</b> {userData.userSchool}
-            <IconButton aria-label="Edit username">
-              <EditTwoToneIcon style={{ fontSize: 'small' }} />
-            </IconButton>
+            {editable && (
+              <IconButton aria-label="Edit username">
+                <EditTwoToneIcon style={{ fontSize: 'small' }} />
+              </IconButton>
+            )}
           </li>
           <li>
             <b>Contacts:</b> None
-            <IconButton aria-label="Edit username">
-              <EditTwoToneIcon style={{ fontSize: 'small' }} />
-            </IconButton>
+            {editable && (
+              <IconButton aria-label="Edit username">
+                <EditTwoToneIcon style={{ fontSize: 'small' }} />
+              </IconButton>
+            )}
           </li>
         </ul>
       </div>
@@ -103,21 +113,30 @@ const StudentDashboard = ({
         <EventsList
           events={userData.userEvents}
           removeAttendee={handleRemoveAttendee}
+          editable={editable}
         />
-        <FollowingList followingList={userData.following} />
+        <FollowingList
+          followingList={userData.following}
+          refreshUserData={refreshUserData}
+        />
       </div>
     </div>
   );
 };
 
 // eslint-disable-next-line react/prefer-stateless-function
-class FollowingList extends React.Component {
-  render() {
-    const { followingList } = this.props;
-    return (
-      <div className="following">
-        <h3 className="listHeader">Following:</h3>
-        {followingList.map((user) => (
+const FollowingList = ({ followingList, refreshUserData }) => {
+  const history = useHistory();
+  return (
+    <div className="following">
+      <h3 className="listHeader">Following:</h3>
+      {followingList.map((user) => (
+        <CardActionArea
+          onClick={() => {
+            refreshUserData();
+            history.push(`/profile/${user}`);
+          }}
+        >
           <List
             sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
           >
@@ -125,17 +144,14 @@ class FollowingList extends React.Component {
               <ListItemAvatar>
                 <Avatar alt="avatar" src={user.avatar} />
               </ListItemAvatar>
-              <ListItemText
-                primary={user.fullName}
-                secondary={user.userSchool}
-              />
+              <ListItemText primary={user} secondary={user.userSchool} />
             </ListItem>
             <Divider variant="inset" component="li" />
           </List>
-        ))}
-      </div>
-    );
-  }
-}
+        </CardActionArea>
+      ))}
+    </div>
+  );
+};
 
 export default StudentDashboard;
