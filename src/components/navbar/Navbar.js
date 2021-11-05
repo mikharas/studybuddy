@@ -53,6 +53,15 @@ function Navbar({ logout }) {
             </li>
             <li className="nav-item">
               <Link
+                to="/events-explorer"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                <Typography variant="h6">Events Explorer</Typography>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
                 to="/profile"
                 className="nav-links"
                 onClick={closeMobileMenu}

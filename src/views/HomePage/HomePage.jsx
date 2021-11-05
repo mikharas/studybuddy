@@ -17,7 +17,6 @@ const HomePage = ({ logout, user }) => {
           ADMIN
         </h2>
       )}
-      <EventsExplorer />
     </div>
   );
 };

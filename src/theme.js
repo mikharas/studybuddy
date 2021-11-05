@@ -87,8 +87,7 @@ theme.typography.h6 = {
 theme.typography.body1 = {
   ...theme.typography.body1,
   fontFamily: 'Avenir Roman',
-  fontSize: theme.spacing(2.3),
-  lineHeight: theme.spacing(0.25),
+  fontSize: theme.spacing(2),
   [theme.breakpoints.down(`sm`)]: {
     fontSize: theme.spacing(2.1),
   },

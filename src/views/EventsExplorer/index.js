@@ -7,7 +7,4 @@ const mapStateToProps = (state) => ({
   events: state.events,
 });
 
-export default connect(mapStateToProps, {
-  addAttendee,
-  removeAttendee,
-})(EventsExplorer);
+export default connect(mapStateToProps, {})(EventsExplorer);
