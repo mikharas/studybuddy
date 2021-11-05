@@ -8,7 +8,7 @@ const initialData = [
     host: 'admin',
     location: 'bahen',
     maxSpots: 5,
-    date: 1,
+    date: 'OCT 5 @8PM',
     attendees: [],
   },
   {
@@ -18,7 +18,7 @@ const initialData = [
     host: 'user',
     location: 'campus',
     maxSpots: 5,
-    date: 2,
+    date: 'OCT 15 @5AM',
     attendees: [],
   },
   {
@@ -28,7 +28,7 @@ const initialData = [
     host: 'admin',
     location: 'bahen',
     maxSpots: 5,
-    date: 1,
+    date: 'OCT 10 @9PM',
     attendees: [],
   },
 ];

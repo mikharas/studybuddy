@@ -16,6 +16,7 @@ import hostIcon from './uoft.png';
 const EventDashboard = ({
   eventID,
   user,
+  isLoggedIn,
   getEvent,
   addAttendee,
   removeAttendee,
@@ -34,13 +35,17 @@ const EventDashboard = ({
   const refreshEvent = () => {
     const refreshedEvent = getEvent(eventID);
     setEvent({ ...refreshedEvent });
-    setIsAttending(refreshedEvent.attendees.includes(user.username));
+    if (isLoggedIn) {
+      setIsAttending(refreshedEvent.attendees.includes(user.username));
+    }
   };
 
   useEffect(() => refreshEvent(), []);
 
   const toggleAttending = () => {
-    if (!isAttending) {
+    if (!isLoggedIn) {
+      alert('You must log in to perform this action.');
+    } else if (!isAttending) {
       addAttendee(eventID, user.username);
     } else {
       removeAttendee(eventID, user.username);

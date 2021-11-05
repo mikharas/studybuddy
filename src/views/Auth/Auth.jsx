@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
+import { Redirect } from 'react-router-dom';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -38,6 +39,10 @@ const Auth = ({ isLoggedIn, login, register }) => {
       register(username, password, isAdmin);
     }
   };
+
+  if (isLoggedIn) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div

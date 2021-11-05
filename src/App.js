@@ -18,33 +18,30 @@ function App({ isLoggedIn }) {
     <CssBaseline>
       <ThemeProvider theme={theme}>
         <div className="App">
-          {isLoggedIn ? (
-            <Router>
-              <Navbar />
-              <Switch>
-                <Route exact path="/" component={() => <HomePage />} />
-                <Route
-                  exact
-                  path="/events-explorer"
-                  component={() => <EventsExplorer />}
-                />
-                <Route
-                  exact
-                  path="/event-dashboard/:eventID"
-                  render={({ match }) => (
-                    <EventDashboard eventID={match.params.eventID} />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/Profile"
-                  component={() => <StudentDashboard />}
-                />
-              </Switch>
-            </Router>
-          ) : (
-            <Auth />
-          )}
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route exact path="/login" component={() => <Auth />} />
+              <Route exact path="/" component={() => <HomePage />} />
+              <Route
+                exact
+                path="/events-explorer"
+                component={() => <EventsExplorer />}
+              />
+              <Route
+                exact
+                path="/event-dashboard/:eventID"
+                render={({ match }) => (
+                  <EventDashboard eventID={match.params.eventID} />
+                )}
+              />
+              <Route
+                exact
+                path="/Profile"
+                component={() => <StudentDashboard />}
+              />
+            </Switch>
+          </Router>
         </div>
       </ThemeProvider>
     </CssBaseline>
