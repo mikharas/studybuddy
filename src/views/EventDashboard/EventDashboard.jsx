@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Button,
   Avatar,
+  CardActionArea,
   List,
   ListItem,
   ListItemAvatar,
@@ -10,17 +11,21 @@ import {
   CardContent,
 } from '@mui/material';
 import './eventDashboard.css';
-import banner from './uoft_banner.png';
-import hostIcon from './uoft.png';
+import { useHistory } from 'react-router-dom';
+import banner from '../../images/uoft_banner.png';
+import hostIcon from '../../images/uoft.png';
+import StudentItem from '../../components/StudentItem';
 
 const EventDashboard = ({
   eventID,
   user,
   isLoggedIn,
   getEvent,
+  getManyUserData,
   addAttendee,
   removeAttendee,
 }) => {
+  const history = useHistory();
   const [event, setEvent] = useState({
     title: '',
     description: '',
@@ -30,14 +35,17 @@ const EventDashboard = ({
     date: undefined,
     attendees: [],
   });
+  const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
 
   const refreshEvent = () => {
     const refreshedEvent = getEvent(eventID);
+    const refreshedAttendees = getManyUserData(refreshedEvent.attendees);
     setEvent({ ...refreshedEvent });
     if (isLoggedIn) {
-      setIsAttending(refreshedEvent.attendees.includes(user.username));
+      setIsAttending(refreshedEvent.attendees.includes(user));
     }
+    setAttendees(refreshedAttendees);
   };
 
   useEffect(() => refreshEvent(), []);
@@ -45,10 +53,11 @@ const EventDashboard = ({
   const toggleAttending = () => {
     if (!isLoggedIn) {
       alert('You must log in to perform this action.');
+      history.push('/login');
     } else if (!isAttending) {
-      addAttendee(eventID, user.username);
+      addAttendee(eventID, user);
     } else {
-      removeAttendee(eventID, user.username);
+      removeAttendee(eventID, user);
     }
     refreshEvent();
   };
@@ -122,13 +131,8 @@ const EventDashboard = ({
           <CardContent>
             <div className="cardHeader">Attendees</div>
             <List>
-              {event.attendees.map((a) => (
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar alt={a} src={hostIcon} />
-                  </ListItemAvatar>
-                  <ListItemText primary={a} />
-                </ListItem>
+              {attendees.map(({ username, userSchool }) => (
+                <StudentItem username={username} userSchool={userSchool} />
               ))}
             </List>
           </CardContent>

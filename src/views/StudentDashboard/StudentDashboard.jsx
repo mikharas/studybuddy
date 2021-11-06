@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
 import {
+  Button,
   CardActionArea,
   List,
   ListItem,
@@ -12,38 +13,24 @@ import {
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import IconButton from '@mui/material/IconButton';
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import profilePic from '../../images/default-avatar.png';
 import robarts from '../../images/robarts.jpg';
 import EventsList from './StudentDashboardEvents';
-
-const events = [
-  {
-    banner: robarts,
-    title: 'CSC309 Study Session',
-    date: 'MON, OCT 25 @ 6:30 PM EDT',
-    location: 'Robarts Library, University of Toronto',
-    attendees: 2,
-  },
-];
-
-const userFollowingList = [
-  {
-    avatar: profilePic,
-    fullName: 'Jane Doe',
-    username: 'admin',
-    userSchool: 'University of Toronto (St. George)',
-  },
-];
+import StudentItem from '../../components/StudentItem';
 
 const StudentDashboard = ({
   isLoggedIn,
+  addFollowing,
+  removeFollowing,
   userID,
+  user,
   getUserEvents,
+  getManyUserData,
   getUserData,
-  removeAttendee,
   editable,
 }) => {
+  const history = useHistory();
   const [userData, setUserData] = useState({
     fullName: '',
     username: '',
@@ -51,33 +38,60 @@ const StudentDashboard = ({
     following: [],
     userEvents: [],
   });
+
+  const [following, setFollowing] = useState([]);
+
+  const [activeUserData, setActiveUserData] = useState({
+    username: '',
+    following: [],
+  });
+
   const refreshUserData = () => {
     if (isLoggedIn) {
       const userEvents = getUserEvents(userID);
       const userDataS = getUserData(userID);
+      const { username: newUsername, following: newFollowing } =
+        getUserData(user);
+      const refreshedFollowing = getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
         userEvents,
       });
+      setActiveUserData({
+        username: newUsername,
+        following: newFollowing,
+      });
+      setFollowing(refreshedFollowing);
     }
-  };
-
-  const handleRemoveAttendee = (eventID) => {
-    removeAttendee(eventID, userID);
-    refreshUserData();
   };
 
   useEffect(() => {
     refreshUserData();
   }, [userID]);
 
+  const isFollowing = activeUserData.following.includes(userID);
+
+  const toggleFollowing = () => {
+    if (!isFollowing) {
+      addFollowing(user, userID);
+    } else {
+      removeFollowing(user, userID);
+    }
+    refreshUserData();
+  };
+
   if (!isLoggedIn) {
     alert('You must log in to perform this action!');
-    return <Redirect to="/" />;
+    history.push('/login');
   }
   return (
     <div className="profilePage">
       <div className="user">
+        {!editable && (
+          <Button onClick={toggleFollowing}>
+            {isFollowing ? 'Unfollow' : 'Follow'}
+          </Button>
+        )}
         <img src={robarts} className="avatar" alt="Avatar" />
         <ul className="userInfo">
           <li className="userFullName">
@@ -110,45 +124,21 @@ const StudentDashboard = ({
         </ul>
       </div>
       <div className="bottomContainer">
-        <EventsList
-          events={userData.userEvents}
-          removeAttendee={handleRemoveAttendee}
-          editable={editable}
-        />
-        <FollowingList
-          followingList={userData.following}
-          refreshUserData={refreshUserData}
-        />
+        <EventsList events={userData.userEvents} />
+        <FollowingList followingList={following} />
       </div>
     </div>
   );
 };
 
 // eslint-disable-next-line react/prefer-stateless-function
-const FollowingList = ({ followingList, refreshUserData }) => {
+const FollowingList = ({ followingList }) => {
   const history = useHistory();
   return (
     <div className="following">
       <h3 className="listHeader">Following:</h3>
-      {followingList.map((user) => (
-        <CardActionArea
-          onClick={() => {
-            refreshUserData();
-            history.push(`/profile/${user}`);
-          }}
-        >
-          <List
-            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-          >
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="avatar" src={user.avatar} />
-              </ListItemAvatar>
-              <ListItemText primary={user} secondary={user.userSchool} />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </List>
-        </CardActionArea>
+      {followingList.map(({ username, userSchool }) => (
+        <StudentItem username={username} userSchool={userSchool} />
       ))}
     </div>
   );

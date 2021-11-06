@@ -4,6 +4,7 @@ import {
   addAttendee,
   removeAttendee,
 } from '../../actions/eventsActions';
+import { getManyUserData } from '../../actions/usersActions';
 import EventDashboard from './EventDashboard';
 
 const mapStateToProps = (state) => ({
@@ -13,6 +14,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   getEvent,
+  getManyUserData,
   addAttendee,
   removeAttendee,
 })(EventDashboard);

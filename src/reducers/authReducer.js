@@ -11,7 +11,7 @@ const authReducer = (state = initialAuthData, { type, payload }) => {
       return {
         ...state,
         isLoggedIn: true,
-        user: payload.user,
+        user: payload.username,
       };
     case 'LOGIN_FAIL':
       return {

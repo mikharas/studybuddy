@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -14,6 +14,7 @@ const InputBox = ({ label, value, handleChange }) => (
 );
 
 const Auth = ({ isLoggedIn, login, register }) => {
+  const history = useHistory();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [input, setInput] = useState({
     username: '',
@@ -41,7 +42,7 @@ const Auth = ({ isLoggedIn, login, register }) => {
   };
 
   if (isLoggedIn) {
-    return <Redirect to="/" />;
+    history.goBack();
   }
 
   return (

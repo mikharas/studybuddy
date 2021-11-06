@@ -1,7 +1,7 @@
 export const register =
   (username, password, isAdmin) => (dispatch, getState) => {
     const allUsers = getState().users;
-    const userExists = allUsers.find((user) => user.username === username);
+    const userExists = allUsers.find((user) => user === username);
     if (userExists) {
       alert('Username taken');
       dispatch({
@@ -37,10 +37,9 @@ export const login = (username, password) => (dispatch, getState) => {
       type: 'LOGIN_FAIL',
     });
   } else {
-    alert('successfully logged in!');
     dispatch({
       type: 'LOGIN_SUCCESS',
-      payload: { user },
+      payload: { username },
     });
   }
 };

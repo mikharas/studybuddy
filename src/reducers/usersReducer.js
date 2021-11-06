@@ -13,7 +13,7 @@ const initialUsersData = [
     fullName: 'Sarah Kim',
     password: 'sarah',
     isAdmin: false,
-    following: ['admin'],
+    following: [],
   },
 ];
 
@@ -31,6 +31,30 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
           following: [],
         },
       ];
+    case 'ADD_FOLLOWING':
+      return state.map((u) => {
+        if (payload.follower === u.username) {
+          const newFollowing = u.following.slice();
+          newFollowing.push(payload.following);
+          return {
+            ...u,
+            following: newFollowing,
+          };
+        }
+        return u;
+      });
+    case 'REMOVE_FOLLOWING':
+      return state.map((u) => {
+        if (payload.follower === u.username) {
+          return {
+            ...u,
+            following: u.following.filter(
+              (following) => following !== payload.following,
+            ),
+          };
+        }
+        return u;
+      });
     default:
       return state;
   }

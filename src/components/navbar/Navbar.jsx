@@ -75,7 +75,7 @@ function Navbar({ logout, isLoggedIn, user }) {
             <>
               <div className={classes.profileIconButton}>
                 <IconButton>
-                  <Link to={`/profile/${user.username}`}>
+                  <Link to={`/profile/${user}`}>
                     <PersonIcon
                       fontSize="large"
                       className={classes.profileIcon}

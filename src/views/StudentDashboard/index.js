@@ -1,18 +1,26 @@
 import { connect } from 'react-redux';
-import { getUserEvents, getUserData } from '../../actions/usersActions';
-import { removeAttendee } from '../../actions/eventsActions';
+import {
+  addFollowing,
+  removeFollowing,
+  getUserEvents,
+  getUserData,
+  getManyUserData,
+} from '../../actions/usersActions';
 import StudentDashboard from './StudentDashboard';
 
 const mapStateToProps = (state, ownProps) => {
-  const { isLoggedIn } = state.auth;
+  const { isLoggedIn, user } = state.auth;
   return {
     isLoggedIn,
-    editable: isLoggedIn && state.auth.user.username === ownProps.userID,
+    editable: isLoggedIn && user === ownProps.userID,
+    user,
   };
 };
 
 export default connect(mapStateToProps, {
+  addFollowing,
+  removeFollowing,
   getUserEvents,
   getUserData,
-  removeAttendee,
+  getManyUserData,
 })(StudentDashboard);

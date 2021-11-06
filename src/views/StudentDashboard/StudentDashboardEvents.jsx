@@ -7,7 +7,7 @@ import Event from '../../components/EventItem';
 // eslint-disable-next-line react/prefer-stateless-function
 class EventsList extends React.Component {
   render() {
-    const { events, removeAttendee, editable } = this.props;
+    const { events } = this.props;
     return (
       <div className="eventsContainer">
         <h3 className="listHeader"> Attending Events: </h3>
