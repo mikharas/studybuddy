@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import {
   EventDashboard,
   EventsExplorer,
@@ -8,19 +10,37 @@ import {
   StudentDashboard,
 } from './views';
 import './App.css';
+import Navbar from './components/navbar/index';
+import theme from './theme';
 
 function App({ isLoggedIn }) {
   return (
-    <div className="App">
-      {isLoggedIn ? (
-        <>
-          <HomePage />
-          <EventsExplorer />
-        </>
-      ) : (
-        <Auth />
-      )}
-    </div>
+    <CssBaseline>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          {isLoggedIn ? (
+            <Router>
+              <Navbar />
+              <Switch>
+                <Route exact path="/" component={() => <HomePage />} />
+                <Route
+                  exact
+                  path="/EventDashboard"
+                  component={() => <EventDashboard />}
+                />
+                <Route
+                  exact
+                  path="/Profile"
+                  component={() => <StudentDashboard />}
+                />
+              </Switch>
+            </Router>
+          ) : (
+            <Auth />
+          )}
+        </div>
+      </ThemeProvider>
+    </CssBaseline>
   );
 }
 
