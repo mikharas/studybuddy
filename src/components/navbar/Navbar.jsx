@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Link, Redirect } from 'react-router-dom';
 import { IconButton, Typography } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+import { Person, School } from '@mui/icons-material';
 import { Button } from './Button';
 import './navbar.css';
 
@@ -50,7 +50,10 @@ function Navbar({ logout, isLoggedIn, user }) {
         <div className="navbar-container">
           <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
             <Typography variant="h2">StudyBuddy&nbsp;</Typography>
-            <i className="fas fa-business-time" />
+            <School
+              sx={{ color: 'white', fontSize: 35 }}
+              onClick={handleClick}
+            />
           </Link>
           <div className="menu-icon" onClick={handleClick}>
             <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
@@ -76,10 +79,7 @@ function Navbar({ logout, isLoggedIn, user }) {
               <div className={classes.profileIconButton}>
                 <IconButton>
                   <Link to={`/profile/${user}`}>
-                    <PersonIcon
-                      fontSize="large"
-                      className={classes.profileIcon}
-                    />
+                    <Person fontSize="large" className={classes.profileIcon} />
                   </Link>
                 </IconButton>
               </div>

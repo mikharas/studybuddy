@@ -2,26 +2,24 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Typography } from '@mui/material';
 import Event from '../../components/EventItem';
-import Map from '../../components/Map';
+import HomeHeader from '../../components/HomeHeader';
+import HomeInfo from '../../components/HomeInfo';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
+  eventsContainer: {
     display: 'flex',
     width: '100%',
     height: 'calc(100vh - 80px)',
-  },
-  map: {
-    flex: 1,
-    width: '50%',
-  },
-  mapImage: {
-    width: '100%',
-    height: '100%',
+    justifyContent: 'center',
   },
   events: {
     borderRadius: '50%',
     width: theme.spacing(80),
     padding: theme.spacing(5),
+  },
+  features: {
+    display: 'flex',
+    justifyContent: 'center',
   },
 }));
 
@@ -29,47 +27,51 @@ const Homepage = ({ isLoggedIn, user, events }) => {
   const classes = useStyles();
   return (
     <>
-      <div>
-        {isLoggedIn && <h1>Hi {user}, Find your study buddy today!</h1>}
-      </div>
-      <div className={classes.container}>
+      <HomeHeader />
+      <HomeInfo />
+      <div className={classes.eventsContainer}>
         <div className={classes.events} float="right">
           <h1>
-            <Typography variant="h2">Upcoming Events</Typography>
+            <Typography variant="h2">You might be interested in...</Typography>
           </h1>
-          {events.map((event) => (
-            <Event
-              id={event.id}
-              title={event.title}
-              description={event.description}
-              date={event.date}
-              attendees={event.attendees.length}
-              freespots={event.maxSpots - event.attendees.length}
-              isAttending={event.attendees.includes(user)}
-            />
-          ))}
+          {events.map(
+            (event) =>
+              !event.attendees.includes(user) && (
+                <Event
+                  id={event.id}
+                  title={event.title}
+                  description={event.description}
+                  date={event.date}
+                  attendees={event.attendees.length}
+                  freespots={event.maxSpots - event.attendees.length}
+                  isAttending={event.attendees.includes(user)}
+                />
+              ),
+          )}
         </div>
-        <div className={classes.events} float="left">
-          <div>
-            <h1>
-              <Typography variant="h2">Your Events</Typography>
-            </h1>
-            {isLoggedIn &&
-              events.map((event) =>
-                event.attendees.includes(user) ? (
-                  <Event
-                    id={event.id}
-                    title={event.title}
-                    description={event.description}
-                    date={event.date}
-                    attendees={event.attendees.length}
-                    freespots={event.maxSpots - event.attendees.length}
-                    isAttending={event.attendees.includes(user)}
-                  />
-                ) : null,
+        {isLoggedIn && (
+          <div className={classes.events} float="left">
+            <div>
+              <h1>
+                <Typography variant="h2">Your upcoming events</Typography>
+              </h1>
+              {events.map(
+                (event) =>
+                  event.attendees.includes(user) && (
+                    <Event
+                      id={event.id}
+                      title={event.title}
+                      description={event.description}
+                      date={event.date}
+                      attendees={event.attendees.length}
+                      freespots={event.maxSpots - event.attendees.length}
+                      isAttending={event.attendees.includes(user)}
+                    />
+                  ),
               )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );
