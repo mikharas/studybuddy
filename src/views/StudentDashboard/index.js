@@ -5,6 +5,7 @@ import {
   getUserEvents,
   getUserData,
   getManyUserData,
+  editProfileInfo,
 } from '../../actions/usersActions';
 import StudentDashboard from './StudentDashboard';
 
@@ -23,4 +24,5 @@ export default connect(mapStateToProps, {
   getUserEvents,
   getUserData,
   getManyUserData,
+  editProfileInfo,
 })(StudentDashboard);

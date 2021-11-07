@@ -1,5 +1,4 @@
-/* eslint-disable max-classes-per-file */
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
 import {
   Button,
@@ -10,6 +9,7 @@ import {
   ListItemAvatar,
   Avatar,
   Divider,
+  TextField,
 } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import IconButton from '@mui/material/IconButton';
@@ -29,6 +29,7 @@ const StudentDashboard = ({
   getManyUserData,
   getUserData,
   editable,
+  editProfileInfo,
 }) => {
   const history = useHistory();
   const [userData, setUserData] = useState({
@@ -70,6 +71,7 @@ const StudentDashboard = ({
   }, [userID]);
 
   const isFollowing = activeUserData.following.includes(userID);
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleFollowing = () => {
     if (!isFollowing) {
@@ -80,10 +82,28 @@ const StudentDashboard = ({
     refreshUserData();
   };
 
+  const fullNameRef = useRef('');
+  const usernameRef = useRef('');
+  const schoolRef = useRef('');
+
+  const toggleEditing = (save) => {
+    if (isEditing && save) {
+      editProfileInfo(
+        userID,
+        schoolRef.current,
+        usernameRef.current,
+        fullNameRef.current,
+      );
+    }
+    setIsEditing(!isEditing);
+    refreshUserData();
+  };
+
   if (!isLoggedIn) {
     alert('You must log in to perform this action!');
     history.push('/login');
   }
+
   return (
     <div className="profilePage">
       <div className="user">
@@ -92,35 +112,64 @@ const StudentDashboard = ({
             {isFollowing ? 'Unfollow' : 'Follow'}
           </Button>
         )}
+        {editable && (
+          <Button onClick={toggleEditing(true)}>
+            {isEditing ? 'Save Changes' : 'Edit'}
+          </Button>
+        )}
+        {isEditing && <Button onClick={toggleEditing(false)}>Cancel</Button>}
+
         <img src={robarts} className="avatar" alt="Avatar" />
         <ul className="userInfo">
           <li className="userFullName">
-            <b>{userData.fullName}</b>
-          </li>
-          <li>
-            <b>Username:</b> {userData.username}
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
+            {isEditing ? (
+              <TextField
+                id="outlined-title"
+                defaultValue={userData.fullName}
+                inputRef={fullNameRef}
+              />
+            ) : (
+              <b>{userData.fullName}</b>
             )}
           </li>
           <li>
-            <b>School:</b> {userData.userSchool}
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
+            <b>Username:</b>
+            {isEditing ? (
+              <TextField
+                id="outlined-title"
+                defaultValue={userData.username}
+                inputRef={usernameRef}
+              />
+            ) : (
+              // <IconButton aria-label="Edit username">
+              //   <EditTwoToneIcon style={{ fontSize: 'small' }} />
+              // </IconButton>
+              userData.username
             )}
           </li>
           <li>
+            <b>School:</b>
+            {isEditing ? (
+              <TextField
+                id="outlined-title"
+                defaultValue={userData.userSchool}
+                inputRef={schoolRef}
+              />
+            ) : (
+              userData.userSchool
+            )}
+          </li>
+          {/* <li>
             <b>Contacts:</b> None
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
-            )}
-          </li>
+            {isEditing
+            ? <TextField
+                id="outlined-title"
+                defaultValue={userData.userSchool}
+                inputRef={userSchoolRef}
+              /> 
+              : userData.userSchool
+            }
+          </li> */}
         </ul>
       </div>
       <div className="bottomContainer">
@@ -131,7 +180,6 @@ const StudentDashboard = ({
   );
 };
 
-// eslint-disable-next-line react/prefer-stateless-function
 const FollowingList = ({ followingList }) => {
   const history = useHistory();
   return (
