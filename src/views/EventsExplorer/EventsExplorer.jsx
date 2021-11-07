@@ -24,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsExplorer = ({ events }) => {
+const EventsExplorer = ({ user, events }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <div className={classes.map}>
-        <Map events={events} />
+        <Map events={events} user={user} />
       </div>
       <div className={classes.events}>
         {events.map((event) => (
@@ -40,6 +40,7 @@ const EventsExplorer = ({ events }) => {
             date={event.date}
             attendees={event.attendees.length}
             freespots={event.maxSpots - event.attendees.length}
+            isAttending={event.attendees.includes(user)}
           />
         ))}
       </div>

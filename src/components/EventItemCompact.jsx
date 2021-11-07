@@ -42,7 +42,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventItemCompact = ({ title, attendees, date, freespots }) => {
+const EventItemCompact = ({
+  title,
+  attendees,
+  date,
+  freespots,
+  isAttending,
+}) => {
   const classes = useStyles();
   return (
     <Card elevation={0} className={classes.eventCard}>
@@ -68,6 +74,11 @@ const EventItemCompact = ({ title, attendees, date, freespots }) => {
           <Typography color="red" variant="body1">
             {freespots} spots left
           </Typography>
+          {isAttending && (
+            <Typography sx={{ fontWeight: 'bold' }} color="red" variant="body1">
+              Attending
+            </Typography>
+          )}
         </div>
       </div>
     </Card>

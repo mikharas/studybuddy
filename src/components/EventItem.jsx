@@ -47,7 +47,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventItem = ({ id, title, attendees, date, description, freespots }) => {
+const EventItem = ({
+  id,
+  title,
+  attendees,
+  date,
+  description,
+  freespots,
+  isAttending,
+}) => {
   const classes = useStyles();
   const history = useHistory();
   return (
@@ -85,6 +93,15 @@ const EventItem = ({ id, title, attendees, date, description, freespots }) => {
             <Typography color="red" variant="body1">
               {freespots} spots left
             </Typography>
+            {isAttending && (
+              <Typography
+                sx={{ fontWeight: 'bold' }}
+                color="red"
+                variant="body1"
+              >
+                Attending
+              </Typography>
+            )}
           </div>
         </div>
       </Card>

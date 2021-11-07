@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     color: theme.palette.primary.main,
   },
+  markerLightGreen: {
+    position: 'relative',
+    color: theme.palette.primary.dark,
+  },
   markerPopup: {
     borderRadius: '50%',
     position: 'absolute',
@@ -30,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Marker = ({ event, $hover }) => {
+const Marker = ({ event, $hover, isAttending }) => {
   const classes = useStyles();
 
   return (
@@ -42,10 +46,14 @@ const Marker = ({ event, $hover }) => {
             attendees={event.attendees.length}
             date={event.date}
             freespots={event.maxSpots - event.attendees.length}
+            isAttending={isAttending}
           />
         </Paper>
       )}
-      <Room fontSize="large" className={classes.markerGreen} />
+      <Room
+        fontSize="large"
+        className={isAttending ? classes.markerGreen : classes.markerLightGreen}
+      />
     </div>
   );
 };
@@ -65,7 +73,7 @@ const UserMarker = ({ $hover }) => {
   );
 };
 
-const GoogleMap = ({ events }) => {
+const GoogleMap = ({ user, events }) => {
   const classes = useStyles();
   const history = useHistory();
   const [userLocation, setUserLocation] = useState({});
@@ -112,6 +120,7 @@ const GoogleMap = ({ events }) => {
         <UserMarker lat={userLocation.lat} lng={userLocation.lng} />
         {events.map((e) => (
           <Marker
+            isAttending={e.attendees.includes(user)}
             event={e}
             text={e.title}
             lat={e.location.lat}
