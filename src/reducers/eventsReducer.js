@@ -1,10 +1,34 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const initialData = [
   {
+    id: '1',
     title: 'Admin gathering!',
     description: 'A gathering for admins',
     host: 'admin',
     location: 'bahen',
-    date: 1,
+    maxSpots: 5,
+    date: 'OCT 5 @8PM',
+    attendees: [],
+  },
+  {
+    id: '2',
+    title: 'Event 2',
+    description: 'Study with me',
+    host: 'user',
+    location: 'campus',
+    maxSpots: 5,
+    date: 'OCT 15 @5AM',
+    attendees: [],
+  },
+  {
+    id: '3',
+    title: 'Admin gathering!',
+    description: 'A gathering for admins',
+    host: 'admin',
+    location: 'bahen',
+    maxSpots: 5,
+    date: 'OCT 10 @9PM',
     attendees: [],
   },
 ];
@@ -15,6 +39,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       return [
         ...state,
         {
+          id: uuidv4(),
           title: payload.title,
           description: payload.description,
           host: payload.title,
@@ -26,7 +51,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       ];
     case 'ADD_ATTENDEE':
       return state.map((e) => {
-        if (e.title === payload.title) {
+        if (e.id === payload.eventID) {
           const newAttendees = e.attendees.slice();
           newAttendees.push(payload.attendee);
           return {
@@ -38,7 +63,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       });
     case 'REMOVE_ATTENDEE':
       return state.map((e) => {
-        if (e.title === payload.title) {
+        if (e.id === payload.eventID) {
           const newAttendees = e.attendees.filter(
             (a) => a !== payload.attendee,
           );

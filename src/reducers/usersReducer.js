@@ -1,8 +1,19 @@
 const initialUsersData = [
   {
-    username: 'admin',
-    password: 'admin',
+    userSchool: 'University of Toronto',
+    username: 'admin123',
+    fullName: 'Admin',
+    password: 'admin123',
     isAdmin: true,
+    following: ['sarah'],
+  },
+  {
+    userSchool: 'University of Toronto',
+    username: 'sarah',
+    fullName: 'Sarah Kim',
+    password: 'sarah123',
+    isAdmin: false,
+    following: [],
   },
 ];
 
@@ -12,11 +23,38 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
       return [
         ...state,
         {
+          userSchool: 'University of Toronto',
           username: payload.username,
+          fullName: payload.username,
           password: payload.password,
           isAdmin: payload.isAdmin,
+          following: [],
         },
       ];
+    case 'ADD_FOLLOWING':
+      return state.map((u) => {
+        if (payload.follower === u.username) {
+          const newFollowing = u.following.slice();
+          newFollowing.push(payload.following);
+          return {
+            ...u,
+            following: newFollowing,
+          };
+        }
+        return u;
+      });
+    case 'REMOVE_FOLLOWING':
+      return state.map((u) => {
+        if (payload.follower === u.username) {
+          return {
+            ...u,
+            following: u.following.filter(
+              (following) => following !== payload.following,
+            ),
+          };
+        }
+        return u;
+      });
     default:
       return state;
   }

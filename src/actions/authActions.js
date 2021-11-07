@@ -37,10 +37,9 @@ export const login = (username, password) => (dispatch, getState) => {
       type: 'LOGIN_FAIL',
     });
   } else {
-    alert('successfully logged in!');
     dispatch({
       type: 'LOGIN_SUCCESS',
-      payload: { user },
+      payload: { username },
     });
   }
 };

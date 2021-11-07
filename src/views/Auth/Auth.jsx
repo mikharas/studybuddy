@@ -1,6 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
+import { useHistory } from 'react-router-dom';
+import Input from '../../components/Input';
+import { useForm } from '../../utils/form-hook';
+import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../utils/validators';
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -12,32 +16,56 @@ const InputBox = ({ label, value, handleChange }) => (
   />
 );
 
-const Auth = ({ login, register }) => {
+const Auth = ({ isLoggedIn, login, register }) => {
+  const history = useHistory();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [input, setInput] = useState({
-    username: '',
-    password: '',
     isAdmin: false,
   });
 
-  const changeUsernameInput = (e) =>
-    setInput({ ...input, username: e.target.value });
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      username: {
+        val: '',
+        helperText: '',
+        isValid: false,
+      },
+      password: {
+        val: '',
+        helperText: '',
+        isValid: false,
+      },
+    },
+    false,
+  );
 
-  const changePasswordInput = (e) =>
-    setInput({ ...input, password: e.target.value });
+  const switchModeHandler = () => {
+    setFormData(
+      {
+        ...formState.inputs,
+      },
+      formState.inputs.username.isValid && formState.inputs.password.isValid,
+    );
+    setIsLoginMode(!isLoginMode);
+  };
 
   const toggleAdminInput = () => {
     setInput({ ...input, isAdmin: !input.isAdmin });
   };
 
   const handleFormSubmit = () => {
-    const { username, password, isAdmin } = input;
+    const { isAdmin } = input;
+    const { username, password } = formState.inputs;
     if (isLoginMode) {
-      login(username, password);
+      login(username.val, password.val);
     } else {
-      register(username, password, isAdmin);
+      register(username.val, password.val, isAdmin);
     }
   };
+
+  if (isLoggedIn) {
+    history.goBack();
+  }
 
   return (
     <div
@@ -65,17 +93,23 @@ const Auth = ({ login, register }) => {
           className={css`
             display: flex;
             flex-direction: column;
+            gap: 10px;
           `}
         >
-          <InputBox
-            label="Username"
-            value={input.username}
-            handleChange={changeUsernameInput}
+          <Input
+            id="username"
+            label="User name"
+            helperText="Username must be atleast 5 characters."
+            onInput={inputHandler}
+            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
           />
-          <InputBox
+          <Input
+            id="password"
+            type="password"
             label="Password"
-            value={input.password}
-            handleChange={changePasswordInput}
+            helperText="Please enter a password of atleast 8 characters."
+            onInput={inputHandler}
+            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
           />
           {!isLoginMode && (
             <FormControlLabel
@@ -99,12 +133,13 @@ const Auth = ({ login, register }) => {
               `}
               variant="contained"
               onClick={handleFormSubmit}
+              disabled={!formState.isValid}
             >
               {isLoginMode ? 'Login' : 'Signup'}
             </Button>
             <Button
               variant="outlined"
-              onClick={() => setIsLoginMode(!isLoginMode)}
+              onClick={switchModeHandler}
               type="Button"
             >
               {`Switch to ${isLoginMode ? 'Sign up' : 'Log in'}`}

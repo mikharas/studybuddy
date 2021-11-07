@@ -1,48 +1,48 @@
 @font-face {
-  font-family: "Avenir";
-  src: url("./Avenir\ Regular.ttf") format("truetype");
+  font-family: 'Avenir';
+  src: url('./Avenir\ Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Avenir";
-  src: url("./Avenir\ Heavy.ttf") format("truetype");
+  font-family: 'Avenir';
+  src: url('./Avenir\ Heavy.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Avenir";
-  src: url("./Avenir\ Light.ttf") format("truetype");
+  font-family: 'Avenir';
+  src: url('./Avenir\ Light.ttf') format('truetype');
   font-weight: lighter;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Avenir Black";
-  src: url("./Avenir\ Black.ttf") format("truetype");
+  font-family: 'Avenir Black';
+  src: url('./Avenir\ Black.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Avenir Book";
-  src: url("./Avenir\ Book.ttf") format("truetype");
+  font-family: 'Avenir Book';
+  src: url('./Avenir\ Book.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Avenir Roman";
-  src: url("./AvenirLTStd-Roman.otf") format("opentype");
+  font-family: 'Avenir Roman';
+  src: url('./AvenirLTStd-Roman.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "Nickainley";
-  src: url("./Nickainley-Normal.otf") format("opentype");
+  font-family: 'Nickainley';
+  src: url('./Nickainley-Normal.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }

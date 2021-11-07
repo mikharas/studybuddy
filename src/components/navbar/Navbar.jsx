@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
-import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
+import { Link, Redirect } from 'react-router-dom';
+import { IconButton, Typography } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 import { Button } from './Button';
 import './navbar.css';
 
@@ -9,11 +10,20 @@ const useStyle = makeStyles((theme) => ({
   navbar: {
     background: theme.palette.primary.main,
   },
+  profileIcon: {
+    color: 'white',
+  },
+  profileIconButton: {
+    marginRight: theme.spacing(3),
+  },
+  whiteText: {
+    textDecoration: 'none',
+    color: 'white',
+  },
 }));
 
-function Navbar({ logout }) {
+function Navbar({ logout, isLoggedIn, user }) {
   const classes = useStyle();
-  const handleLogout = () => logout();
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
 
@@ -53,32 +63,35 @@ function Navbar({ logout }) {
             </li>
             <li className="nav-item">
               <Link
-                to="/profile"
+                to="/events-explorer"
                 className="nav-links"
                 onClick={closeMobileMenu}
               >
-                <Typography variant="h6">Profile</Typography>
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                to="/eventdashboard"
-                className="nav-links"
-                onClick={closeMobileMenu}
-              >
-                <Typography variant="h6">Events</Typography>
-              </Link>
-            </li>
-
-            <li>
-              <Link to="/" className="nav-links-mobile" onClick={handleLogout}>
-                Logout
+                <Typography variant="h6">Events Explorer</Typography>
               </Link>
             </li>
           </ul>
-          {button && (
-            <Button buttonStyle="btn--outline" onClick={handleLogout}>
-              <Typography variant="h6">Logout</Typography>
+          {isLoggedIn ? (
+            <>
+              <div className={classes.profileIconButton}>
+                <IconButton>
+                  <Link to={`/profile/${user}`}>
+                    <PersonIcon
+                      fontSize="large"
+                      className={classes.profileIcon}
+                    />
+                  </Link>
+                </IconButton>
+              </div>
+              <Button buttonStyle="btn--outline" onClick={logout}>
+                <Typography variant="h6">Logout</Typography>
+              </Button>
+            </>
+          ) : (
+            <Button buttonStyle="btn--outline">
+              <Link to="/login" className={classes.whiteText}>
+                <Typography variant="h6">Login</Typography>
+              </Link>
             </Button>
           )}
         </div>
