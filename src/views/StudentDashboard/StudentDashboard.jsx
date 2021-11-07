@@ -1,16 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import React, { useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
-import {
-  Button,
-  CardActionArea,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
-  Divider,
-} from '@mui/material';
+import { Button } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import IconButton from '@mui/material/IconButton';
 import { useHistory } from 'react-router-dom';
@@ -25,7 +16,7 @@ const StudentDashboard = ({
   removeFollowing,
   userID,
   user,
-  getUserEvents,
+  getUserAttendingEvents,
   getManyUserData,
   getUserData,
   editable,
@@ -36,7 +27,7 @@ const StudentDashboard = ({
     username: '',
     userSchool: '',
     following: [],
-    userEvents: [],
+    userAttendingEvents: [],
   });
 
   const [following, setFollowing] = useState([]);
@@ -48,14 +39,14 @@ const StudentDashboard = ({
 
   const refreshUserData = () => {
     if (isLoggedIn) {
-      const userEvents = getUserEvents(userID);
+      const userAttendingEvents = getUserAttendingEvents(userID);
       const userDataS = getUserData(userID);
       const { username: newUsername, following: newFollowing } =
         getUserData(user);
       const refreshedFollowing = getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
-        userEvents,
+        userAttendingEvents,
       });
       setActiveUserData({
         username: newUsername,
@@ -124,7 +115,7 @@ const StudentDashboard = ({
         </ul>
       </div>
       <div className="bottomContainer">
-        <EventsList events={userData.userEvents} />
+        <EventsList events={userData.userAttendingEvents} user={user} />
         <FollowingList followingList={following} />
       </div>
     </div>

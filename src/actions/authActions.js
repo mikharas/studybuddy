@@ -1,3 +1,5 @@
+// TODO: Calls to database using axios
+
 export const register =
   (username, password, isAdmin) => (dispatch, getState) => {
     const allUsers = getState().users;

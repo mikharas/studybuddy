@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Marker = ({ event, $hover, isAttending }) => {
+const Marker = ({ event, $hover, isAttending, isHost }) => {
   const classes = useStyles();
 
   return (
@@ -42,11 +42,9 @@ const Marker = ({ event, $hover, isAttending }) => {
       {$hover && (
         <Paper className={classes.markerPopup}>
           <EventItemCompact
-            title={event.title}
-            attendees={event.attendees.length}
-            date={event.date}
-            freespots={event.maxSpots - event.attendees.length}
+            {...event}
             isAttending={isAttending}
+            isHost={isHost}
           />
         </Paper>
       )}
@@ -74,10 +72,14 @@ const UserMarker = ({ $hover }) => {
 };
 
 const GoogleMap = ({ user, events }) => {
+  const dummyData = {
+    lat: 43.661032765413275,
+    lng: -79.39591425104017,
+  };
   const classes = useStyles();
   const history = useHistory();
-  const [userLocation, setUserLocation] = useState({});
-  const [curLoc, setCurLoc] = useState(events[0].location);
+  const [userLocation, setUserLocation] = useState(dummyData);
+  const [curLoc, setCurLoc] = useState(dummyData);
 
   const handleChildClick = (key, childProps) => {
     if (childProps.event) {
@@ -87,26 +89,10 @@ const GoogleMap = ({ user, events }) => {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        setCurLoc({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      (error) => {
-        alert('We could not get your location.');
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: Infinity,
-      },
-    );
+    // TODO: using geo locator, get user's current location and call setUserLocation
+    // to indicate on map
   }, []);
+
   return (
     <div className={classes.container}>
       <GoogleMapReact
@@ -121,6 +107,7 @@ const GoogleMap = ({ user, events }) => {
         {events.map((e) => (
           <Marker
             isAttending={e.attendees.includes(user)}
+            isHost={e.host === user}
             event={e}
             text={e.title}
             lat={e.location.lat}

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Button,
   Avatar,
-  CardActionArea,
   List,
   ListItem,
   ListItemAvatar,
@@ -52,30 +51,9 @@ const EventDashboard = ({
       setIsAttending(refreshedEvent.attendees.includes(user));
     }
     setAttendees(refreshedAttendees);
-    Geocode.setApiKey('AIzaSyB_RUPihF4_K2RXvpCKHYB7GPwd2Nb7Y_U');
-    Geocode.setRegion('can');
-    Geocode.fromLatLng(
-      `${refreshedEvent.location.lat}`,
-      `${refreshedEvent.location.lng}`,
-    ).then(
-      (response) => {
-        const address = response.results[0].formatted_address;
-        setEvent({ ...refreshedEvent, location: address });
-        console.log(address);
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
-    Geocode.fromAddress('Bahen').then(
-      (response) => {
-        const { lat, lng } = response.results[0].geometry.location;
-        console.log(lat, lng);
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
+    setEvent({ ...refreshedEvent, location: 'DUMMY ADDRESS' });
+    // TODO: Here, we use geocode to convert event location coordinates
+    // to a common address, and display that
   };
 
   useEffect(() => refreshEvent(), []);
@@ -102,7 +80,7 @@ const EventDashboard = ({
       </div>
       <div className="attendee">
         <div className="avatarContainer">
-          <Avatar alt="Alyssa Chan" src={hostIcon} />
+          <Avatar alt={event.host} src={hostIcon} />
         </div>
         <div className="attendeeName">{event.host}</div>
       </div>

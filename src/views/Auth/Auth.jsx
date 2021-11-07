@@ -8,23 +8,13 @@ import * as yup from 'yup';
 const validationSchema = yup.object({
   username: yup
     .string('Enter a username')
-    .min(5, 'Username should be of minimum 5 characters length')
+    .min(3, 'Username should be of minimum 3 characters length')
     .required('Username is required'),
   password: yup
     .string('Enter a password')
-    .min(8, 'Password should be of minimum 8 characters length')
+    .min(3, 'Password should be of minimum 3 characters length')
     .required('Password is required'),
 });
-
-const InputBox = ({ label, value, handleChange }) => (
-  <TextField
-    id="outlined-name"
-    margin="dense"
-    label={label}
-    value={value}
-    onChange={(e) => handleChange(e, label)}
-  />
-);
 
 const Auth = ({ isLoggedIn, login, register }) => {
   const history = useHistory();

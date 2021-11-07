@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   addFollowing,
   removeFollowing,
-  getUserEvents,
+  getUserAttendingEvents,
   getUserData,
   getManyUserData,
 } from '../../actions/usersActions';
@@ -20,7 +20,7 @@ const mapStateToProps = (state, ownProps) => {
 export default connect(mapStateToProps, {
   addFollowing,
   removeFollowing,
-  getUserEvents,
+  getUserAttendingEvents,
   getUserData,
   getManyUserData,
 })(StudentDashboard);

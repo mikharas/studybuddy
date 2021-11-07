@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   eventCardImageContainer: {
     height: theme.spacing(15),
-    width: theme.spacing(20),
+    width: '25%',
   },
   eventCardImage: {
     width: '100%',
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     padding: theme.spacing(3),
-    paddingLeft: theme.spacing(5),
     textAlign: 'left',
     justifyContent: 'center',
+    width: '70%',
   },
 }));
 
@@ -53,8 +53,9 @@ const EventItem = ({
   attendees,
   date,
   description,
-  freespots,
+  maxSpots,
   isAttending,
+  isHost,
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -88,12 +89,21 @@ const EventItem = ({
           </Typography>
           <div className={classes.eventAttendee}>
             <Typography color="GrayText" variant="body1">
-              {attendees} attendees
+              {attendees.length} attendees
             </Typography>
             <Typography color="red" variant="body1">
-              {freespots} spots left
+              {maxSpots - attendees.length} spots left
             </Typography>
-            {isAttending && (
+            {isHost && (
+              <Typography
+                sx={{ fontWeight: 'bold' }}
+                color="red"
+                variant="body1"
+              >
+                Host
+              </Typography>
+            )}
+            {!isHost && isAttending && (
               <Typography
                 sx={{ fontWeight: 'bold' }}
                 color="red"

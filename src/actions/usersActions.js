@@ -1,3 +1,5 @@
+// TODO: Calls to data base using axios
+
 export const addFollowing = (follower, following) => (dispatch, getState) => {
   dispatch({
     type: 'ADD_FOLLOWING',
@@ -19,7 +21,7 @@ export const removeFollowing =
     });
   };
 
-export const getUserEvents = (userID) => (dispatch, getState) => {
+export const getUserAttendingEvents = (userID) => (dispatch, getState) => {
   const { events } = getState();
   return events.filter((e) => e.attendees.includes(userID));
 };

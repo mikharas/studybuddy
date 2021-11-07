@@ -20,6 +20,8 @@ import Navbar from './components/navbar/index';
 import NotFound from './views/NotFound';
 import theme from './theme';
 
+// TODO: when app runs, populate event state with some events by calling the database
+
 function App({ isLoggedIn }) {
   return (
     <CssBaseline>

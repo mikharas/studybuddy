@@ -46,8 +46,9 @@ const EventItemCompact = ({
   title,
   attendees,
   date,
-  freespots,
+  maxSpots,
   isAttending,
+  isHost,
 }) => {
   const classes = useStyles();
   return (
@@ -69,12 +70,17 @@ const EventItemCompact = ({
         </Typography>
         <div className={classes.eventAttendee}>
           <Typography color="GrayText" variant="body1">
-            {attendees} attendees
+            {attendees.length} attendees
           </Typography>
           <Typography color="red" variant="body1">
-            {freespots} spots left
+            {maxSpots - attendees.length} spots left
           </Typography>
-          {isAttending && (
+          {isHost && (
+            <Typography sx={{ fontWeight: 'bold' }} color="red" variant="body1">
+              Host
+            </Typography>
+          )}
+          {!isHost && isAttending && (
             <Typography sx={{ fontWeight: 'bold' }} color="red" variant="body1">
               Attending
             </Typography>

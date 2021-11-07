@@ -34,13 +34,9 @@ const EventsExplorer = ({ user, events }) => {
       <div className={classes.events}>
         {events.map((event) => (
           <Event
-            id={event.id}
-            title={event.title}
-            description={event.description}
-            date={event.date}
-            attendees={event.attendees.length}
-            freespots={event.maxSpots - event.attendees.length}
+            {...event}
             isAttending={event.attendees.includes(user)}
+            isHost={event.host === user}
           />
         ))}
       </div>
