@@ -1,21 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
-import {
-  Button,
-  CardActionArea,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
-  Divider,
-  TextField,
-} from '@mui/material';
+import { Button, Typography, TextField } from '@mui/material';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import IconButton from '@mui/material/IconButton';
 import { useHistory } from 'react-router-dom';
-import profilePic from '../../images/default-avatar.png';
-import robarts from '../../images/robarts.jpg';
+import uoft from '../../images/uoft.png';
+import Event from '../../components/EventItem';
 import EventsList from './StudentDashboardEvents';
 import StudentItem from '../../components/StudentItem';
 
@@ -36,7 +26,9 @@ const StudentDashboard = ({
     fullName: '',
     username: '',
     userSchool: '',
+    isAdmin: false,
     following: [],
+    contact: '',
     userEvents: [],
   });
 
@@ -44,6 +36,7 @@ const StudentDashboard = ({
 
   const [activeUserData, setActiveUserData] = useState({
     username: '',
+    isAdmin: false,
     following: [],
   });
 
@@ -51,8 +44,11 @@ const StudentDashboard = ({
     if (isLoggedIn) {
       const userEvents = getUserEvents(userID);
       const userDataS = getUserData(userID);
-      const { username: newUsername, following: newFollowing } =
-        getUserData(user);
+      const {
+        username: newUsername,
+        following: newFollowing,
+        isAdmin: admin,
+      } = getUserData(user);
       const refreshedFollowing = getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
@@ -61,6 +57,7 @@ const StudentDashboard = ({
       setActiveUserData({
         username: newUsername,
         following: newFollowing,
+        isAdmin: admin,
       });
       setFollowing(refreshedFollowing);
     }
@@ -82,17 +79,17 @@ const StudentDashboard = ({
     refreshUserData();
   };
 
-  const fullNameRef = useRef('');
-  const usernameRef = useRef('');
-  const schoolRef = useRef('');
+  const fullNameRef = useRef();
+  const schoolRef = useRef();
+  const contactRef = useRef();
 
-  const toggleEditing = (save) => {
-    if (isEditing && save) {
+  const toggleEditing = (cancelled) => {
+    if (isEditing && !cancelled) {
       editProfileInfo(
         userID,
-        schoolRef.current,
-        usernameRef.current,
-        fullNameRef.current,
+        schoolRef.current.value,
+        fullNameRef.current.value,
+        contactRef.current.value,
       );
     }
     setIsEditing(!isEditing);
@@ -108,55 +105,101 @@ const StudentDashboard = ({
     <div className="profilePage">
       <div className="user">
         {!editable && (
-          <Button onClick={toggleFollowing}>
+          <Button className="followEditButton" onClick={toggleFollowing}>
             {isFollowing ? 'Unfollow' : 'Follow'}
           </Button>
         )}
         {editable && (
-          <Button onClick={toggleEditing(true)}>
-            {isEditing ? 'Save Changes' : 'Edit'}
+          <Button
+            className="followEditButton"
+            onClick={() => toggleEditing(false)}
+          >
+            {isEditing ? 'Save' : 'Edit'}
           </Button>
         )}
-        {isEditing && <Button onClick={toggleEditing(false)}>Cancel</Button>}
+        {isEditing && (
+          <>
+            <Button
+              className="followEditButton"
+              onClick={() => toggleEditing(true)}
+            >
+              Cancel
+            </Button>
+            {/* Add remove user functionality in phase 2 */}
+            <Button
+              className="deleteBanButton" // onClick={removeUser}
+            >
+              Delete Account
+            </Button>
+          </>
+        )}
+        {/* Add remove user functionality in phase 2 */}
+        {!editable && activeUserData.isAdmin && !userData.isAdmin && (
+          <Button
+            className="deleteBanButton" // onClick={banUser}
+          >
+            Ban
+          </Button>
+        )}
 
-        <img src={robarts} className="avatar" alt="Avatar" />
+        <img src={uoft} className="avatar" alt="Avatar" />
         <ul className="userInfo">
           <li className="userFullName">
             {isEditing ? (
               <TextField
-                id="outlined-title"
+                id="outlined-fullname"
+                variant="outlined"
+                label="Full Name"
                 defaultValue={userData.fullName}
                 inputRef={fullNameRef}
+                size="small"
+                margin="dense"
               />
             ) : (
-              <b>{userData.fullName}</b>
+              <Typography variant="body1">{userData.fullName}</Typography>
             )}
           </li>
           <li>
-            <b>Username:</b>
-            {isEditing ? (
-              <TextField
-                id="outlined-title"
-                defaultValue={userData.username}
-                inputRef={usernameRef}
-              />
-            ) : (
-              // <IconButton aria-label="Edit username">
-              //   <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              // </IconButton>
-              userData.username
-            )}
+            <Typography variant="body2">
+              Username: {userData.username}
+            </Typography>
           </li>
           <li>
-            <b>School:</b>
             {isEditing ? (
               <TextField
-                id="outlined-title"
+                id="outlined-school"
+                variant="outlined"
+                label="School"
                 defaultValue={userData.userSchool}
                 inputRef={schoolRef}
+                size="small"
+                margin="dense"
               />
             ) : (
-              userData.userSchool
+              <>
+                <Typography variant="body2">
+                  School: {userData.userSchool}
+                </Typography>
+              </>
+            )}
+          </li>
+          <li>
+            {isEditing ? (
+              <TextField
+                id="outlined-title"
+                variant="outlined"
+                label="Contact"
+                defaultValue={userData.contact}
+                inputRef={contactRef}
+                size="small"
+                margin="dense"
+              />
+            ) : (
+              <>
+                <Typography variant="body2">
+                  Contact: {userData.contact}
+                </Typography>
+              </>
             )}
           </li>
           {/* <li>
@@ -184,7 +227,9 @@ const FollowingList = ({ followingList }) => {
   const history = useHistory();
   return (
     <div className="following">
-      <h3 className="listHeader">Following:</h3>
+      <Typography variant="h6" className="listHeader">
+        Following:{' '}
+      </Typography>
       {followingList.map(({ username, userSchool }) => (
         <StudentItem username={username} userSchool={userSchool} />
       ))}

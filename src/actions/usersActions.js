@@ -20,19 +20,26 @@ export const removeFollowing =
   };
 
 export const editProfileInfo =
-  (userID, userSchool, username, fullName) => (dispatch, getState) => {
-    const { users } = getState();
-    const user = users.filter((u) => u.username === userID)[0];
+  (userID, userSchool, fullName, contact) => (dispatch, getState) => {
     dispatch({
       type: 'EDIT_PROFILE',
       payload: {
-        user,
+        userID,
         userSchool,
-        username,
         fullName,
+        contact,
       },
     });
   };
+
+// export const removeUser = (userID) => (dispatch, getState) => {
+//   dispatch({
+//     type: 'REMOVE_USER',
+//     payload: {
+//       userID,
+//     },
+//   });
+// };
 
 export const getUserEvents = (userID) => (dispatch, getState) => {
   const { events } = getState();
@@ -43,10 +50,12 @@ export const getUserData = (userID) => (dispatch, getState) => {
   const { users } = getState();
   const user = users.filter((u) => u.username === userID)[0];
   return {
-    fullname: user.fullname,
+    fullName: user.fullName,
     username: user.username,
     userSchool: user.userSchool,
+    isAdmin: user.isAdmin,
     following: user.following,
+    contact: user.contact,
   };
 };
 

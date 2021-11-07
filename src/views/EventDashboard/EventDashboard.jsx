@@ -11,6 +11,7 @@ import {
   CardContent,
 } from '@mui/material';
 import './eventDashboard.css';
+import Geocode from 'react-geocode';
 import { useHistory } from 'react-router-dom';
 import banner from '../../images/uoft_banner.png';
 import hostIcon from '../../images/uoft.png';
@@ -41,11 +42,34 @@ const EventDashboard = ({
   const refreshEvent = () => {
     const refreshedEvent = getEvent(eventID);
     const refreshedAttendees = getManyUserData(refreshedEvent.attendees);
-    setEvent({ ...refreshedEvent });
     if (isLoggedIn) {
       setIsAttending(refreshedEvent.attendees.includes(user));
     }
     setAttendees(refreshedAttendees);
+    Geocode.setApiKey('AIzaSyB_RUPihF4_K2RXvpCKHYB7GPwd2Nb7Y_U');
+    Geocode.setRegion('can');
+    Geocode.fromLatLng(
+      `${refreshedEvent.location.lat}`,
+      `${refreshedEvent.location.lng}`,
+    ).then(
+      (response) => {
+        const address = response.results[0].formatted_address;
+        setEvent({ ...refreshedEvent, location: address });
+        console.log(address);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
+    Geocode.fromAddress('Bahen').then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        console.log(lat, lng);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
   };
 
   useEffect(() => refreshEvent(), []);

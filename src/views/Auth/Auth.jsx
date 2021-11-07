@@ -2,9 +2,19 @@ import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
 import { useHistory } from 'react-router-dom';
-import Input from '../../components/Input';
-import { useForm } from '../../utils/form-hook';
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../utils/validators';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+  username: yup
+    .string('Enter a username')
+    .min(5, 'Username should be of minimum 5 characters length')
+    .required('Username is required'),
+  password: yup
+    .string('Enter a password')
+    .min(8, 'Password should be of minimum 8 characters length')
+    .required('Password is required'),
+});
 
 const InputBox = ({ label, value, handleChange }) => (
   <TextField
@@ -19,49 +29,27 @@ const InputBox = ({ label, value, handleChange }) => (
 const Auth = ({ isLoggedIn, login, register }) => {
   const history = useHistory();
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [input, setInput] = useState({
-    isAdmin: false,
-  });
 
-  const [formState, inputHandler, setFormData] = useForm(
-    {
-      username: {
-        val: '',
-        helperText: '',
-        isValid: false,
-      },
-      password: {
-        val: '',
-        helperText: '',
-        isValid: false,
-      },
-    },
-    false,
-  );
-
-  const switchModeHandler = () => {
-    setFormData(
-      {
-        ...formState.inputs,
-      },
-      formState.inputs.username.isValid && formState.inputs.password.isValid,
-    );
-    setIsLoginMode(!isLoginMode);
-  };
-
-  const toggleAdminInput = () => {
-    setInput({ ...input, isAdmin: !input.isAdmin });
-  };
-
-  const handleFormSubmit = () => {
-    const { isAdmin } = input;
-    const { username, password } = formState.inputs;
+  const handleFormSubmit = (username, password, isAdmin) => {
     if (isLoginMode) {
       login(username.val, password.val);
     } else {
       register(username.val, password.val, isAdmin);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+      isAdmin: false,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      const { username, password, isAdmin } = values;
+      handleFormSubmit(username, password, isAdmin);
+    },
+  });
 
   if (isLoggedIn) {
     history.goBack();
@@ -95,26 +83,37 @@ const Auth = ({ isLoggedIn, login, register }) => {
             flex-direction: column;
             gap: 10px;
           `}
+          onSubmit={formik.handleSubmit}
         >
-          <Input
+          <TextField
             id="username"
-            label="User name"
-            helperText="Username must be atleast 5 characters."
-            onInput={inputHandler}
-            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
+            name="username"
+            margin="dense"
+            label="Username"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
-          <Input
+          <TextField
             id="password"
-            type="password"
+            name="password"
+            margin="dense"
             label="Password"
-            helperText="Please enter a password of atleast 8 characters."
-            onInput={inputHandler}
-            validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(8)]}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            type="password"
           />
           {!isLoginMode && (
             <FormControlLabel
               control={
-                <Checkbox value={input.isAdmin} onClick={toggleAdminInput} />
+                <Checkbox
+                  id="isAdmin"
+                  value={formik.values.isAdmin}
+                  onClick={formik.handleChange}
+                />
               }
               label="Admin"
             />
@@ -132,14 +131,13 @@ const Auth = ({ isLoggedIn, login, register }) => {
                 box-shadow: none;
               `}
               variant="contained"
-              onClick={handleFormSubmit}
-              disabled={!formState.isValid}
+              type="submit"
             >
               {isLoginMode ? 'Login' : 'Signup'}
             </Button>
             <Button
               variant="outlined"
-              onClick={switchModeHandler}
+              onClick={() => setIsLoginMode(!isLoginMode)}
               type="Button"
             >
               {`Switch to ${isLoginMode ? 'Sign up' : 'Log in'}`}

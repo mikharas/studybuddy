@@ -1,12 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@mui/styles';
-import Map from './map.png';
 import Event from '../../components/EventItem';
+import Map from '../../components/Map';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     width: '100%',
+    height: 'calc(100vh - 80px)',
   },
   map: {
     flex: 1,
@@ -23,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EventsExplorer = ({ events }) => {
+const EventsExplorer = ({ user, events }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
       <div className={classes.map}>
-        <img className={classes.mapImage} alt="map" src={Map} />
+        <Map events={events} user={user} />
       </div>
       <div className={classes.events}>
         {events.map((event) => (
@@ -39,6 +40,7 @@ const EventsExplorer = ({ events }) => {
             date={event.date}
             attendees={event.attendees.length}
             freespots={event.maxSpots - event.attendees.length}
+            isAttending={event.attendees.includes(user)}
           />
         ))}
       </div>
