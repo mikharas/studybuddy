@@ -48,7 +48,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
           date: payload.date,
           location: payload.location,
           maxSpots: parseInt(payload.maxSpots, 10),
-          attendees: [payload.title],
+          attendees: [payload.host],
         },
       ];
     case 'EDIT_EVENT':

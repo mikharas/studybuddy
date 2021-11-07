@@ -19,6 +19,7 @@ export const createEvent =
         maxSpots,
       },
     });
+    alert('Event successfully created!');
   };
 
 export const editEvent =

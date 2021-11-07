@@ -41,7 +41,7 @@ export const login = (username, password) => (dispatch, getState) => {
   } else {
     dispatch({
       type: 'LOGIN_SUCCESS',
-      payload: { username },
+      payload: { username: user.username, isAdmin: user.isAdmin },
     });
   }
 };

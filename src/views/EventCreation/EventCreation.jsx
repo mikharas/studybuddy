@@ -20,13 +20,18 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
       createEvent(
         titleRef.current.value,
         descriptionRef.current.value,
-        user.username,
+        user,
         dateRef.current.value,
         locationRef.current.value,
         spotsRef.current.value,
       );
     }
   };
+
+  if (!isLoggedIn) {
+    alert('You must log in to perform this action.');
+    history.push('/login');
+  }
 
   return (
     <div className="eventCreation">

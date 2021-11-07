@@ -10,6 +10,7 @@ import EventDashboard from './EventDashboard';
 
 const mapStateToProps = (state) => ({
   isLoggedIn: state.auth.isLoggedIn,
+  isAdmin: state.auth.isAdmin,
   user: state.auth.user,
 });
 

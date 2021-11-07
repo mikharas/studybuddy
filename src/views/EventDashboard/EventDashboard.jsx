@@ -17,6 +17,7 @@ import StudentItem from '../../components/StudentItem';
 const EventDashboard = ({
   eventID,
   user,
+  isAdmin,
   isLoggedIn,
   getEvent,
   editEvent,
@@ -41,7 +42,7 @@ const EventDashboard = ({
   let canEdit;
   if (user === undefined) {
     canEdit = false;
-  } else if (user.isAdmin || user.username === event.host) {
+  } else if (isAdmin || user === event.host) {
     canEdit = true;
   } else {
     canEdit = false;
@@ -154,11 +155,13 @@ const EventDashboard = ({
         </div>
         <div className="eventInformation">
           <ul>
-            <li>
-              <Button variant="contained" onClick={toggleAttending}>
-                {isAttending ? 'Unattend' : 'Attend'}
-              </Button>
-            </li>
+            {user !== event.host && !isEditMode && (
+              <li>
+                <Button variant="contained" onClick={toggleAttending}>
+                  {isAttending ? 'Unattend' : 'Attend'}
+                </Button>
+              </li>
+            )}
             <li>
               <Card>
                 <CardContent>
