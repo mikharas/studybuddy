@@ -1,3 +1,5 @@
+// TODO: Calls to database using axios
+
 export const register =
   (username, password, isAdmin) => (dispatch, getState) => {
     const allUsers = getState().users;
@@ -37,10 +39,9 @@ export const login = (username, password) => (dispatch, getState) => {
       type: 'LOGIN_FAIL',
     });
   } else {
-    alert('successfully logged in!');
     dispatch({
       type: 'LOGIN_SUCCESS',
-      payload: { user },
+      payload: { username },
     });
   }
 };

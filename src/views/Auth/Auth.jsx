@@ -1,43 +1,49 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, FormControlLabel, Checkbox } from '@mui/material';
 import { css } from '@emotion/css';
+import { useHistory } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-const InputBox = ({ label, value, handleChange }) => (
-  <TextField
-    id="outlined-name"
-    margin="dense"
-    label={label}
-    value={value}
-    onChange={(e) => handleChange(e, label)}
-  />
-);
+const validationSchema = yup.object({
+  username: yup
+    .string('Enter a username')
+    .min(3, 'Username should be of minimum 3 characters length')
+    .required('Username is required'),
+  password: yup
+    .string('Enter a password')
+    .min(3, 'Password should be of minimum 3 characters length')
+    .required('Password is required'),
+});
 
-const Auth = ({ login, register }) => {
+const Auth = ({ isLoggedIn, login, register }) => {
+  const history = useHistory();
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [input, setInput] = useState({
-    username: '',
-    password: '',
-    isAdmin: false,
-  });
 
-  const changeUsernameInput = (e) =>
-    setInput({ ...input, username: e.target.value });
-
-  const changePasswordInput = (e) =>
-    setInput({ ...input, password: e.target.value });
-
-  const toggleAdminInput = () => {
-    setInput({ ...input, isAdmin: !input.isAdmin });
-  };
-
-  const handleFormSubmit = () => {
-    const { username, password, isAdmin } = input;
+  const handleFormSubmit = (username, password, isAdmin) => {
     if (isLoginMode) {
       login(username, password);
     } else {
       register(username, password, isAdmin);
     }
   };
+
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+      isAdmin: false,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      const { username, password, isAdmin } = values;
+      handleFormSubmit(username, password, isAdmin);
+    },
+  });
+
+  if (isLoggedIn) {
+    history.goBack();
+  }
 
   return (
     <div
@@ -66,21 +72,37 @@ const Auth = ({ login, register }) => {
             display: flex;
             flex-direction: column;
           `}
+          onSubmit={formik.handleSubmit}
         >
-          <InputBox
+          <TextField
+            id="username"
+            name="username"
+            margin="dense"
             label="Username"
-            value={input.username}
-            handleChange={changeUsernameInput}
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
           />
-          <InputBox
+          <TextField
+            id="password"
+            name="password"
+            margin="dense"
             label="Password"
-            value={input.password}
-            handleChange={changePasswordInput}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+            type="password"
           />
           {!isLoginMode && (
             <FormControlLabel
               control={
-                <Checkbox value={input.isAdmin} onClick={toggleAdminInput} />
+                <Checkbox
+                  id="isAdmin"
+                  value={formik.values.isAdmin}
+                  onClick={formik.handleChange}
+                />
               }
               label="Admin"
             />
@@ -98,7 +120,7 @@ const Auth = ({ login, register }) => {
                 box-shadow: none;
               `}
               variant="contained"
-              onClick={handleFormSubmit}
+              type="submit"
             >
               {isLoginMode ? 'Login' : 'Signup'}
             </Button>

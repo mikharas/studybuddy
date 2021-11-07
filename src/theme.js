@@ -5,8 +5,8 @@ const theme = createTheme({
   palette: {
     primary: {
       light: `#e4ebdd`,
-      dark: `#241f19`,
-      main: `#A88E6F`,
+      dark: `#212e26`,
+      main: `#618770`,
       contrastText: `#fff`,
     },
     secondary: {
@@ -24,7 +24,7 @@ const theme = createTheme({
 
 theme.typography.h1 = {
   fontFamily: 'Avenir Black',
-  fontSize: theme.spacing(5),
+  fontSize: theme.spacing(7),
   [theme.breakpoints.down(`sm`)]: {
     fontSize: theme.spacing(5.5),
   },
@@ -35,7 +35,7 @@ theme.typography.h1 = {
 
 theme.typography.h2 = {
   ...theme.typography.h2,
-  fontSize: theme.spacing(4.3),
+  fontSize: theme.spacing(4),
   fontFamily: 'Avenir Roman',
   [theme.breakpoints.down(`sm`)]: {
     fontSize: theme.spacing(4),
@@ -48,8 +48,7 @@ theme.typography.h2 = {
 theme.typography.h3 = {
   ...theme.typography.h3,
   fontFamily: 'Avenir',
-  fontSize: theme.spacing(4.5),
-  fontWeight: 'bold',
+  fontSize: theme.spacing(4),
   [theme.breakpoints.down(`sm`)]: {
     fontSize: theme.spacing(4),
   },
@@ -67,8 +66,7 @@ theme.typography.h4 = {
 theme.typography.h5 = {
   ...theme.typography.h5,
   fontFamily: 'Avenir',
-  fontSize: theme.spacing(3.3),
-  fontWeight: 'bold',
+  fontSize: theme.spacing(3),
   [theme.breakpoints.down(`xs`)]: {
     fontSize: theme.spacing(3.1),
   },
@@ -87,8 +85,7 @@ theme.typography.h6 = {
 theme.typography.body1 = {
   ...theme.typography.body1,
   fontFamily: 'Avenir Roman',
-  fontSize: theme.spacing(2.3),
-  lineHeight: theme.spacing(0.25),
+  fontSize: theme.spacing(2),
   [theme.breakpoints.down(`sm`)]: {
     fontSize: theme.spacing(2.1),
   },

@@ -1,3 +1,5 @@
+// TODO: Calls to databse using axios;
+
 export const getEvent = (eventID) => (dispatch, getState) => {
   const { events } = getState();
   return events.filter((e) => e.id === eventID)[0];
@@ -19,21 +21,31 @@ export const createEvent =
     });
   };
 
-export const addAttendee = (title, attendee) => (dispatch, getState) => {
+export const addAttendee = (eventID, attendee) => (dispatch, getState) => {
+  const event = getState().events.find((e) => e.id === eventID);
+  if (event.host === attendee) {
+    alert('You are the host of this event');
+    return;
+  }
   dispatch({
     type: 'ADD_ATTENDEE',
     payload: {
-      title,
+      eventID,
       attendee,
     },
   });
 };
 
-export const removeAttendee = (title, attendee) => (dispatch, getState) => {
+export const removeAttendee = (eventID, attendee) => (dispatch, getState) => {
+  const event = getState().events.find((e) => e.id === eventID);
+  if (event.host === attendee) {
+    alert('You are the host of this event');
+    return;
+  }
   dispatch({
     type: 'REMOVE_ATTENDEE',
     payload: {
-      title,
+      eventID,
       attendee,
     },
   });
