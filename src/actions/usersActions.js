@@ -19,6 +19,21 @@ export const removeFollowing =
     });
   };
 
+export const editProfileInfo =
+  (userID, userSchool, username, fullName) => (dispatch, getState) => {
+    const { users } = getState();
+    const user = users.filter((u) => u.username === userID)[0];
+    dispatch({
+      type: 'EDIT_PROFILE',
+      payload: {
+        user,
+        userSchool,
+        username,
+        fullName,
+      },
+    });
+  };
+
 export const getUserEvents = (userID) => (dispatch, getState) => {
   const { events } = getState();
   return events.filter((e) => e.attendees.includes(userID));

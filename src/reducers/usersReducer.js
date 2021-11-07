@@ -55,6 +55,19 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
         }
         return u;
       });
+    case 'EDIT_PROFILE':
+      return state.map((u) => {
+        if (payload.user === u) {
+          return {
+            ...u,
+            userSchool: payload.userSchool,
+            username: payload.username,
+            fullName: payload.fullName,
+          };
+        }
+        return u;
+      });
+
     default:
       return state;
   }
