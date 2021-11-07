@@ -6,6 +6,7 @@ const initialUsersData = [
     password: 'admin',
     isAdmin: true,
     following: ['user'],
+    contact: 'None',
   },
   {
     userSchool: 'University of Toronto',
@@ -14,6 +15,7 @@ const initialUsersData = [
     password: 'user',
     isAdmin: false,
     following: ['admin'],
+    contact: 'None',
   },
   {
     userSchool: 'University of Toronto',
@@ -22,6 +24,7 @@ const initialUsersData = [
     password: 'user2',
     isAdmin: false,
     following: ['admin', 'user'],
+    contact: 'None',
   },
 ];
 

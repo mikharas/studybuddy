@@ -212,14 +212,14 @@ const StudentDashboard = ({
             {' '}
             My Events:{' '}
           </Typography>
-          <EventsList events={userData.hostedEvents} />
+          <EventsList events={userData.hostedEvents} user={user} />
         </div>
         <div className="eventsContainer">
           <Typography variant="h6" className="listHeader">
             {' '}
             Attending Events:{' '}
           </Typography>
-          <EventsList events={userData.userEvents} />
+          <EventsList events={userData.userEvents} user={user} />
         </div>
         <FollowingList followingList={following} />
       </div>
