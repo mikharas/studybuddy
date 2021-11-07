@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     borderTop: `solid 0.5px ${theme.palette.gray.dark}`,
     display: 'flex',
     alignItems: 'center',
+    minWidth: theme.spacing(60),
     width: '100%',
     height: '100%',
   },
@@ -56,10 +57,18 @@ const EventItem = ({ id, title, attendees, date, description, freespots }) => {
           <img alt="cat" src={Cat} className={classes.eventCardImage} />
         </div>
         <div className={classes.eventCardInfo}>
-          <Typography variant="body1" className={classes.eventDate}>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 'bold' }}
+            className={classes.eventDate}
+          >
             {date}
           </Typography>
-          <Typography variant="body1" className={classes.eventTitle}>
+          <Typography
+            variant="body1"
+            sx={{ fontWeight: 'bold' }}
+            className={classes.eventTitle}
+          >
             {title}
           </Typography>
           <Typography

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { StylesProvider } from '@mui/styles';
 import {
   EventDashboard,
   EventsExplorer,
@@ -17,34 +18,36 @@ function App({ isLoggedIn }) {
   return (
     <CssBaseline>
       <ThemeProvider theme={theme}>
-        <div className="App">
-          <Router>
-            <Navbar />
-            <Switch>
-              <Route exact path="/login" component={() => <Auth />} />
-              <Route exact path="/" component={() => <HomePage />} />
-              <Route
-                exact
-                path="/events-explorer"
-                component={() => <EventsExplorer />}
-              />
-              <Route
-                exact
-                path="/event-dashboard/:eventID"
-                render={({ match }) => (
-                  <EventDashboard eventID={match.params.eventID} />
-                )}
-              />
-              <Route
-                exact
-                path="/profile/:userID"
-                render={({ match }) => (
-                  <StudentDashboard userID={match.params.userID} />
-                )}
-              />
-            </Switch>
-          </Router>
-        </div>
+        <StylesProvider injectFirst>
+          <div className="App">
+            <Router>
+              <Navbar />
+              <Switch>
+                <Route exact path="/login" component={() => <Auth />} />
+                <Route exact path="/" component={() => <HomePage />} />
+                <Route
+                  exact
+                  path="/events-explorer"
+                  component={() => <EventsExplorer />}
+                />
+                <Route
+                  exact
+                  path="/event-dashboard/:eventID"
+                  render={({ match }) => (
+                    <EventDashboard eventID={match.params.eventID} />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/profile/:userID"
+                  render={({ match }) => (
+                    <StudentDashboard userID={match.params.userID} />
+                  )}
+                />
+              </Switch>
+            </Router>
+          </div>
+        </StylesProvider>
       </ThemeProvider>
     </CssBaseline>
   );
