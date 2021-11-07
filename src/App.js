@@ -12,6 +12,7 @@ import {
 } from './views';
 import './App.css';
 import Navbar from './components/navbar/index';
+import NotFound from './views/NotFound';
 import theme from './theme';
 
 function App({ isLoggedIn }) {
@@ -44,6 +45,7 @@ function App({ isLoggedIn }) {
                     <StudentDashboard userID={match.params.userID} />
                   )}
                 />
+                <Route path="*" component={() => <NotFound />} />
               </Switch>
             </Router>
           </div>
