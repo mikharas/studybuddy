@@ -1,7 +1,5 @@
 import React from 'react';
 import '../styles/studentDashboard.css';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Event from '../../components/EventItem';
 
 // eslint-disable-next-line react/prefer-stateless-function

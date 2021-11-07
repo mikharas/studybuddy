@@ -1,12 +1,9 @@
-/* eslint-disable max-classes-per-file */
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
-import { Button } from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import IconButton from '@mui/material/IconButton';
+import { Button, Typography, TextField } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import profilePic from '../../images/default-avatar.png';
-import robarts from '../../images/robarts.jpg';
+import uoft from '../../images/uoft.png';
+import Event from '../../components/EventItem';
 import EventsList from './StudentDashboardEvents';
 import StudentItem from '../../components/StudentItem';
 
@@ -20,37 +17,49 @@ const StudentDashboard = ({
   getManyUserData,
   getUserData,
   editable,
+  editProfileInfo,
+  getHostedEvents,
 }) => {
   const history = useHistory();
   const [userData, setUserData] = useState({
     fullName: '',
     username: '',
     userSchool: '',
+    isAdmin: false,
     following: [],
-    userAttendingEvents: [],
+    contact: '',
+    userEvents: [],
+    hostedEvents: [],
   });
 
   const [following, setFollowing] = useState([]);
 
   const [activeUserData, setActiveUserData] = useState({
     username: '',
+    isAdmin: false,
     following: [],
   });
 
   const refreshUserData = () => {
     if (isLoggedIn) {
-      const userAttendingEvents = getUserAttendingEvents(userID);
+      const userEvents = getUserAttendingEvents(userID);
+      const hostedEvents = getHostedEvents(userID);
       const userDataS = getUserData(userID);
-      const { username: newUsername, following: newFollowing } =
-        getUserData(user);
+      const {
+        username: newUsername,
+        following: newFollowing,
+        isAdmin: admin,
+      } = getUserData(user);
       const refreshedFollowing = getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
-        userAttendingEvents,
+        userEvents,
+        hostedEvents,
       });
       setActiveUserData({
         username: newUsername,
         following: newFollowing,
+        isAdmin: admin,
       });
       setFollowing(refreshedFollowing);
     }
@@ -61,6 +70,7 @@ const StudentDashboard = ({
   }, [userID]);
 
   const isFollowing = activeUserData.following.includes(userID);
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleFollowing = () => {
     if (!isFollowing) {
@@ -71,63 +81,159 @@ const StudentDashboard = ({
     refreshUserData();
   };
 
+  const fullNameRef = useRef();
+  const schoolRef = useRef();
+  const contactRef = useRef();
+
+  const toggleEditing = (cancelled) => {
+    if (isEditing && !cancelled) {
+      editProfileInfo(
+        userID,
+        schoolRef.current.value,
+        fullNameRef.current.value,
+        contactRef.current.value,
+      );
+    }
+    setIsEditing(!isEditing);
+    refreshUserData();
+  };
+
   if (!isLoggedIn) {
     alert('You must log in to perform this action!');
     history.push('/login');
   }
+
   return (
     <div className="profilePage">
       <div className="user">
         {!editable && (
-          <Button onClick={toggleFollowing}>
+          <Button className="followEditButton" onClick={toggleFollowing}>
             {isFollowing ? 'Unfollow' : 'Follow'}
           </Button>
         )}
-        <img src={robarts} className="avatar" alt="Avatar" />
+        {editable && (
+          <Button
+            className="followEditButton"
+            onClick={() => toggleEditing(false)}
+          >
+            {isEditing ? 'Save' : 'Edit'}
+          </Button>
+        )}
+        {isEditing && (
+          <>
+            <Button
+              className="followEditButton"
+              onClick={() => toggleEditing(true)}
+            >
+              Cancel
+            </Button>
+            {/* Add remove user functionality in phase 2 */}
+            <Button
+              className="deleteBanButton" // onClick={removeUser}
+            >
+              Delete Account
+            </Button>
+          </>
+        )}
+        {/* Add remove user functionality in phase 2 */}
+        {!editable && activeUserData.isAdmin && !userData.isAdmin && (
+          <Button
+            className="deleteBanButton" // onClick={banUser}
+          >
+            Ban
+          </Button>
+        )}
+
+        <img src={uoft} className="avatar" alt="Avatar" />
         <ul className="userInfo">
           <li className="userFullName">
-            <b>{userData.fullName}</b>
-          </li>
-          <li>
-            <b>Username:</b> {userData.username}
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
+            {isEditing ? (
+              <TextField
+                id="outlined-fullname"
+                variant="outlined"
+                label="Full Name"
+                defaultValue={userData.fullName}
+                inputRef={fullNameRef}
+                size="small"
+                margin="dense"
+              />
+            ) : (
+              <Typography variant="body1">{userData.fullName}</Typography>
             )}
           </li>
           <li>
-            <b>School:</b> {userData.userSchool}
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
+            <Typography variant="body2">
+              Username: {userData.username}
+            </Typography>
+          </li>
+          <li>
+            {isEditing ? (
+              <TextField
+                id="outlined-school"
+                variant="outlined"
+                label="School"
+                defaultValue={userData.userSchool}
+                inputRef={schoolRef}
+                size="small"
+                margin="dense"
+              />
+            ) : (
+              <>
+                <Typography variant="body2">
+                  School: {userData.userSchool}
+                </Typography>
+              </>
             )}
           </li>
           <li>
-            <b>Contacts:</b> None
-            {editable && (
-              <IconButton aria-label="Edit username">
-                <EditTwoToneIcon style={{ fontSize: 'small' }} />
-              </IconButton>
+            {isEditing ? (
+              <TextField
+                id="outlined-title"
+                variant="outlined"
+                label="Contact"
+                defaultValue={userData.contact}
+                inputRef={contactRef}
+                size="small"
+                margin="dense"
+              />
+            ) : (
+              <>
+                <Typography variant="body2">
+                  Contact: {userData.contact}
+                </Typography>
+              </>
             )}
           </li>
         </ul>
       </div>
       <div className="bottomContainer">
-        <EventsList events={userData.userAttendingEvents} user={user} />
+        <div className="eventsContainer">
+          <Typography variant="h6" className="listHeader">
+            {' '}
+            My Events:{' '}
+          </Typography>
+          <EventsList events={userData.hostedEvents} />
+        </div>
+        <div className="eventsContainer">
+          <Typography variant="h6" className="listHeader">
+            {' '}
+            Attending Events:{' '}
+          </Typography>
+          <EventsList events={userData.userEvents} />
+        </div>
         <FollowingList followingList={following} />
       </div>
     </div>
   );
 };
 
-// eslint-disable-next-line react/prefer-stateless-function
 const FollowingList = ({ followingList }) => {
   const history = useHistory();
   return (
     <div className="following">
-      <h3 className="listHeader">Following:</h3>
+      <Typography variant="h6" className="listHeader">
+        Following:{' '}
+      </Typography>
       {followingList.map(({ username, userSchool }) => (
         <StudentItem username={username} userSchool={userSchool} />
       ))}

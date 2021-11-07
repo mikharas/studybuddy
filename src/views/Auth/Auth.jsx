@@ -22,9 +22,9 @@ const Auth = ({ isLoggedIn, login, register }) => {
 
   const handleFormSubmit = (username, password, isAdmin) => {
     if (isLoginMode) {
-      login(username, password);
+      login(username.val, password.val);
     } else {
-      register(username, password, isAdmin);
+      register(username.val, password.val, isAdmin);
     }
   };
 
@@ -71,6 +71,7 @@ const Auth = ({ isLoggedIn, login, register }) => {
           className={css`
             display: flex;
             flex-direction: column;
+            gap: 10px;
           `}
           onSubmit={formik.handleSubmit}
         >
