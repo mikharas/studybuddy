@@ -41,6 +41,12 @@ const EventDashboard = ({
 
   const refreshEvent = () => {
     const refreshedEvent = getEvent(eventID);
+    // TODO: refactor this later
+    if (!refreshedEvent) {
+      history.push('/404');
+      history.go(0);
+      return;
+    }
     const refreshedAttendees = getManyUserData(refreshedEvent.attendees);
     if (isLoggedIn) {
       setIsAttending(refreshedEvent.attendees.includes(user));

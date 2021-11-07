@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { StylesProvider } from '@mui/styles';
 import {
@@ -45,7 +50,8 @@ function App({ isLoggedIn }) {
                     <StudentDashboard userID={match.params.userID} />
                   )}
                 />
-                <Route path="*" component={() => <NotFound />} />
+                <Route exact path="/404" component={() => <NotFound />} />
+                <Redirect from="*" to="/404" />
               </Switch>
             </Router>
           </div>
