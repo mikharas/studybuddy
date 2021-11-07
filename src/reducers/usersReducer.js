@@ -15,6 +15,7 @@ const initialUsersData = [
     password: 'sarah123',
     isAdmin: false,
     following: [],
+    contact: 'None',
   },
 ];
 
@@ -63,7 +64,6 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
           return {
             ...u,
             userSchool: payload.userSchool,
-            username: payload.username,
             fullName: payload.fullName,
             contact: payload.contact,
           };

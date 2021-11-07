@@ -1,8 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
 import { Button, Typography, TextField } from '@mui/material';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import IconButton from '@mui/material/IconButton';
 import { useHistory } from 'react-router-dom';
 import uoft from '../../images/uoft.png';
 import Event from '../../components/EventItem';
@@ -20,6 +18,7 @@ const StudentDashboard = ({
   getUserData,
   editable,
   editProfileInfo,
+  getHostedEvents,
 }) => {
   const history = useHistory();
   const [userData, setUserData] = useState({
@@ -30,6 +29,7 @@ const StudentDashboard = ({
     following: [],
     contact: '',
     userEvents: [],
+    hostedEvents: [],
   });
 
   const [following, setFollowing] = useState([]);
@@ -43,6 +43,7 @@ const StudentDashboard = ({
   const refreshUserData = () => {
     if (isLoggedIn) {
       const userEvents = getUserEvents(userID);
+      const hostedEvents = getHostedEvents(userID);
       const userDataS = getUserData(userID);
       const {
         username: newUsername,
@@ -53,6 +54,7 @@ const StudentDashboard = ({
       setUserData({
         ...userDataS,
         userEvents,
+        hostedEvents,
       });
       setActiveUserData({
         username: newUsername,
@@ -202,21 +204,23 @@ const StudentDashboard = ({
               </>
             )}
           </li>
-          {/* <li>
-            <b>Contacts:</b> None
-            {isEditing
-            ? <TextField
-                id="outlined-title"
-                defaultValue={userData.userSchool}
-                inputRef={userSchoolRef}
-              /> 
-              : userData.userSchool
-            }
-          </li> */}
         </ul>
       </div>
       <div className="bottomContainer">
-        <EventsList events={userData.userEvents} />
+        <div className="eventsContainer">
+          <Typography variant="h6" className="listHeader">
+            {' '}
+            My Events:{' '}
+          </Typography>
+          <EventsList events={userData.hostedEvents} />
+        </div>
+        <div className="eventsContainer">
+          <Typography variant="h6" className="listHeader">
+            {' '}
+            Attending Events:{' '}
+          </Typography>
+          <EventsList events={userData.userEvents} />
+        </div>
         <FollowingList followingList={following} />
       </div>
     </div>
