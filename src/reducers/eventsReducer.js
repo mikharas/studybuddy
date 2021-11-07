@@ -47,10 +47,24 @@ const eventsReducer = (state = initialData, { type, payload }) => {
           host: payload.host,
           date: payload.date,
           location: payload.location,
-          maxSpots: payload.maxSpots,
+          maxSpots: parseInt(payload.maxSpots, 10),
           attendees: [payload.title],
         },
       ];
+    case 'EDIT_EVENT':
+      return state.map((e) => {
+        if (e.id === payload.eventID) {
+          return {
+            ...e,
+            title: payload.title,
+            description: payload.description,
+            date: payload.date,
+            location: payload.location,
+            maxSpots: parseInt(payload.maxSpots, 10) + e.attendees.length,
+          };
+        }
+        return e;
+      });
     case 'ADD_ATTENDEE':
       return state.map((e) => {
         if (e.id === payload.eventID) {

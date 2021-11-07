@@ -21,6 +21,22 @@ export const createEvent =
     });
   };
 
+export const editEvent =
+  (eventID, title, description, date, location, maxSpots) =>
+  (dispatch, getState) => {
+    dispatch({
+      type: 'EDIT_EVENT',
+      payload: {
+        eventID,
+        title,
+        description,
+        date,
+        location,
+        maxSpots,
+      },
+    });
+  };
+
 export const addAttendee = (eventID, attendee) => (dispatch, getState) => {
   const event = getState().events.find((e) => e.id === eventID);
   if (event.host === attendee) {

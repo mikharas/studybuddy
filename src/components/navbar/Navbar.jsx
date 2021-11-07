@@ -73,6 +73,15 @@ function Navbar({ logout, isLoggedIn, user }) {
                 <Typography variant="h6">Events Explorer</Typography>
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                to="/event-creation"
+                className="nav-links"
+                onClick={closeMobileMenu}
+              >
+                <Typography variant="h6">Create Event</Typography>
+              </Link>
+            </li>
           </ul>
           {isLoggedIn ? (
             <>

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import {
   getEvent,
+  editEvent,
   addAttendee,
   removeAttendee,
 } from '../../actions/eventsActions';
@@ -14,6 +15,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   getEvent,
+  editEvent,
   getManyUserData,
   addAttendee,
   removeAttendee,

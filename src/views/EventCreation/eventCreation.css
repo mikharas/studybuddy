@@ -1,0 +1,10 @@
+.eventCreation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eventList ul li {
+  padding: 10px;
+  list-style-type: none;
+}
