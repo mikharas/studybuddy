@@ -2,6 +2,7 @@ const initialAuthData = [
   {
     isLoggedIn: false,
     user: null,
+    isAdmin: null,
   },
 ];
 
@@ -12,18 +13,21 @@ const authReducer = (state = initialAuthData, { type, payload }) => {
         ...state,
         isLoggedIn: true,
         user: payload.username,
+        isAdmin: payload.isAdmin,
       };
     case 'LOGIN_FAIL':
       return {
         ...state,
         isLoggedIn: false,
         user: null,
+        isAdmin: null,
       };
     case 'LOGOUT':
       return {
         ...state,
         isLoggedIn: false,
         user: null,
+        isAdmin: null,
       };
     case 'REGISTER_SUCCESS':
       return {
