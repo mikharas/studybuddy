@@ -4,6 +4,8 @@ export const register =
   (username, password, isAdmin) => (dispatch, getState) => {
     const allUsers = getState().users;
     const userExists = allUsers.find((user) => user.username === username);
+    console.log(allUsers);
+    console.log(username, password, isAdmin);
     if (userExists) {
       alert('Username taken');
       dispatch({

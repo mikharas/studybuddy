@@ -3,8 +3,10 @@ import {
   addFollowing,
   removeFollowing,
   getUserAttendingEvents,
+  getHostedEvents,
   getUserData,
   getManyUserData,
+  editProfileInfo,
 } from '../../actions/usersActions';
 import StudentDashboard from './StudentDashboard';
 
@@ -21,6 +23,8 @@ export default connect(mapStateToProps, {
   addFollowing,
   removeFollowing,
   getUserAttendingEvents,
+  getHostedEvents,
   getUserData,
   getManyUserData,
+  editProfileInfo,
 })(StudentDashboard);

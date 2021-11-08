@@ -6,6 +6,7 @@ const initialUsersData = [
     password: 'admin',
     isAdmin: true,
     following: ['user'],
+    contact: 'None',
   },
   {
     userSchool: 'University of Toronto',
@@ -14,6 +15,7 @@ const initialUsersData = [
     password: 'user',
     isAdmin: false,
     following: ['admin'],
+    contact: 'None',
   },
   {
     userSchool: 'University of Toronto',
@@ -22,6 +24,7 @@ const initialUsersData = [
     password: 'user2',
     isAdmin: false,
     following: ['admin', 'user'],
+    contact: 'None',
   },
 ];
 
@@ -37,6 +40,7 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
           password: payload.password,
           isAdmin: payload.isAdmin,
           following: [],
+          contact: payload.contact,
         },
       ];
     case 'ADD_FOLLOWING':
@@ -63,6 +67,23 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
         }
         return u;
       });
+    case 'EDIT_PROFILE':
+      return state.map((u) => {
+        if (payload.userID === u.username) {
+          return {
+            ...u,
+            userSchool: payload.userSchool,
+            fullName: payload.fullName,
+            contact: payload.contact,
+          };
+        }
+        return u;
+      });
+    // case 'REMOVE_USER':
+    //   return state.filter((u) =>  {
+    //     return u.username !=== payload.userID
+    //   });
+
     default:
       return state;
   }
