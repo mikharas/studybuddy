@@ -94,7 +94,7 @@ Detailed Features Instructions:
     4. Should you host any events the marker will be red
 - Event Joining/Leaving
     1. Navigate to the details of any event (via event explorer or the homepage)
-    2. Click the attend button located to the right of the info
+    2. Click the attend button located under the banner to the right
         - You may see your upcoming events in the homepage
 - Profile Editing
     1. Once logged in click the portrait icon located in the nav bar to the left of the logout button
