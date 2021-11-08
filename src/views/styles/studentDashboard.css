@@ -70,7 +70,6 @@ li {
   width: 450px;
   max-height: 550px;
   overflow-y: scroll;
-  border-top: 2px solid lightgrey;
 }
 
 .userEvent {

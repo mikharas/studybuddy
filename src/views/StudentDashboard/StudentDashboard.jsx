@@ -3,7 +3,6 @@ import '../styles/studentDashboard.css';
 import { Button, Typography, TextField } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import uoft from '../../images/uoft.png';
-import Event from '../../components/EventItem';
 import EventsList from './StudentDashboardEvents';
 import StudentItem from '../../components/StudentItem';
 
@@ -210,7 +209,7 @@ const StudentDashboard = ({
         <div className="eventsContainer">
           <Typography variant="h6" className="listHeader">
             {' '}
-            My Events:{' '}
+            {user === userID ? 'My Events' : 'Hosted events'}{' '}
           </Typography>
           <EventsList events={userData.hostedEvents} user={user} />
         </div>
@@ -219,7 +218,10 @@ const StudentDashboard = ({
             {' '}
             Attending Events:{' '}
           </Typography>
-          <EventsList events={userData.userEvents} user={user} />
+          <EventsList
+            events={userData.userEvents.filter((e) => e.host !== userID)}
+            user={user}
+          />
         </div>
         <FollowingList followingList={following} />
       </div>

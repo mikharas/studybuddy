@@ -1,7 +1,7 @@
 const initialUsersData = [
   {
     userSchool: 'University of Toronto',
-    username: 'admin123',
+    username: 'admin',
     fullName: 'Admin',
     password: 'admin',
     isAdmin: true,
