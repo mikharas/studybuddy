@@ -8,7 +8,6 @@ li {
   width: 100%;
   background-color: white;
   overflow-y: auto;
-  border: 9px solid rgba(0, 0, 0, 0.795);
 }
 
 .user {
