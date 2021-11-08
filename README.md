@@ -19,11 +19,14 @@ but you may create your own if you wish.
 Features:
 Our current features include:
 - Event Navigation
-- Event creation
+- Event Creation
 - Event Editing
 - Event Map/location navigation
-- Event joining/leaving
-- Profile editing
+- Event Joining/Leaving
+- Profile Editing
+
+Usage of the features should be self explanatory but for more detailed instructions
+see below.
 
 Admins currently have the ability to edit their special
 admin event meetings, more features for them coming soon.
@@ -32,7 +35,10 @@ IMPORTANT:
 As our backend is not yet fully constructed, we have a 
 save state function in the frontend that keeps track of the user.
 As such refreshing the page will remove this state needing
-the user to log back in.
+the user to log back in. The other features that still are incomplete
+due to lack of backend support are as follows:
+    - Event Creation: image uploading
+    - Google Map API: calls backend
 
 Third Party Libraries Used:
     "@babel/core": "^7.15.8",

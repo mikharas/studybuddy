@@ -77,6 +77,13 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
             />
           </li>
           <li>
+            <Button variant="contained">
+              Upload Image
+              {/* Note this feature pulls from backend and as such does not work yet
+               */}
+            </Button>
+          </li>
+          <li>
             <Button variant="contained" onClick={createNewEvent}>
               Create Event
               {/* <Link to={`/profile/${user}`}>
