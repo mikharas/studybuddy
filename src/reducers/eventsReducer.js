@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 const initialData = [
   {
     id: '1',
@@ -41,7 +39,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       return [
         ...state,
         {
-          id: uuidv4(),
+          id: payload.id,
           title: payload.title,
           description: payload.description,
           host: payload.host,

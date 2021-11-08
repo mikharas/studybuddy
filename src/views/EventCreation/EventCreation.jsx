@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { Button, TextField } from '@mui/material';
 import './eventCreation.css';
 import { useHistory } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
   const history = useHistory();
@@ -17,7 +18,9 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
       alert('You must log in to perform this action.');
       history.push('/login');
     } else {
+      const generatedID = uuidv4();
       createEvent(
+        generatedID,
         titleRef.current.value,
         descriptionRef.current.value,
         user,
@@ -25,6 +28,7 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
         locationRef.current.value,
         spotsRef.current.value,
       );
+      history.push(`/event-dashboard/${generatedID}`);
     }
   };
 
