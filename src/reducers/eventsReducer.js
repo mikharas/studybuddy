@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 const initialData = [
   {
     id: '1',
@@ -41,16 +39,30 @@ const eventsReducer = (state = initialData, { type, payload }) => {
       return [
         ...state,
         {
-          id: uuidv4(),
+          id: payload.id,
           title: payload.title,
           description: payload.description,
           host: payload.host,
           date: payload.date,
           location: payload.location,
-          maxSpots: payload.maxSpots,
-          attendees: [payload.title],
+          maxSpots: parseInt(payload.maxSpots, 10),
+          attendees: [payload.host],
         },
       ];
+    case 'EDIT_EVENT':
+      return state.map((e) => {
+        if (e.id === payload.eventID) {
+          return {
+            ...e,
+            title: payload.title,
+            description: payload.description,
+            date: payload.date,
+            location: payload.location,
+            maxSpots: parseInt(payload.maxSpots, 10) + e.attendees.length,
+          };
+        }
+        return e;
+      });
     case 'ADD_ATTENDEE':
       return state.map((e) => {
         if (e.id === payload.eventID) {

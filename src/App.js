@@ -14,6 +14,7 @@ import {
   HomePage,
   Auth,
   StudentDashboard,
+  EventCreation,
 } from './views';
 import './App.css';
 import Navbar from './components/navbar/index';
@@ -37,6 +38,11 @@ function App({ isLoggedIn }) {
                   exact
                   path="/events-explorer"
                   component={() => <EventsExplorer />}
+                />
+                <Route
+                  exact
+                  path="/event-creation"
+                  component={() => <EventCreation />}
                 />
                 <Route
                   exact

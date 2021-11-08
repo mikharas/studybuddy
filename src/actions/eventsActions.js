@@ -6,14 +6,32 @@ export const getEvent = (eventID) => (dispatch, getState) => {
 };
 
 export const createEvent =
-  (title, description, host, date, location, maxSpots) =>
+  (id, title, description, host, date, location, maxSpots) =>
   (dispatch, getState) => {
     dispatch({
       type: 'CREATE_EVENT',
       payload: {
+        id,
         title,
         description,
         host,
+        date,
+        location,
+        maxSpots,
+      },
+    });
+    alert('Event successfully created!');
+  };
+
+export const editEvent =
+  (eventID, title, description, date, location, maxSpots) =>
+  (dispatch, getState) => {
+    dispatch({
+      type: 'EDIT_EVENT',
+      payload: {
+        eventID,
+        title,
+        description,
         date,
         location,
         maxSpots,
