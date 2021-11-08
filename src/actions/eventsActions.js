@@ -1,4 +1,6 @@
-// TODO: Calls to databse using axios;
+// TODO: Calls to database using axios;
+// code below requires server call to get event data, which is dispatched to reducers
+// to modify application state
 
 export const getEvent = (eventID) => (dispatch, getState) => {
   const { events } = getState();
