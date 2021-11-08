@@ -1,4 +1,6 @@
-// TODO: Calls to data base using axios
+// TODO: Calls to database using axios
+// code below requires server call to get user data, which is dispatched to reducers
+// to modify application state
 
 export const addFollowing = (follower, following) => (dispatch, getState) => {
   dispatch({
