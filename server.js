@@ -10,12 +10,12 @@ const path = require('path')
 
 const express = require('express')
 const app = express();
-
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 const cors = require('cors')
 if (env !== 'production') { app.use(cors()) }
-
+const log = (stuff) => console.log(stuff)
 const { mongoose } = require("./db/mongoose");
-mongoose.set('useFindAndModify', false);
+mongoose.connect('mongodb://localhost:27017/StudyBuddyAPI').then(()=>{console.log('...')})
 
 const { Event } = require("./models/event");
 const { User } = require("./models/user");
@@ -123,8 +123,15 @@ app.get("/check-session", (req, res) => {
 })
 
 // API Routes
-app.post('/events-explorer', mongoChecker, async (req, res) => {
-    
+app.post('/api/users', mongoChecker, async (req, res) => {
+    console.log("bruh moment")
+    console.log(req.body)
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
+
     const user = new User({
         username: req.body.username,
         password: req.body.password,
@@ -145,7 +152,27 @@ app.post('/events-explorer', mongoChecker, async (req, res) => {
     }
 })
 
+app.get('/api/users', async (req, res) => {
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	} 
+
+	// Get the students
+	try {
+		const students = await User.find()
+		// res.send(students) // just the array
+		res.send({ students }) // can wrap students in object if want to add more properties
+	} catch(error) {
+		log(error)
+		res.status(500).send("Internal Server Error")
+	}
+})
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    log(`Listening on port ${port}...`);
+    log(`Listening on port localhost://${port}...`);
 })
