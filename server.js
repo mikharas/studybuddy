@@ -1,4 +1,5 @@
 'use strict'
+const log = console.log;
 
 const env = process.env.NODE_ENV
 
@@ -15,7 +16,7 @@ const cors = require('cors')
 if (env !== 'production') { app.use(cors()) }
 
 const { mongoose } = require("./db/mongoose");
-mongoose.set('useFindAndModify', false);
+//mongoose.set('useFindAndModify', false);
 
 const { Event } = require("./models/event");
 const { User } = require("./models/user");
@@ -69,7 +70,7 @@ const authenticate = (req, res, next) => {
 
 app.use(
     session({
-        secret: process.env.SESSION_SECRET, // || "some secret"
+        secret: process.env.SECRET, // || "some secret"
         resave: false,
         saveUninitialized: false,
         cookie: {

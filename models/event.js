@@ -35,7 +35,7 @@ const Event = mongoose.model('Event', {
         minlength: 1
     },
     attendees: {
-        type: [User],
+        type: [String],
         required: true
     }
 })
