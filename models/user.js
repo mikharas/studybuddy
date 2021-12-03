@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
-const UserSchema = new mongoose.Schema('User', {
+const UserSchema = new mongoose.Schema({
     school: {
         type: String,
         required: false,
@@ -28,7 +28,7 @@ const UserSchema = new mongoose.Schema('User', {
         required: true,
     },
     following: {
-        type: [User],
+        type: [String],
         required: true
     },
     contact: {

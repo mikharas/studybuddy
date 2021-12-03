@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const { User } = require("./user");
 
 const Event = mongoose.model('Event', {
     id: {
@@ -35,7 +34,7 @@ const Event = mongoose.model('Event', {
         minlength: 1
     },
     attendees: {
-        type: [User],
+        type: [String],
         required: true
     }
 })
