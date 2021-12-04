@@ -20,7 +20,6 @@
   },
   "scripts": {
     "start": "node server.js",
-    "build-run": "cd client && yarn build && cd .. && node server.js",
-    "heroku-postbuild": "cd client && yarn && yarn build"
+    "build-run": "cd client && yarn build && cd .. && node server.js"
   }
 }
