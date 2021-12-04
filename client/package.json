@@ -15,9 +15,9 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "cz": "^1.8.2",
     "formik": "^2.2.9",
     "google-map-react": "^2.1.10",
+    "husky": "^7.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-geocode": "^0.2.3",
@@ -38,6 +38,7 @@
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|css)\" --write",
     "postinstall": "cd .. && husky install client/.husky",
+    "pre-commit": "lint-staged",
     "prepare": "cd .. && husky install client/.husky"
   },
   "eslintConfig": {
@@ -60,6 +61,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
+    "cz": "^1.8.2",
     "cz-conventional-changelog": "^3.0.1",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -68,7 +70,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
     "override-material-ui-css": "^1.1.4",
     "prettier": "^2.4.1"
