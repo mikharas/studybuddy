@@ -5,6 +5,10 @@
   "repository": "https://github.com/csc309-fall-2021/team21.git",
   "author": "",
   "license": "MIT",
+  "engines" : { 
+    "node": "17.0.1",
+    "yarn": "1.22.17"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-mongo": "^4.6.0",
