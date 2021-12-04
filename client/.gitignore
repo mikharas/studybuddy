@@ -24,7 +24,6 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
-yarn.lock
 mongo-data
 
 packages/react-devtools-core/dist
