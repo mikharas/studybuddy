@@ -36,8 +36,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|css)\" --write",
-    "postinstall": "husky install",
-    "prepare": "husky install"
+    "postinstall": "cd .. && husky install client/.husky",
+    "prepare": "cd .. && husky install client/.husky"
   },
   "eslintConfig": {
     "extends": [
@@ -68,7 +68,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.4",
-    "lint-staged": "^11.2.4",
+    "lint-staged": "^12.1.2",
     "override-material-ui-css": "^1.1.4",
     "prettier": "^2.4.1"
   },
