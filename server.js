@@ -138,13 +138,10 @@ Request body expects:
 app.post('/events-explorer', mongoChecker, async (req, res) => {
     
     const user = new User({
-        school: "",
         username: req.body.username,
-        fullName: "",
         password: req.body.password,
         isAdmin: req.body.isAdmin,
         following: [],
-        contact: ""
     })
 
     try {
@@ -182,14 +179,6 @@ app.delete('/profile/:userID', mongoChecker, authenticate, async (req, res) => {
 })
 
 // Route for getting a user.
-/* 
-Request body expects:
-{
-	"username": <username>,
-    "password": <password>,
-    "isAdmin": <true or false>
-}
-*/
 app.get('/profile/:userID', mongoChecker, authenticate, async (req, res) => {
     const userID = req.params.userID
     if (!ObjectID.isValid(userID)) {
