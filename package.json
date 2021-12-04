@@ -5,7 +5,7 @@
   "repository": "https://github.com/csc309-fall-2021/team21.git",
   "author": "",
   "license": "MIT",
-  "engines" : { 
+  "engines": {
     "node": "17.0.1",
     "yarn": "1.22.17"
   },
