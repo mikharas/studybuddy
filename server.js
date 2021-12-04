@@ -70,7 +70,7 @@ const authenticate = (req, res, next) => {
 
 app.use(
     session({
-        secret: process.env.SECRET, // || "some secret"
+        secret: process.env.SESSION_SECRET || "some secret",
         resave: false,
         saveUninitialized: false,
         cookie: {
