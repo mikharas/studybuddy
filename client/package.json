@@ -32,7 +32,7 @@
   "scripts": {
     "start": "react-scripts start",
     "commit": "cz",
-    "build": "react-scripts build",
+    "build": "react-scripts build --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
