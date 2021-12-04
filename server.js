@@ -1,5 +1,4 @@
 'use strict'
-const log = console.log;
 
 const env = process.env.NODE_ENV
 
