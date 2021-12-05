@@ -41,9 +41,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|css)\" --write",
-    "postinstall": "cd .. && husky install client/.husky",
+    "postinstall": "cd .. && husky install client/.husky && cd client",
     "pre-commit": "lint-staged",
-    "prepare": "cd .. && husky install client/.husky"
+    "prepare": "cd .. && husky install client/.husky && cd client"
   },
   "eslintConfig": {
     "extends": [
