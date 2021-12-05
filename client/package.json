@@ -17,7 +17,6 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "cz": "^1.8.2",
-    "eslint": "^7.2.0",
     "formik": "^2.2.9",
     "google-map-react": "^2.1.10",
     "husky": "^7.0.4",
@@ -41,9 +40,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
     "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|css)\" --write",
-    "postinstall": "cd .. && husky install client/.husky && cd client",
+    "postinstall": "cd .. && husky install client/.husky",
     "pre-commit": "lint-staged",
-    "prepare": "cd .. && husky install client/.husky && cd client"
+    "prepare": "cd .. && husky install client/.husky"
   },
   "eslintConfig": {
     "extends": [
@@ -66,7 +65,7 @@
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "cz-conventional-changelog": "^3.0.1",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint": "^7.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
