@@ -1,11 +1,6 @@
 const mongoose = require('mongoose')
-const { User } = require("./user");
 
 const Event = mongoose.model('Event', {
-    id: {
-        type: String,
-        required: true
-    },
     title: {
         type: String,
         required: true,
@@ -19,7 +14,6 @@ const Event = mongoose.model('Event', {
     host: {
         type: String,
         required: true,
-        minlength: 1
     },
     location: {
         type: Object,
@@ -34,10 +28,10 @@ const Event = mongoose.model('Event', {
         required: true,
         minlength: 1
     },
-    // attendees: {
-    //     type: [User],
-    //     required: true
-    // }
+    attendees: {
+        type: [String],
+        required: true
+    }
 })
 
 module.exports = { Event }
