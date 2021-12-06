@@ -19,7 +19,6 @@ mongoose.connect('mongodb://localhost:27017/StudyBuddyAPI').then(()=>{console.lo
 
 const { Event } = require("./models/event");
 const { User } = require("./models/user");
-const { ObjectID } = require('mongodb')
 
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
@@ -32,7 +31,7 @@ function isMongoError(error) {
     return typeof error === 'object' && error != null && error.name === "MongoNetworkError"
 }
 
-/** Helper Functions **/
+// Helper functions
 
 const mongoChecker = (req, res, next) => {
     if (mongoose.connection.readyState != 1) {
@@ -43,7 +42,7 @@ const mongoChecker = (req, res, next) => {
     }
 }
 
-/** Middleware **/
+// Middleware
 
 const authenticate = (req, res, next) => {
     if (env !== 'production' && USE_TEST_USER) {
@@ -59,18 +58,18 @@ const authenticate = (req, res, next) => {
                 next()
             }
         }).catch((error) => {
-            res.status(401).send('Unauthorized')
+            res.status(401).send()
         })
     } else {
-        res.status(401).send('Unauthorized')
+        res.status(401).send()
     }
 }
 
-/** Session Handling **/
+// Session handling
 
 app.use(
     session({
-        secret: process.env.SESSION_SECRET || "some secret",
+        secret: process.env.SESSION_SECRET, // || "some secret"
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -119,29 +118,25 @@ app.get("/check-session", (req, res) => {
     if (req.session.user) {
         res.send({ currentUser: req.session.username });
     } else {
-        res.status(401).send('Unauthorized');
+        res.status(401).send();
     }
 })
 
-/** API Routes **/
-// User API Routes
+// API Routes
+app.post('/api/users', mongoChecker, async (req, res) => {
+    console.log("bruh moment")
+    console.log(req.body)
+    if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
+		return;
+	}  
 
-// Route for creating a user.
-/* 
-Request body expects:
-{
-	"username": <username>,
-    "password": <password>,
-    "isAdmin": <true or false>
-}
-*/
-app.post('/events-explorer', mongoChecker, async (req, res) => {
-    
     const user = new User({
         username: req.body.username,
         password: req.body.password,
         isAdmin: req.body.isAdmin,
-        following: [],
+        following: []
     })
 
     try {
@@ -157,367 +152,26 @@ app.post('/events-explorer', mongoChecker, async (req, res) => {
     }
 })
 
-// Route for removing a user.
-app.delete('/profile/:userID', mongoChecker, authenticate, async (req, res) => {
-    const userID = req.params.userID
-    if (!ObjectID.isValid(userID)) {
-		res.status(404).send('Resource not found')
+app.get('/api/users', async (req, res) => {
+
+	// check mongoose connection established.
+	if (mongoose.connection.readyState != 1) {
+		log('Issue with mongoose connection')
+		res.status(500).send('Internal server error')
 		return;
-	}
+	} 
 
-    try {
-        const user = await User.findByIdAndRemove(userID)
-        if (!user) {
-            res.status(404).send('Resource not found')
-        } else {
-            res.send(user)
-        }
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for getting a user.
-app.get('/profile/:userID', mongoChecker, authenticate, async (req, res) => {
-    const userID = req.params.userID
-    if (!ObjectID.isValid(userID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-    try {
-        const user = await User.findById(userID)
-        if (!user) {
-            res.status(404).send('Resource not found')
-        } else {
-            res.send(user)
-        }
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for getting all users.
-app.get('/users', mongoChecker, authenticate, async (req, res) => {
-
-    try {
-        const users = await User.find()
-        res.send(users)
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for editing a user's information.
-/* 
-Request body expects, for example:
-[
-  { "op": "add", "path": "/fullName", "value": "Full Name" },
-  { "op": "replace", "path": "/school", "value": "New School" },
-  ...
-]
-*/
-app.patch('/profile/:userID', mongoChecker, authenticate, async (req, res) => {
-    const userID = req.params.userID
-    if (!ObjectID.isValid(userID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-    const fieldsToUpdate = {}
-	req.body.map((change) => {
-		const propertyToChange = change.path.substr(1)
-		fieldsToUpdate[propertyToChange] = change.value
-	})
-
-    try {
-		const user = await User.findOneAndUpdate({_id: userID}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false})
-		if (!user) {
-			res.status(404).send('Resource not found')
-		} else {   
-			res.send(user)
-		}
-	} catch (error) {
-		log(error)
-		if (isMongoError(error)) {
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad request')
-        }
-    }
-})
-
-
-// Route for adding an user to another's following list.
-/* 
-Request body expects:
-{
-	"user": <follower user ID>
-}
-*/
-app.post('/profile/:userID/follow', mongoChecker, async (req, res) => {
-	const userID = req.params.userID
-    if (!ObjectID.isValid(userID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
+	// Get the students
 	try {
-		const follower = await User.findById(req.body.user)
-		if (!follower) {
-			res.status(404).send('Resource not found')
-		} else {
-			follower.following.push(userID)
-			const newUser = await follower.save()
-			res.send({
-				user: newUser
-			})
-		}
-	} catch(error) {
-		console.log(error)
-		res.status(400).send('Bad request')
-	}
-})
-
-// Route for removing a user from another's following list.
-/* 
-Request body expects:
-{
-	"user": <to-be removed user ID>
-}
-*/
-app.delete('/profile/:userID/unfollow', mongoChecker, async (req, res) => {
-	const userID = req.params.userID
-    if (!ObjectID.isValid(userID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-	try {
-		const follower = await User.findById(req.body.user)
-		if (!follower) {
-			res.status(404).send('Resource not found')
-		} else {
-            const index = follower.following.indexOf(userID)
-            follower.following.splice(index, 1)
-			const newUser = await follower.save()
-			res.send({
-				user: newUser
-			})
-		}
-	} catch(error) {
-		console.log(error)
-		res.status(400).send('Bad request')
-	}
-})
-
-// Event API Routes
-
-// Route for creating an event.
-/* 
-Request body expects:
-{
-	"title": <attendee>,
-    "description": <description>,
-    "location": <location>,
-    "maxSpots": <number of spots>,
-    "date": <date>
-}
-*/
-app.post('/event-dashboard', mongoChecker, authenticate, async (req, res) => {
-    
-    const event = new Event({
-        title: req.body.title,
-        description: req.body.description,
-        host: currentUser,
-        location: req.body.location,
-        maxSpots: req.body.maxSpots,
-        date: req.body.date,
-        attendees: []
-    })
-
-    try {
-        const newEvent = await event.save()
-        res.send(newEvent)
-    } catch (error) {
-        if (isMongoError(error)) {
-            res.status(500).send('Internal server error')
-        } else {
-            log(error)
-            res.status(400).send('Bad request')
-        }
-    }
-})
-
-// Route for removing an event.
-app.delete('/event-dashboard/:eventID', mongoChecker, authenticate, async (req, res) => {
-    const eventID = req.params.eventID
-    if (!ObjectID.isValid(eventID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-    try {
-        const event = await Event.findByIdAndRemove(eventID)
-        if (!event) {
-            res.status(404).send('Resource not found')
-        } else {
-            res.send(event)
-        }
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for getting all events.
-app.get('/event-dashboard', mongoChecker, authenticate, async (req, res) => {
-    try {
-        const events = await Event.find()
-        res.send(events)
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for getting one event.
-app.get('/event-dashboard/:eventID', mongoChecker, authenticate, async (req, res) => {
-    const eventID = req.params.eventID
-    if (!ObjectID.isValid(eventID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-    try {
-        const event = await Event.findById(eventID)
-        if (!event) {
-            res.status(404).send('Resource not found')
-        } else {
-            res.send(event)
-        }
-    } catch(error) {
-        log(error)
-        res.status(500).send('Internal server error')
-    }
-})
-
-// Route for editing an event.
-/* 
-Request body expects, for example:
-[
-  { "op": "replace", "path": "/description", "value": "New Description" },
-  { "op": "replace", "path": "/maxSpots", "value": 5 },
-  ...
-]
-*/
-app.patch('/event-dashboard/:eventID', mongoChecker, authenticate, async (req, res) => {
-    const eventID = req.params.eventID
-    if (!ObjectID.isValid(eventID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-    const fieldsToUpdate = {}
-	req.body.map((change) => {
-		const propertyToChange = change.path.substr(1)
-		fieldsToUpdate[propertyToChange] = change.value
-	})
-
-    try {
-		const event = await Event.findOneAndUpdate({_id: eventID}, {$set: fieldsToUpdate}, {new: true, useFindAndModify: false})
-		if (!event) {
-			res.status(404).send('Resource not found')
-		} else {   
-			res.send(event)
-		}
-	} catch (error) {
-        log(error)
-		if (isMongoError(error)) {
-			res.status(500).send('Internal server error')
-		} else {
-			res.status(400).send('Bad request')
-        }
-    }
-})
-
-// Route for adding an attendee to a particular event.
-/* 
-Request body expects:
-{
-	"attendee": <attendee ID>
-}
-*/
-app.post('/event-dashboard/:eventID/attend', mongoChecker, authenticate, async (req, res) => {
-	const eventID = req.params.eventID
-    if (!ObjectID.isValid(eventID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-	try {
-		const event = await Event.findById(eventID)
-		if (!event) {
-			res.status(404).send('Resource not found')
-		} else {
-			event.attendees.push(req.body.attendee)
-			const newEvent = await event.save()
-			res.send({
-				event: newEvent
-			})
-		}
+		const students = await User.find()
+		// res.send(students) // just the array
+		res.send({ students }) // can wrap students in object if want to add more properties
 	} catch(error) {
 		log(error)
-		res.status(400).send('Bad request')
+		res.status(500).send("Internal Server Error")
 	}
 })
 
-// Route for removing an attendee from a particular event.
-/* 
-Request body expects:
-{
-	"attendee": <attendee>
-}
-*/
-app.delete('/event-dashboard/:eventID/unattend', mongoChecker, authenticate, async (req, res) => {
-	const eventID = req.params.eventID
-    if (!ObjectID.isValid(eventID)) {
-		res.status(404).send('Resource not found')
-		return;
-	}
-
-	try {
-		const event = await Event.findById(eventID)
-		if (!event) {
-			res.status(404).send('Resource not found')
-		} else {
-            const index = event.attendees.indexOf(req.body.attendee)
-            event.attendees.splice(index, 1)
-			const newEvent = await event.save()
-			res.send({
-				event: newEvent
-			})
-		}
-	} catch(error) {
-		log(error)
-		res.status(400).send('Bad request')
-	}
-})
-
-/*** Webpage routes below **********************************/
-// Serve the build
-app.use(express.static(__dirname + "/client/build"));
-
-// All routes other than above will go to index.html
-app.get("*", (req, res) => {
-    res.sendFile(__dirname + "/client/build/index.html");
-});
-
-/*************************************************/
-// Express server listening...
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     log(`Listening on port localhost://${port}...`);
