@@ -5,6 +5,7 @@ const UserSchema = new mongoose.Schema({
     school: {
         type: String,
         required: false,
+        minlength: 1
     },
     username: {
         type: String,
@@ -15,6 +16,7 @@ const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
         required: false,
+        minlength: 1,
     },
     password: {
         type: String,
@@ -25,13 +27,14 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-    following: {
-        type: [String],
-        required: true
-    },
+    // following: {
+    //     type: [User],
+    //     required: true
+    // },
     contact: {
         type: String,
         required: false,
+        minlength: 1
     }
 })
 
