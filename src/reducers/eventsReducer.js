@@ -3,12 +3,13 @@ const initialData = [
     id: '1',
     title: 'Late night hussle',
     description:
-      "I'm working on my CSC309 assignment. Anyone fellow procrastinators out there?",
+      "I'm working on my CSC309 assignment. Any fellow procrastinators out there?",
     host: 'user2',
     location: { lat: 43.66722268215065, lng: -79.39352376463985 },
     maxSpots: 3,
     date: 'NOV 7 @12AM',
     attendees: ['user2'],
+    questions: [],
   },
   {
     id: '2',
@@ -20,6 +21,7 @@ const initialData = [
     maxSpots: 5,
     date: 'NOV 10 @8PM',
     attendees: ['admin'],
+    questions: [],
   },
   {
     id: '3',
@@ -30,6 +32,7 @@ const initialData = [
     maxSpots: 5,
     date: 'NOV 15 @9AM',
     attendees: ['user'],
+    questions: [{ id: 1, q: 'How long are you planning on studying?', a: '' }],
   },
 ];
 
@@ -47,6 +50,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
           location: payload.location,
           maxSpots: parseInt(payload.maxSpots, 10),
           attendees: [payload.host],
+          questions: [],
         },
       ];
     case 'EDIT_EVENT':
@@ -88,6 +92,46 @@ const eventsReducer = (state = initialData, { type, payload }) => {
         }
         return e;
       });
+    case 'ADD_QUESTION':
+      return state.map((e) => {
+        if (e.id === payload.eventID) {
+          const newQuestions = e.questions.slice();
+          newQuestions.push(payload.question);
+          return {
+            ...e,
+            questions: newQuestions,
+          };
+        }
+        return e;
+      });
+    case 'EDIT_QUESTION':
+      return state.map((e) => {
+        if (e.id === payload.eventID) {
+          const newQuestions = e.questions.filter(
+            (q) => q.id !== payload.question.id,
+          );
+          newQuestions.push(payload.question);
+          return {
+            ...e,
+            questions: newQuestions,
+          };
+        }
+        return e;
+      });
+    case 'DELETE_QUESTION':
+      return state.map((e) => {
+        if (e.id === payload.eventID) {
+          const newQuestions = e.questions.filter(
+            (q) => q.id !== payload.question.id,
+          );
+          return {
+            ...e,
+            questions: newQuestions,
+          };
+        }
+        return e;
+      });
+
     default:
       return state;
   }

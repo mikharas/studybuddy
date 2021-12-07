@@ -4,6 +4,9 @@ import {
   editEvent,
   addAttendee,
   removeAttendee,
+  addQuestion,
+  editQuestion,
+  deleteQuestion,
 } from '../../actions/eventsActions';
 import { getManyUserData } from '../../actions/usersActions';
 import EventDashboard from './EventDashboard';
@@ -20,4 +23,7 @@ export default connect(mapStateToProps, {
   getManyUserData,
   addAttendee,
   removeAttendee,
+  addQuestion,
+  editQuestion,
+  deleteQuestion,
 })(EventDashboard);

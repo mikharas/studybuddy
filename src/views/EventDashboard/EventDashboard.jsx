@@ -15,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import banner from '../../images/uoft_banner.png';
 import hostIcon from '../../images/uoft.png';
 import StudentItem from '../../components/StudentItem';
+import QuestionItem from '../../components/QuestionItem';
 
 const EventDashboard = ({
   eventID,
@@ -26,6 +27,9 @@ const EventDashboard = ({
   getManyUserData,
   addAttendee,
   removeAttendee,
+  addQuestion,
+  editQuestion,
+  deleteQuestion,
 }) => {
   const history = useHistory();
   const [event, setEvent] = useState({
@@ -36,6 +40,7 @@ const EventDashboard = ({
     maxSpots: undefined,
     date: undefined,
     attendees: [],
+    questions: [],
   });
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
@@ -81,6 +86,27 @@ const EventDashboard = ({
       addAttendee(eventID, user);
     } else {
       removeAttendee(eventID, user);
+    }
+    refreshEvent();
+  };
+
+  const questionPrompt = () => {
+    if (!isLoggedIn) {
+      alert('You must log in to perform this action.');
+      history.push('/login');
+    } else {
+      const newQ = prompt('Post your question:');
+      if (newQ === null || newQ === '') {
+        return;
+      }
+      const { length } = event.questions;
+      if (length === 0) {
+        const newID = 1;
+        addQuestion(eventID, { id: newID, q: newQ, a: '' });
+      } else {
+        const newID = event.questions[length - 1].id + 1;
+        addQuestion(eventID, { id: newID, q: newQ, a: '' });
+      }
     }
     refreshEvent();
   };
@@ -147,6 +173,63 @@ const EventDashboard = ({
             </CardContent>
           </Card>
           {/* tags */}
+        </div>
+        <div className="questionsContainer">
+          <Card>
+            <CardContent>
+              <div className="cardHeader">Questions & Answers</div>
+              {user !== event.host && (
+                <Box textAlign="center">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={questionPrompt}
+                  >
+                    Got a question?
+                  </Button>
+                </Box>
+              )}
+              <List>
+                {user === event.host &&
+                  event.questions.map(({ id, q, a }) => (
+                    <>
+                      <QuestionItem question={q} answer={a} />
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          const newA = prompt(q);
+                          if (newA === null || newA === '') {
+                            return;
+                          }
+                          editQuestion(eventID, { id, q, a: newA });
+                          refreshEvent();
+                        }}
+                      >
+                        {a !== '' ? 'Edit Response' : 'Respond'}
+                      </Button>
+                      <Button
+                        size="small"
+                        onClick={() => {
+                          deleteQuestion(eventID, { id, q, a });
+                          refreshEvent();
+                        }}
+                      >
+                        Delete Question
+                      </Button>
+                    </>
+                  ))}
+                {user !== event.host &&
+                  event.questions.map(({ q, a }) => (
+                    <QuestionItem
+                      question={q}
+                      answer={a}
+                      addQuestion={addQuestion}
+                      eventID={eventID}
+                    />
+                  ))}
+              </List>
+            </CardContent>
+          </Card>
         </div>
         <div className="attendeesContainer">
           <Card>

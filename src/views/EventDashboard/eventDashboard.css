@@ -21,7 +21,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  float: left;
   margin-left: 20%;
   width: 750px;
   min-height: 750px;
@@ -47,6 +46,12 @@
 }
 
 .eventDescription {
+  text-align: left;
+  float: left;
+  width: 750px;
+  padding-bottom: 30px;
+}
+.questionsContainer {
   text-align: left;
   float: left;
   width: 750px;
