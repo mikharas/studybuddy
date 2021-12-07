@@ -1,46 +1,70 @@
 .eventDashboard {
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow-y: auto;
 }
 
 .bannerImg {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
-  max-height: 300px;
-}
-
-.title {
-  padding: 10px;
-}
-
-.editButton {
   padding-bottom: 30px;
+  float: left;
+  max-width: 750px;
+  max-height: 500px;
 }
 
-.eventDescription {
+.eventTitle {
+  margin-top: 3%;
+  margin-left: 20.5%;
   text-align: left;
-  width: 500px;
 }
 
-.eventContainer {
+.eventInfoContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: stretch;
   align-content: flex-start;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.middleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 750px;
+  min-height: 750px;
+}
+
+.rightContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 700px;
+  min-height: 750px;
 }
 
 .eventInformation {
-  text-align: left;
-  width: 500px;
+  position: fixed;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  min-height: 350px;
+  width: 300px;
+  border-radius: 15%;
+  border: solid 1px grey;
 }
 
-.eventInformation ul li {
-  padding: 10px;
-  list-style-type: none;
+.eventDescription {
+  text-align: left;
+  float: left;
+  width: 750px;
+  padding-bottom: 30px;
+}
+
+.questionsContainer {
+  text-align: left;
+  float: left;
+  width: 750px;
+  padding-bottom: 30px;
 }
 
 .attendee {
@@ -62,10 +86,8 @@
 }
 
 .attendeesContainer {
-  float: left;
-  display: block;
-  padding: 20px;
-  margin-left: 35%;
+  margin-top: 0.5%;
+  margin-right: 10px;
   width: 500px;
 }
 

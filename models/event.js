@@ -34,10 +34,10 @@ const Event = mongoose.model('Event', {
         required: true,
         minlength: 1
     },
-    // attendees: {
-    //     type: [User],
-    //     required: true
-    // }
+    attendees: {
+        type: [String],
+        required: true
+    },
 })
 
 module.exports = { Event }

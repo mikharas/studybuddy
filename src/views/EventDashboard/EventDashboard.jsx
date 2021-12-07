@@ -6,6 +6,8 @@ import {
   Card,
   CardContent,
   TextField,
+  Grid,
+  Box,
 } from '@mui/material';
 import './eventDashboard.css';
 import Geocode from 'react-geocode';
@@ -13,6 +15,7 @@ import { useHistory } from 'react-router-dom';
 import banner from '../../images/uoft_banner.png';
 import hostIcon from '../../images/uoft.png';
 import StudentItem from '../../components/StudentItem';
+import QuestionItem from '../../components/QuestionItem';
 
 const EventDashboard = ({
   eventID,
@@ -24,6 +27,9 @@ const EventDashboard = ({
   getManyUserData,
   addAttendee,
   removeAttendee,
+  addQuestion,
+  editQuestion,
+  deleteQuestion,
 }) => {
   const history = useHistory();
   const [event, setEvent] = useState({
@@ -34,11 +40,11 @@ const EventDashboard = ({
     maxSpots: undefined,
     date: undefined,
     attendees: [],
+    questions: [],
   });
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
 
-  // const canEdit = true;
   let canEdit;
   if (user === undefined) {
     canEdit = false;
@@ -84,6 +90,27 @@ const EventDashboard = ({
     refreshEvent();
   };
 
+  const questionPrompt = () => {
+    if (!isLoggedIn) {
+      alert('You must log in to perform this action.');
+      history.push('/login');
+    } else {
+      const newQ = prompt('Post your question:');
+      if (newQ === null || newQ === '') {
+        return;
+      }
+      const { length } = event.questions;
+      if (length === 0) {
+        const newID = 1;
+        addQuestion(eventID, { id: newID, q: newQ, a: '' });
+      } else {
+        const newID = event.questions[length - 1].id + 1;
+        addQuestion(eventID, { id: newID, q: newQ, a: '' });
+      }
+    }
+    refreshEvent();
+  };
+
   const titleRef = useRef('');
   const descriptionRef = useRef('');
   const dateRef = useRef('');
@@ -107,10 +134,7 @@ const EventDashboard = ({
 
   return (
     <div className="eventDashboard">
-      <div className="banner">
-        <img src={banner} className="bannerImg" alt="banner" />
-      </div>
-      <div className="title">
+      <div className="eventTitle">
         {isEditMode ? (
           <TextField
             id="outlined-title"
@@ -120,117 +144,175 @@ const EventDashboard = ({
         ) : (
           <h1>{event.title}</h1>
         )}
-      </div>
-      {canEdit && (
-        <div className="editButton">
-          <Button variant="contained" onClick={toggleEditMode}>
-            {isEditMode ? 'Done' : 'Edit Event'}
-          </Button>
+        <div className="attendee">
+          <div className="avatarContainer">
+            <Avatar alt={event.host} src={hostIcon} />
+          </div>
+          <div className="attendeeName">Hosted by {event.host}</div>
         </div>
-      )}
-      <div className="attendee">
-        <div className="avatarContainer">
-          <Avatar alt={event.host} src={hostIcon} />
-        </div>
-        <div className="attendeeName">Hosted by {event.host}</div>
       </div>
-      <div className="eventContainer">
-        <div className="eventDescription">
+      <div className="eventInfoContainer">
+        <div className="attendeesContainer">
           <Card>
             <CardContent>
-              {isEditMode ? (
-                <TextField
-                  id="outlined-multiline-flexible"
-                  multiline
-                  maxRows={15}
-                  defaultValue={event.description}
-                  inputRef={descriptionRef}
-                />
-              ) : (
-                event.description
-              )}
+              <div className="cardHeader">Attendees</div>
+              <List>
+                {attendees.map(({ username, userSchool }) => (
+                  <StudentItem username={username} userSchool={userSchool} />
+                ))}
+              </List>
             </CardContent>
           </Card>
-          {/* tags */}
         </div>
-        <div className="eventInformation">
-          <ul>
-            {user !== event.host && !isEditMode && (
-              <li>
-                <Button variant="contained" onClick={toggleAttending}>
-                  {isAttending ? 'Unattend' : 'Attend'}
-                </Button>
-              </li>
-            )}
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-spots"
-                        defaultValue={event.maxSpots - event.attendees.length}
-                        inputRef={spotsRef}
-                        // does not check for valid inputs
+        <div className="middleContainer">
+          <div className="banner">
+            <img src={banner} className="bannerImg" alt="banner" />
+          </div>
+          <div className="eventDescription">
+            <Card>
+              <CardContent>
+                {isEditMode ? (
+                  <TextField
+                    id="outlined-multiline-flexible"
+                    multiline
+                    maxRows={15}
+                    defaultValue={event.description}
+                    inputRef={descriptionRef}
+                    style={{ width: 715 }}
+                  />
+                ) : (
+                  event.description
+                )}
+              </CardContent>
+            </Card>
+            {/* tags */}
+          </div>
+          <div className="questionsContainer">
+            <Card>
+              <CardContent>
+                <div className="cardHeader">Questions & Answers</div>
+                {user !== event.host && (
+                  <Box textAlign="center">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={questionPrompt}
+                    >
+                      Got a question?
+                    </Button>
+                  </Box>
+                )}
+                <List>
+                  {user === event.host &&
+                    event.questions.map(({ id, q, a }) => (
+                      <>
+                        <QuestionItem question={q} answer={a} />
+                        <Button
+                          size="small"
+                          onClick={() => {
+                            const newA = prompt(q);
+                            if (newA === null || newA === '') {
+                              return;
+                            }
+                            editQuestion(eventID, { id, q, a: newA });
+                            refreshEvent();
+                          }}
+                        >
+                          {a !== '' ? 'Edit Response' : 'Respond'}
+                        </Button>
+                        <Button
+                          size="small"
+                          onClick={() => {
+                            deleteQuestion(eventID, { id, q, a });
+                            refreshEvent();
+                          }}
+                        >
+                          Delete Question
+                        </Button>
+                      </>
+                    ))}
+                  {user !== event.host &&
+                    event.questions.map(({ q, a }) => (
+                      <QuestionItem
+                        question={q}
+                        answer={a}
+                        addQuestion={addQuestion}
+                        eventID={eventID}
                       />
-                    ) : (
-                      event.maxSpots - event.attendees.length
-                    )}
-                  </div>
-                  <div className="cardInformation">spots left</div>
-                </CardContent>
-              </Card>
-            </li>
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">Location</div>
-                  <div className="cardInformation">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-location"
-                        defaultValue={event.location}
-                        inputRef={locationRef}
-                      />
-                    ) : (
-                      event.location
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </li>
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">Time and Date</div>
-                  <div className="cardInformation">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-date"
-                        defaultValue={event.date}
-                        inputRef={dateRef}
-                      />
-                    ) : (
-                      event.date
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </li>
-          </ul>
+                    ))}
+                </List>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-      <div className="attendeesContainer">
-        <Card>
-          <CardContent>
-            <div className="cardHeader">Attendees</div>
-            <List>
-              {attendees.map(({ username, userSchool }) => (
-                <StudentItem username={username} userSchool={userSchool} />
-              ))}
-            </List>
-          </CardContent>
-        </Card>
+        <div className="rightContainer">
+          <Box className="eventInformation">
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={3}
+            >
+              <Grid item>
+                <div className="cardHeader">
+                  {isEditMode ? (
+                    <TextField
+                      id="outlined-spots"
+                      defaultValue={event.maxSpots - event.attendees.length}
+                      inputRef={spotsRef}
+                    />
+                  ) : (
+                    event.maxSpots - event.attendees.length
+                  )}
+                </div>
+                <div className="cardInformation">spots left</div>
+              </Grid>
+              <Grid item>
+                <div className="cardHeader">Location</div>
+                <div className="cardInformation">
+                  {isEditMode ? (
+                    <TextField
+                      id="outlined-location"
+                      defaultValue={event.location}
+                      inputRef={locationRef}
+                    />
+                  ) : (
+                    event.location
+                  )}
+                </div>
+              </Grid>
+              <Grid item>
+                <div className="cardHeader">Time and Date</div>
+                <div className="cardInformation">
+                  {isEditMode ? (
+                    <TextField
+                      id="outlined-date"
+                      defaultValue={event.date}
+                      inputRef={dateRef}
+                    />
+                  ) : (
+                    event.date
+                  )}
+                </div>
+              </Grid>
+              {user !== event.host && !isEditMode && (
+                <Grid item>
+                  <Button variant="contained" onClick={toggleAttending}>
+                    {isAttending ? 'Unattend' : 'Attend'}
+                  </Button>
+                </Grid>
+              )}
+              {canEdit && (
+                <Grid item>
+                  <Button variant="contained" onClick={toggleEditMode}>
+                    {isEditMode ? 'Done' : 'Edit Event'}
+                  </Button>
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+        </div>
       </div>
     </div>
   );

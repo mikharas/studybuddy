@@ -70,3 +70,33 @@ export const removeAttendee = (eventID, attendee) => (dispatch, getState) => {
     },
   });
 };
+
+export const addQuestion = (eventID, question) => (dispatch, getState) => {
+  dispatch({
+    type: 'ADD_QUESTION',
+    payload: {
+      eventID,
+      question,
+    },
+  });
+};
+
+export const editQuestion = (eventID, question) => (dispatch, getState) => {
+  dispatch({
+    type: 'EDIT_QUESTION',
+    payload: {
+      eventID,
+      question,
+    },
+  });
+};
+
+export const deleteQuestion = (eventID, question) => (dispatch, getState) => {
+  dispatch({
+    type: 'DELETE_QUESTION',
+    payload: {
+      eventID,
+      question,
+    },
+  });
+};

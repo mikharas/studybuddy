@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Box, Grid } from '@mui/material';
 import './eventCreation.css';
 import { useHistory } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -39,13 +39,48 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
 
   return (
     <div className="eventCreation">
-      <div className="eventList">
-        <ul>
-          {/* input for banner */}
-          <li>
+      <Box className="formContainer">
+        <h2> Create an event! </h2>
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid
+            item
+            xs={6}
+            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+          >
             <TextField id="outlined-title" label="Title" inputRef={titleRef} />
-          </li>
-          <li>
+            <TextField
+              id="outlined-location"
+              label="Location"
+              inputRef={locationRef}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+          >
+            <TextField
+              id="outlined-spots"
+              label="Number of Spots"
+              inputRef={spotsRef}
+              // does not check for valid inputs
+            />
+            <TextField
+              id="outlined-date"
+              label="Time and Date"
+              inputRef={dateRef}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{ '& .MuiTextField-root': { m: 1, width: '52ch' } }}
+          >
             <TextField
               id="outlined-multiline-flexible"
               multiline
@@ -53,46 +88,29 @@ const EventCreation = ({ user, events, isLoggedIn, createEvent }) => {
               label="Description"
               inputRef={descriptionRef}
             />
-          </li>
-          <li>
-            <TextField
-              id="outlined-spots"
-              label="Number of Spots"
-              inputRef={spotsRef}
-              // does not check for valid inputs
-            />
-          </li>
-          <li>
-            <TextField
-              id="outlined-location"
-              label="Location"
-              inputRef={locationRef}
-            />
-          </li>
-          <li>
-            <TextField
-              id="outlined-date"
-              label="Time and Date"
-              inputRef={dateRef}
-            />
-          </li>
-          <li>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{ '& .MuiButton-root': { m: 1, width: '25ch' } }}
+          >
             <Button variant="contained">
               Upload Image
               {/* Note this feature pulls from backend and as such does not work yet
                */}
             </Button>
-          </li>
-          <li>
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{ '& .MuiButton-root': { m: 1, width: '25ch' } }}
+          >
             <Button variant="contained" onClick={createNewEvent}>
               Create Event
-              {/* <Link to={`/profile/${user}`}>
-                    <Person fontSize="large" className={classes.profileIcon} />
-                  </Link> */}
             </Button>
-          </li>
-        </ul>
-      </div>
+          </Grid>
+        </Grid>
+      </Box>
     </div>
   );
 };
