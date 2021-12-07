@@ -1,52 +1,50 @@
-// TODO: Calls to database using axios
-// code below requires server call to get user data, which is dispatched to reducers
-// to modify application state
+const axios = require('axios');
 
-export const register =
-  (username, password, isAdmin) => (dispatch, getState) => {
-    const allUsers = getState().users;
-    const userExists = allUsers.find((user) => user.username === username);
-    console.log(allUsers);
-    console.log(username, password, isAdmin);
-    if (userExists) {
-      alert('Username taken');
-      dispatch({
-        type: 'REGISTER_FAIL',
-      });
-    } else {
-      dispatch({
-        type: 'ADD_USER',
-        payload: {
-          username,
-          password,
-          isAdmin,
-        },
-      });
-      dispatch({
-        type: 'REGISTER_SUCCESS',
-      });
-      alert('Successfully created user, please log in!');
-    }
-  };
+export const register = (username, password, isAdmin) => async () => {
+  try {
+    let res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/user`,
+      data: {
+        username,
+        password,
+        isAdmin,
+      },
+    });
 
-export const login = (username, password) => (dispatch, getState) => {
-  const allUsers = getState().users;
-  const user = allUsers.find((u) => u.username === username);
-  if (!user) {
-    alert('no such user');
-    dispatch({
-      type: 'LOGIN_FAIL',
+    console.log(res.data);
+    alert('Event successfully created!');
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
+};
+
+export const login = (username, password) => async (dispatch, getState) => {
+  try {
+    let res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/login`,
+      data: {
+        username,
+        password,
+      },
     });
-  } else if (user.password !== password) {
-    alert('incorrect password');
-    dispatch({
-      type: 'LOGIN_FAIL',
-    });
-  } else {
+
+    const data = res.data;
+    console.log(data);
     dispatch({
       type: 'LOGIN_SUCCESS',
-      payload: { username: user.username, isAdmin: user.isAdmin },
+      payload: { username: data.currentUser, isAdmin: data.isAdmin },
     });
+    return data;
+  } catch (error) {
+    alert('incorrect password or username');
+    dispatch({
+      type: 'LOGIN_FAIL',
+    });
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
   }
 };
 

@@ -11,6 +11,7 @@ const StudentDashboard = ({
   removeFollowing,
   userID,
   user,
+  getEvents,
   getUserAttendingEvents,
   getManyUserData,
   getUserData,
@@ -39,8 +40,6 @@ const StudentDashboard = ({
     following: [],
   });
 
-  let image = getUserData(userID).profileImage;
-
   const uploadImage = async (e) => {
     const formData = new FormData();
     formData.append('file', e.target.files[0]);
@@ -56,20 +55,25 @@ const StudentDashboard = ({
 
     const file = await result.json();
 
-    image = file.secure_url;
+    setUserData({
+      ...userData,
+      image: file.secure_url,
+    });
   };
 
-  const refreshUserData = () => {
+  const refreshUserData = async () => {
     if (isLoggedIn) {
+      // populate events, if not done
+      await getEvents();
+      const userDataS = await getUserData(userID);
       const userEvents = getUserAttendingEvents(userID);
       const hostedEvents = getHostedEvents(userID);
-      const userDataS = getUserData(userID);
       const {
         username: newUsername,
         following: newFollowing,
         isAdmin: admin,
-      } = getUserData(user);
-      const refreshedFollowing = getManyUserData(userDataS.following);
+      } = await getUserData(user);
+      const refreshedFollowing = await getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
         userEvents,
@@ -84,8 +88,8 @@ const StudentDashboard = ({
     }
   };
 
-  useEffect(() => {
-    refreshUserData();
+  useEffect(async () => {
+    await refreshUserData();
   }, [userID]);
 
   const isFollowing = activeUserData.following.includes(userID);
@@ -104,14 +108,14 @@ const StudentDashboard = ({
   const schoolRef = useRef();
   const contactRef = useRef();
 
-  const toggleEditing = (cancelled) => {
+  const toggleEditing = async (cancelled) => {
     if (isEditing && !cancelled) {
-      editProfileInfo(
+      await editProfileInfo(
         userID,
         schoolRef.current.value,
         fullNameRef.current.value,
         contactRef.current.value,
-        image,
+        userData.profileImage,
       );
     }
     setIsEditing(!isEditing);

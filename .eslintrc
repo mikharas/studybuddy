@@ -22,7 +22,12 @@
   "plugins": ["react", "react-hooks", "jsx-a11y", "prettier"],
   "extends": ["plugin:react/recommended", "airbnb", "prettier"],
   "rules": {
+    "consistent-return": 0,
+    "prefer-const": 0,
+    "prefer-destructuring": 0,
+    "no-underscore-dangle": 0,
     "no-param-reassign": 0,
+    "no-use-before-define": 0,
     "no-unused-vars": 0,
     "prettier/prettier": 0,
     "import/prefer-default-export": "off",

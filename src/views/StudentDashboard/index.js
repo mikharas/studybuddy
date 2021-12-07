@@ -8,6 +8,7 @@ import {
   getManyUserData,
   editProfileInfo,
 } from '../../actions/usersActions';
+import { getEvents } from '../../actions/eventsActions';
 import StudentDashboard from './StudentDashboard';
 
 const mapStateToProps = (state, ownProps) => {
@@ -25,6 +26,7 @@ export default connect(mapStateToProps, {
   getUserAttendingEvents,
   getHostedEvents,
   getUserData,
+  getEvents,
   getManyUserData,
   editProfileInfo,
 })(StudentDashboard);

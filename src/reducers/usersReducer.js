@@ -1,38 +1,4 @@
-const initialUsersData = [
-  {
-    userSchool: 'University of Toronto',
-    username: 'admin',
-    fullName: 'Admin',
-    password: 'admin',
-    isAdmin: true,
-    following: ['user'],
-    contact: 'None',
-    profileImage:
-      'https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg',
-  },
-  {
-    userSchool: 'University of Toronto',
-    username: 'user',
-    fullName: 'User',
-    password: 'user',
-    isAdmin: false,
-    following: ['admin'],
-    contact: 'None',
-    profileImage:
-      'https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg',
-  },
-  {
-    userSchool: 'University of Toronto',
-    username: 'user2',
-    fullName: 'User2',
-    password: 'user2',
-    isAdmin: false,
-    following: ['admin', 'user'],
-    contact: 'None',
-    profileImage:
-      'https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg',
-  },
-];
+const initialUsersData = [];
 
 const usersReducer = (state = initialUsersData, { type, payload }) => {
   switch (type) {

@@ -72,25 +72,38 @@ const UserMarker = ({ $hover }) => {
 };
 
 const GoogleMap = ({ user, events }) => {
-  const dummyData = {
-    lat: 43.661032765413275,
-    lng: -79.39591425104017,
-  };
   const classes = useStyles();
   const history = useHistory();
-  const [userLocation, setUserLocation] = useState(dummyData);
-  const [curLoc, setCurLoc] = useState(dummyData);
+  const [userLocation, setUserLocation] = useState({});
+  const [curLoc, setCurLoc] = useState();
 
   const handleChildClick = (key, childProps) => {
     if (childProps.event) {
       setCurLoc({ lat: childProps.lat, lng: childProps.lng });
-      history.push(`/event-dashboard/${childProps.event.id}`);
+      history.push(`/event-dashboard/${childProps.event._id}`);
     }
   };
 
   useEffect(() => {
-    // TODO: using geo locator, get user's current location and call setUserLocation
-    // to indicate on map
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+        setCurLoc({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        alert('We could not get your location.');
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: Infinity,
+      },
+    );
   }, []);
 
   return (
