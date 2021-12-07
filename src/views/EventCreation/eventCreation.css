@@ -1,10 +1,16 @@
 .eventCreation {
+  width: 100%;
+  height: calc(100vh - 50px);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-.eventList ul li {
-  padding: 10px;
-  list-style-type: none;
+.formContainer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  min-height: 500px;
+  width: 500px;
+  border-radius: 15%;
+  border: solid 1px grey;
 }

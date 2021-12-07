@@ -6,6 +6,8 @@ import {
   Card,
   CardContent,
   TextField,
+  Grid,
+  Box,
 } from '@mui/material';
 import './eventDashboard.css';
 import Geocode from 'react-geocode';
@@ -38,7 +40,6 @@ const EventDashboard = ({
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
 
-  // const canEdit = true;
   let canEdit;
   if (user === undefined) {
     canEdit = false;
@@ -107,10 +108,7 @@ const EventDashboard = ({
 
   return (
     <div className="eventDashboard">
-      <div className="banner">
-        <img src={banner} className="bannerImg" alt="banner" />
-      </div>
-      <div className="title">
+      <div className="eventTitle">
         {isEditMode ? (
           <TextField
             id="outlined-title"
@@ -120,21 +118,17 @@ const EventDashboard = ({
         ) : (
           <h1>{event.title}</h1>
         )}
-      </div>
-      {canEdit && (
-        <div className="editButton">
-          <Button variant="contained" onClick={toggleEditMode}>
-            {isEditMode ? 'Done' : 'Edit Event'}
-          </Button>
+        <div className="attendee">
+          <div className="avatarContainer">
+            <Avatar alt={event.host} src={hostIcon} />
+          </div>
+          <div className="attendeeName">Hosted by {event.host}</div>
         </div>
-      )}
-      <div className="attendee">
-        <div className="avatarContainer">
-          <Avatar alt={event.host} src={hostIcon} />
-        </div>
-        <div className="attendeeName">Hosted by {event.host}</div>
       </div>
-      <div className="eventContainer">
+      <div className="leftContainer">
+        <div className="banner">
+          <img src={banner} className="bannerImg" alt="banner" />
+        </div>
         <div className="eventDescription">
           <Card>
             <CardContent>
@@ -145,6 +139,7 @@ const EventDashboard = ({
                   maxRows={15}
                   defaultValue={event.description}
                   inputRef={descriptionRef}
+                  style={{ width: 715 }}
                 />
               ) : (
                 event.description
@@ -153,84 +148,86 @@ const EventDashboard = ({
           </Card>
           {/* tags */}
         </div>
-        <div className="eventInformation">
-          <ul>
+        <div className="attendeesContainer">
+          <Card>
+            <CardContent>
+              <div className="cardHeader">Attendees</div>
+              <List>
+                {attendees.map(({ username, userSchool }) => (
+                  <StudentItem username={username} userSchool={userSchool} />
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <div className="rightContainer">
+        <Box className="eventInformation">
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            spacing={3}
+          >
+            <Grid item>
+              <div className="cardHeader">
+                {isEditMode ? (
+                  <TextField
+                    id="outlined-spots"
+                    defaultValue={event.maxSpots - event.attendees.length}
+                    inputRef={spotsRef}
+                  />
+                ) : (
+                  event.maxSpots - event.attendees.length
+                )}
+              </div>
+              <div className="cardInformation">spots left</div>
+            </Grid>
+            <Grid item>
+              <div className="cardHeader">Location</div>
+              <div className="cardInformation">
+                {isEditMode ? (
+                  <TextField
+                    id="outlined-location"
+                    defaultValue={event.location}
+                    inputRef={locationRef}
+                  />
+                ) : (
+                  event.location
+                )}
+              </div>
+            </Grid>
+            <Grid item>
+              <div className="cardHeader">Time and Date</div>
+              <div className="cardInformation">
+                {isEditMode ? (
+                  <TextField
+                    id="outlined-date"
+                    defaultValue={event.date}
+                    inputRef={dateRef}
+                  />
+                ) : (
+                  event.date
+                )}
+              </div>
+            </Grid>
             {user !== event.host && !isEditMode && (
-              <li>
+              <Grid item>
                 <Button variant="contained" onClick={toggleAttending}>
                   {isAttending ? 'Unattend' : 'Attend'}
                 </Button>
-              </li>
+              </Grid>
             )}
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-spots"
-                        defaultValue={event.maxSpots - event.attendees.length}
-                        inputRef={spotsRef}
-                        // does not check for valid inputs
-                      />
-                    ) : (
-                      event.maxSpots - event.attendees.length
-                    )}
-                  </div>
-                  <div className="cardInformation">spots left</div>
-                </CardContent>
-              </Card>
-            </li>
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">Location</div>
-                  <div className="cardInformation">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-location"
-                        defaultValue={event.location}
-                        inputRef={locationRef}
-                      />
-                    ) : (
-                      event.location
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </li>
-            <li>
-              <Card>
-                <CardContent>
-                  <div className="cardHeader">Time and Date</div>
-                  <div className="cardInformation">
-                    {isEditMode ? (
-                      <TextField
-                        id="outlined-date"
-                        defaultValue={event.date}
-                        inputRef={dateRef}
-                      />
-                    ) : (
-                      event.date
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="attendeesContainer">
-        <Card>
-          <CardContent>
-            <div className="cardHeader">Attendees</div>
-            <List>
-              {attendees.map(({ username, userSchool }) => (
-                <StudentItem username={username} userSchool={userSchool} />
-              ))}
-            </List>
-          </CardContent>
-        </Card>
+            {canEdit && (
+              <Grid item>
+                <Button variant="contained" onClick={toggleEditMode}>
+                  {isEditMode ? 'Done' : 'Edit Event'}
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </Box>
       </div>
     </div>
   );
