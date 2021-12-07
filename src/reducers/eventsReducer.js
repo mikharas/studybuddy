@@ -51,6 +51,7 @@ const eventsReducer = (state = initialData, { type, payload }) => {
           maxSpots: parseInt(payload.maxSpots, 10),
           attendees: [payload.host],
           questions: [],
+          image: payload.image,
         },
       ];
     case 'EDIT_EVENT':

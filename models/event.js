@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 const { User } = require("./user");
 
-const Event = mongoose.model('Event', {
+const QandA = new mongoose.Schema({
+    q: String,
+    a: String
+})
+
+const EventSchema = new mongoose.Schema({
     id: {
         type: String,
         required: true
@@ -38,6 +43,15 @@ const Event = mongoose.model('Event', {
         type: [String],
         required: true
     },
+    image: {
+        type: String,
+        required: false
+    },
+    questions: {
+        type: [QandA],
+        required: true
+    }
 })
+const Event = mongoose.model('Event', EventSchema);
 
 module.exports = { Event }

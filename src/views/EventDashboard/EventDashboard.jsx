@@ -12,8 +12,6 @@ import {
 import './eventDashboard.css';
 import Geocode from 'react-geocode';
 import { useHistory } from 'react-router-dom';
-import banner from '../../images/uoft_banner.png';
-import hostIcon from '../../images/uoft.png';
 import StudentItem from '../../components/StudentItem';
 import QuestionItem from '../../components/QuestionItem';
 
@@ -41,6 +39,7 @@ const EventDashboard = ({
     date: undefined,
     attendees: [],
     questions: [],
+    image: '',
   });
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
@@ -55,6 +54,10 @@ const EventDashboard = ({
   }
 
   const [isEditMode, setIsEditMode] = useState(false);
+
+  const e = getEvent(eventID);
+  const hostImage = getManyUserData(e.attendees)[e.attendees.length - 1]
+    .profileImage;
 
   const refreshEvent = () => {
     const refreshedEvent = getEvent(eventID);
@@ -146,7 +149,7 @@ const EventDashboard = ({
         )}
         <div className="attendee">
           <div className="avatarContainer">
-            <Avatar alt={event.host} src={hostIcon} />
+            <Avatar alt={event.host} src={hostImage} />
           </div>
           <div className="attendeeName">Hosted by {event.host}</div>
         </div>
@@ -157,8 +160,12 @@ const EventDashboard = ({
             <CardContent>
               <div className="cardHeader">Attendees</div>
               <List>
-                {attendees.map(({ username, userSchool }) => (
-                  <StudentItem username={username} userSchool={userSchool} />
+                {attendees.map(({ username, userSchool, profileImage }) => (
+                  <StudentItem
+                    username={username}
+                    userSchool={userSchool}
+                    profileImage={profileImage}
+                  />
                 ))}
               </List>
             </CardContent>
@@ -166,7 +173,7 @@ const EventDashboard = ({
         </div>
         <div className="middleContainer">
           <div className="banner">
-            <img src={banner} className="bannerImg" alt="banner" />
+            <img src={event.image} className="bannerImg" alt="banner" />
           </div>
           <div className="eventDescription">
             <Card>

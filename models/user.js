@@ -21,20 +21,23 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-        // minlength: 
     },
     isAdmin: {
         type: Boolean,
         required: true,
     },
-    // following: {
-    //     type: [User],
-    //     required: true
-    // },
+    following: {
+        type: [String],
+        required: true
+    },
     contact: {
         type: String,
         required: false,
         minlength: 1
+    },
+    profileImage: {
+        type: String,
+        required: false
     }
 })
 

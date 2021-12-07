@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import '../styles/studentDashboard.css';
 import { Button, Typography, TextField } from '@mui/material';
 import { useHistory } from 'react-router-dom';
-import uoft from '../../images/uoft.png';
 import EventsList from './StudentDashboardEvents';
 import StudentItem from '../../components/StudentItem';
 
@@ -29,6 +28,7 @@ const StudentDashboard = ({
     contact: '',
     userEvents: [],
     hostedEvents: [],
+    profileImage: '',
   });
 
   const [following, setFollowing] = useState([]);
@@ -38,6 +38,26 @@ const StudentDashboard = ({
     isAdmin: false,
     following: [],
   });
+
+  let image = getUserData(userID).profileImage;
+
+  const uploadImage = async (e) => {
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
+    formData.append('upload_preset', 'duespamm');
+
+    const result = await fetch(
+      'https://api.cloudinary.com/v1_1/dllebueou/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+
+    const file = await result.json();
+
+    image = file.secure_url;
+  };
 
   const refreshUserData = () => {
     if (isLoggedIn) {
@@ -91,6 +111,7 @@ const StudentDashboard = ({
         schoolRef.current.value,
         fullNameRef.current.value,
         contactRef.current.value,
+        image,
       );
     }
     setIsEditing(!isEditing);
@@ -143,7 +164,7 @@ const StudentDashboard = ({
           </Button>
         )}
 
-        <img src={uoft} className="avatar" alt="Avatar" />
+        <img src={userData.profileImage} className="avatar" alt="Avatar" />
         <ul className="userInfo">
           <li className="userFullName">
             {isEditing ? (
@@ -203,6 +224,12 @@ const StudentDashboard = ({
               </>
             )}
           </li>
+          {isEditing && (
+            <li>
+              <Typography variant="body2">Upload image</Typography>
+              <input type="file" onChange={uploadImage} />
+            </li>
+          )}
         </ul>
       </div>
       <div className="bottomContainer">
@@ -236,8 +263,12 @@ const FollowingList = ({ followingList }) => {
       <Typography variant="h6" className="listHeader">
         Following:{' '}
       </Typography>
-      {followingList.map(({ username, userSchool }) => (
-        <StudentItem username={username} userSchool={userSchool} />
+      {followingList.map(({ username, userSchool, profileImage }) => (
+        <StudentItem
+          username={username}
+          userSchool={userSchool}
+          profileImage={profileImage}
+        />
       ))}
     </div>
   );

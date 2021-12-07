@@ -24,7 +24,8 @@ export const removeFollowing =
   };
 
 export const editProfileInfo =
-  (userID, userSchool, fullName, contact) => (dispatch, getState) => {
+  (userID, userSchool, fullName, contact, profileImage) =>
+  (dispatch, getState) => {
     dispatch({
       type: 'EDIT_PROFILE',
       payload: {
@@ -32,6 +33,7 @@ export const editProfileInfo =
         userSchool,
         fullName,
         contact,
+        profileImage,
       },
     });
   };
@@ -65,6 +67,7 @@ export const getUserData = (userID) => (dispatch, getState) => {
     isAdmin: user.isAdmin,
     following: user.following,
     contact: user.contact,
+    profileImage: user.profileImage,
   };
 };
 
@@ -74,5 +77,6 @@ export const getManyUserData = (userIDs) => (dispatch, getState) => {
   return wantedUsers.map((u) => ({
     username: u.username,
     userSchool: u.userSchool,
+    profileImage: u.profileImage,
   }));
 };

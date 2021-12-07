@@ -8,7 +8,7 @@ export const getEvent = (eventID) => (dispatch, getState) => {
 };
 
 export const createEvent =
-  (id, title, description, host, date, location, maxSpots) =>
+  (id, title, description, host, date, location, maxSpots, image) =>
   (dispatch, getState) => {
     dispatch({
       type: 'CREATE_EVENT',
@@ -20,6 +20,7 @@ export const createEvent =
         date,
         location,
         maxSpots,
+        image,
       },
     });
     alert('Event successfully created!');
