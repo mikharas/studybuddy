@@ -4,14 +4,24 @@ import {
   Avatar,
   List,
   Card,
+  CardActionArea,
   CardContent,
   TextField,
+  Typography,
   Grid,
   Box,
 } from '@mui/material';
+import { DateTimePicker } from '@mui/lab';
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from 'use-places-autocomplete';
 import './eventDashboard.css';
 import Geocode from 'react-geocode';
 import { useHistory } from 'react-router-dom';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import moment from 'moment';
 import banner from '../../images/uoft_banner.png';
 import hostIcon from '../../images/uoft.png';
 import StudentItem from '../../components/StudentItem';
@@ -44,6 +54,56 @@ const EventDashboard = ({
   });
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
+  const [locationCoord, setLocationCoord] = useState();
+  const {
+    ready,
+    value,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      /* Define search scope here */
+    },
+    debounce: 300,
+  });
+  const handleLocSelect =
+    ({ description }) =>
+    () => {
+      setValue(description, false);
+      clearSuggestions();
+
+      getGeocode({ address: description })
+        .then((results) => getLatLng(results[0]))
+        .then(({ lat, lng }) => {
+          setLocationCoord({ lat, lng });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+  const renderSuggestions = () =>
+    data.map((suggestion) => {
+      const {
+        place_id: placeId,
+        structured_formatting: {
+          main_text: mainText,
+          seconday_text: secondaryText,
+        },
+      } = suggestion;
+
+      return (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
+        <li
+          key={placeId}
+          onClick={handleLocSelect(suggestion)}
+          className="suggestions"
+        >
+          <strong>{mainText}</strong> <small>{secondaryText}</small>
+        </li>
+      );
+    });
 
   let canEdit;
   if (user === undefined) {
@@ -56,36 +116,62 @@ const EventDashboard = ({
 
   const [isEditMode, setIsEditMode] = useState(false);
 
-  const refreshEvent = () => {
-    const refreshedEvent = getEvent(eventID);
-    // TODO: refactor this later
+  const refreshEvent = async () => {
+    const refreshedEvent = await getEvent(eventID);
     if (!refreshedEvent) {
       history.push('/404');
       history.go(0);
       return;
     }
-    const refreshedAttendees = getManyUserData(refreshedEvent.attendees);
+    setDateTime(refreshedEvent.date);
+    const refreshedAttendees = await getManyUserData(refreshedEvent.attendees);
     if (isLoggedIn) {
       setIsAttending(refreshedEvent.attendees.includes(user));
     }
     setAttendees(refreshedAttendees);
-    setEvent({ ...refreshedEvent, location: 'DUMMY ADDRESS' });
-    // TODO: Here, we use geocode to convert event location coordinates
-    // to a common address, and display that
+    Geocode.setApiKey('AIzaSyB_RUPihF4_K2RXvpCKHYB7GPwd2Nb7Y_U');
+    Geocode.setRegion('can');
+    Geocode.fromLatLng(
+      `${refreshedEvent.location.lat}`,
+      `${refreshedEvent.location.lng}`,
+    ).then(
+      (response) => {
+        const address = response.results[0].formatted_address;
+        setLocationCoord({
+          lat: refreshedEvent.location.lat,
+          lng: refreshedEvent.location.lng,
+        });
+        setEvent({
+          ...refreshedEvent,
+          location: address,
+          questions: [],
+        });
+        setValue(address);
+      },
+      (error) => {
+        console.error(error);
+      },
+    );
   };
 
   useEffect(() => refreshEvent(), []);
 
-  const toggleAttending = () => {
+  const openGoogleMaps = () => {
+    window.open(`https://maps.google.com?q=${event.location}`);
+  };
+  const toggleAttending = async () => {
+    console.log('here');
     if (!isLoggedIn) {
       alert('You must log in to perform this action.');
       history.push('/login');
     } else if (event.maxSpots - event.attendees.length === 0) {
       alert('No more space available!');
     } else if (!isAttending) {
-      addAttendee(eventID, user);
+      console.log('addattendee');
+      await addAttendee(eventID, user);
     } else {
-      removeAttendee(eventID, user);
+      console.log('removeattendee');
+      await removeAttendee(eventID, user);
     }
     refreshEvent();
   };
@@ -113,8 +199,7 @@ const EventDashboard = ({
 
   const titleRef = useRef('');
   const descriptionRef = useRef('');
-  const dateRef = useRef('');
-  const locationRef = useRef('');
+  const [dateTime, setDateTime] = useState();
   const spotsRef = useRef('');
 
   const toggleEditMode = () => {
@@ -123,8 +208,9 @@ const EventDashboard = ({
         eventID,
         titleRef.current.value,
         descriptionRef.current.value,
-        dateRef.current.value,
-        locationRef.current.value,
+        user,
+        moment(dateTime, 'ddd MMM DD yyyy HH:mm').toString(),
+        locationCoord,
         spotsRef.current.value,
       );
     }
@@ -272,13 +358,19 @@ const EventDashboard = ({
                 <div className="cardHeader">Location</div>
                 <div className="cardInformation">
                   {isEditMode ? (
-                    <TextField
-                      id="outlined-location"
-                      defaultValue={event.location}
-                      inputRef={locationRef}
-                    />
+                    <>
+                      <TextField
+                        id="outlined-location"
+                        value={value}
+                        disabled={!ready}
+                        onChange={(e) => setValue(e.target.value)}
+                      />
+                      {status === 'OK' && <ul>{renderSuggestions()}</ul>}
+                    </>
                   ) : (
-                    event.location
+                    <CardActionArea onClick={openGoogleMaps}>
+                      <Typography variant="body1">{event.location}</Typography>
+                    </CardActionArea>
                   )}
                 </div>
               </Grid>
@@ -286,11 +378,15 @@ const EventDashboard = ({
                 <div className="cardHeader">Time and Date</div>
                 <div className="cardInformation">
                   {isEditMode ? (
-                    <TextField
-                      id="outlined-date"
-                      defaultValue={event.date}
-                      inputRef={dateRef}
-                    />
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                      <DateTimePicker
+                        label="Start Date and Time"
+                        value={dateTime}
+                        format="yyyy-MM-dd:HH:mm"
+                        onChange={(newValue) => setDateTime(newValue)}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </LocalizationProvider>
                   ) : (
                     event.date
                   )}

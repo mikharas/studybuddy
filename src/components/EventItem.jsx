@@ -46,9 +46,8 @@ const useStyles = makeStyles((theme) => ({
     width: '70%',
   },
 }));
-
 const EventItem = ({
-  id,
+  _id,
   title,
   attendees,
   date,
@@ -60,7 +59,7 @@ const EventItem = ({
   const classes = useStyles();
   const history = useHistory();
   return (
-    <CardActionArea onClick={() => history.push(`/event-dashboard/${id}`)}>
+    <CardActionArea onClick={() => history.push(`/event-dashboard/${_id}`)}>
       <Card elevation={0} className={classes.eventCard}>
         <div className={classes.eventCardImageContainer}>
           <img alt="cat" src={Cat} className={classes.eventCardImage} />

@@ -1,72 +1,134 @@
-// TODO: Calls to database using axios;
-// code below requires server call to get event data, which is dispatched to reducers
-// to modify application state
+const axios = require('axios');
 
-export const getEvent = (eventID) => (dispatch, getState) => {
-  const { events } = getState();
-  return events.filter((e) => e.id === eventID)[0];
+export const getEvent = (eventID) => async (dispatch, getState) => {
+  // fetch from axios
+  try {
+    let res = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}`,
+    });
+    return res.data;
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
+};
+
+export const getEvents = () => async (dispatch, getState) => {
+  // fetch from axios
+
+  try {
+    let res = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard`,
+    });
+    console.log(res.data);
+
+    dispatch({
+      type: 'SET_EVENTS',
+      payload: {
+        events: res.data,
+      },
+    });
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
 };
 
 export const createEvent =
-  (id, title, description, host, date, location, maxSpots) =>
-  (dispatch, getState) => {
-    dispatch({
-      type: 'CREATE_EVENT',
-      payload: {
-        id,
-        title,
-        description,
-        host,
-        date,
-        location,
-        maxSpots,
-      },
-    });
-    alert('Event successfully created!');
+  (title, description, host, date, location, maxSpots) =>
+  async (dispatch, getState) => {
+    try {
+      let res = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard`,
+        data: {
+          title,
+          description,
+          host,
+          location,
+          date,
+          maxSpots,
+        },
+      });
+
+      console.log(res.data._id);
+      alert('Event successfully created!');
+      return res.data._id;
+    } catch (error) {
+      console.log(error.response); // this is the main part. Use the response property from the error object
+      return error.response;
+    }
   };
 
 export const editEvent =
-  (eventID, title, description, date, location, maxSpots) =>
-  (dispatch, getState) => {
-    dispatch({
-      type: 'EDIT_EVENT',
-      payload: {
-        eventID,
-        title,
-        description,
-        date,
-        location,
-        maxSpots,
-      },
-    });
+  (eventID, title, description, host, date, location, maxSpots) =>
+  async (dispatch, getState) => {
+    // axios post on event
+    // axios fetch all events again
+    try {
+      let res = await axios({
+        method: 'patch',
+        url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}`,
+        data: {
+          title,
+          description,
+          host,
+          location,
+          date,
+          maxSpots,
+        },
+      });
+
+      console.log(res.data._id);
+      return res.data._id;
+    } catch (error) {
+      console.log(error.response); // this is the main part. Use the response property from the error object
+      return error.response;
+    }
   };
 
-export const addAttendee = (eventID, attendee) => (dispatch, getState) => {
-  const event = getState().events.find((e) => e.id === eventID);
-  if (event.host === attendee) {
-    alert('You are the host of this event');
-    return;
+export const addAttendee = (eventID, attendee) => async () => {
+  try {
+    console.log('here');
+    let res = await axios({
+      method: 'post',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}/attend`,
+      data: {
+        attendee,
+      },
+    });
+
+    console.log(res.data.event);
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
   }
-  dispatch({
-    type: 'ADD_ATTENDEE',
-    payload: {
-      eventID,
-      attendee,
-    },
-  });
 };
 
-export const removeAttendee = (eventID, attendee) => (dispatch, getState) => {
-  const event = getState().events.find((e) => e.id === eventID);
-  if (event.host === attendee) {
-    alert('You are the host of this event');
-    return;
+export const removeAttendee = (eventID, attendee) => async () => {
+  try {
+    let res = await axios({
+      method: 'delete',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}/unattend`,
+      data: {
+        attendee,
+      },
+    });
+
+    console.log(res.data.event);
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
   }
+};
+
+export const setFilter = (filter) => (dispatch, getState) => {
   dispatch({
-    type: 'REMOVE_ATTENDEE',
+    type: 'SET_FILTER',
     payload: {
-      eventID,
-      attendee,
+      filter,
     },
   });
 };

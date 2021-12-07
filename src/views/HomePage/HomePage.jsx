@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import { Typography } from '@mui/material';
 import Event from '../../components/EventItem';
@@ -23,8 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Homepage = ({ isLoggedIn, user, events }) => {
+const Homepage = ({ isLoggedIn, user, events, getEvents }) => {
   const classes = useStyles();
+  useEffect(async () => {
+    console.log('hi');
+    await getEvents();
+  }, []);
   return (
     <>
       <HomeHeader />

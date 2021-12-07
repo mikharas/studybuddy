@@ -1,39 +1,77 @@
-// TODO: Calls to database using axios
-// code below requires server call to get user data, which is dispatched to reducers
-// to modify application state
+const axios = require('axios');
 
-export const addFollowing = (follower, following) => (dispatch, getState) => {
-  dispatch({
-    type: 'ADD_FOLLOWING',
-    payload: {
-      following,
-      follower,
-    },
-  });
+export const getUserData = (userID) => async (dispatch, getState) => {
+  try {
+    console.log(userID);
+    let res = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${userID}`,
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
 };
 
-export const removeFollowing =
-  (follower, following) => (dispatch, getState) => {
-    dispatch({
-      type: 'REMOVE_FOLLOWING',
-      payload: {
-        following,
-        follower,
-      },
-    });
+export const getUserAttendingEvents = (userID) => (dispatch, getState) => {
+  const { events } = getState();
+  console.log(userID, events);
+  return events.events.filter((e) => e.attendees.includes(userID));
+};
+
+export const addFollowing =
+  (follower, following) => async (dispatch, getState) => {
+    try {
+      console.log('here');
+      const res = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
+      });
+
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.response); // this is the main part. Use the response property from the error object
+      return error.response;
+    }
   };
 
-export const editProfileInfo =
-  (userID, userSchool, fullName, contact) => (dispatch, getState) => {
-    dispatch({
-      type: 'EDIT_PROFILE',
-      payload: {
-        userID,
-        userSchool,
-        fullName,
-        contact,
-      },
+export const removeFollowing = (follower, following) => async () => {
+  try {
+    const res = await axios({
+      method: 'delete',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
     });
+
+    console.log(res.data);
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
+};
+
+export const editProfileInfo =
+  (userID, userSchool, fullName, contact) => async () => {
+    // axios post on event
+    // axios fetch all events again
+    try {
+      let res = await axios({
+        method: 'patch',
+        url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${userID}`,
+        data: {
+          contact,
+          fullName,
+          userSchool,
+        },
+      });
+
+      console.log(res.data._id);
+      return res.data._id;
+    } catch (error) {
+      console.log(error.response); // this is the main part. Use the response property from the error object
+      return error.response;
+    }
   };
 
 // export const removeUser = (userID) => (dispatch, getState) => {
@@ -45,34 +83,24 @@ export const editProfileInfo =
 //   });
 // };
 
-export const getUserAttendingEvents = (userID) => (dispatch, getState) => {
-  const { events } = getState();
-  return events.filter((e) => e.attendees.includes(userID));
-};
-
 export const getHostedEvents = (userID) => (dispatch, getState) => {
   const { events } = getState();
-  return events.filter((e) => e.host === userID);
+  return events.events.filter((e) => e.host === userID);
 };
 
-export const getUserData = (userID) => (dispatch, getState) => {
-  const { users } = getState();
-  const user = users.filter((u) => u.username === userID)[0];
-  return {
-    fullName: user.fullName,
-    username: user.username,
-    userSchool: user.userSchool,
-    isAdmin: user.isAdmin,
-    following: user.following,
-    contact: user.contact,
-  };
-};
-
-export const getManyUserData = (userIDs) => (dispatch, getState) => {
-  const { users } = getState();
-  const wantedUsers = users.filter((u) => userIDs.includes(u.username));
-  return wantedUsers.map((u) => ({
-    username: u.username,
-    userSchool: u.userSchool,
-  }));
+export const getManyUserData = (userIDs) => async () => {
+  try {
+    let res = await axios({
+      method: 'get',
+      url: `${process.env.REACT_APP_BACKEND_API_URL}/users`,
+    });
+    const wantedUsers = res.data.filter((u) => userIDs.includes(u.username));
+    return wantedUsers.map((u) => ({
+      username: u.username,
+      userSchool: u.userSchool,
+    }));
+  } catch (error) {
+    console.log(error.response); // this is the main part. Use the response property from the error object
+    return error.response;
+  }
 };

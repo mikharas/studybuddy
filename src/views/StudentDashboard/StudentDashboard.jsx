@@ -12,6 +12,7 @@ const StudentDashboard = ({
   removeFollowing,
   userID,
   user,
+  getEvents,
   getUserAttendingEvents,
   getManyUserData,
   getUserData,
@@ -39,17 +40,19 @@ const StudentDashboard = ({
     following: [],
   });
 
-  const refreshUserData = () => {
+  const refreshUserData = async () => {
     if (isLoggedIn) {
+      // populate events, if not done
+      await getEvents();
+      const userDataS = await getUserData(userID);
       const userEvents = getUserAttendingEvents(userID);
       const hostedEvents = getHostedEvents(userID);
-      const userDataS = getUserData(userID);
       const {
         username: newUsername,
         following: newFollowing,
         isAdmin: admin,
-      } = getUserData(user);
-      const refreshedFollowing = getManyUserData(userDataS.following);
+      } = await getUserData(user);
+      const refreshedFollowing = await getManyUserData(userDataS.following);
       setUserData({
         ...userDataS,
         userEvents,
@@ -64,8 +67,8 @@ const StudentDashboard = ({
     }
   };
 
-  useEffect(() => {
-    refreshUserData();
+  useEffect(async () => {
+    await refreshUserData();
   }, [userID]);
 
   const isFollowing = activeUserData.following.includes(userID);
@@ -84,9 +87,9 @@ const StudentDashboard = ({
   const schoolRef = useRef();
   const contactRef = useRef();
 
-  const toggleEditing = (cancelled) => {
+  const toggleEditing = async (cancelled) => {
     if (isEditing && !cancelled) {
-      editProfileInfo(
+      await editProfileInfo(
         userID,
         schoolRef.current.value,
         fullNameRef.current.value,

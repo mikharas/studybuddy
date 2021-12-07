@@ -2,10 +2,6 @@ const mongoose = require('mongoose')
 const { User } = require("./user");
 
 const Event = mongoose.model('Event', {
-    id: {
-        type: String,
-        required: true
-    },
     title: {
         type: String,
         required: true,
