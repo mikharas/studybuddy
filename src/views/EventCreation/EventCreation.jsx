@@ -14,6 +14,8 @@ import usePlacesAutocomplete, {
 const EventCreation = ({ user, isLoggedIn, createEvent }) => {
   const history = useHistory();
 
+  let image = '';
+
   const titleRef = useRef('');
   const descriptionRef = useRef('');
   const [dateTime, setDateTime] = useState();
@@ -30,6 +32,24 @@ const EventCreation = ({ user, isLoggedIn, createEvent }) => {
   });
   const spotsRef = useRef('');
 
+  const uploadImage = async (e) => {
+    const formData = new FormData();
+    formData.append('file', e.target.files[0]);
+    formData.append('upload_preset', 'duespamm');
+
+    const result = await fetch(
+      'https://api.cloudinary.com/v1_1/dllebueou/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
+
+    const file = await result.json();
+
+    image = file.secure_url;
+  };
+
   const createNewEvent = async () => {
     if (!isLoggedIn) {
       alert('You must log in to perform this action.');
@@ -42,6 +62,7 @@ const EventCreation = ({ user, isLoggedIn, createEvent }) => {
         moment(dateTime, 'ddd MMM DD yyyy HH:mm').toString(),
         locationCoord,
         spotsRef.current.value,
+        image,
       );
       history.push(`/event-dashboard/${id}`);
     }
@@ -101,6 +122,7 @@ const EventCreation = ({ user, isLoggedIn, createEvent }) => {
           direction="column"
           justifyContent="center"
           alignItems="center"
+          spacing={2}
         >
           <Grid
             item
@@ -155,16 +177,11 @@ const EventCreation = ({ user, isLoggedIn, createEvent }) => {
               inputRef={descriptionRef}
             />
           </Grid>
-          <Grid
-            item
-            xs={6}
-            sx={{ '& .MuiButton-root': { m: 1, width: '25ch' } }}
-          >
-            <Button variant="contained">
-              Upload Image
-              {/* Note this feature pulls from backend and as such does not work yet
-               */}
-            </Button>
+          <Grid item xs={6}>
+            <strong> Upload image </strong>
+          </Grid>
+          <Grid item xs={6} sx={{ marginLeft: 7 }}>
+            <input type="file" onChange={uploadImage} />
           </Grid>
           <Grid
             item

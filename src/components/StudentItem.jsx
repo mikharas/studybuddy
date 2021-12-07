@@ -10,7 +10,6 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import hostIcon from '../images/uoft.png';
 
 const useStyles = makeStyles((theme) => ({
   eventDate: {
@@ -54,14 +53,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentItem = ({ username, userSchool }) => {
+const StudentItem = ({ username, userSchool, profileImage }) => {
   const classes = useStyles();
   const history = useHistory();
   return (
     <CardActionArea onClick={() => history.push(`/profile/${username}`)}>
       <ListItem>
         <ListItemAvatar>
-          <Avatar alt={username} src={hostIcon} />
+          <Avatar alt={username} src={profileImage} />
         </ListItemAvatar>
         <ListItemText
           primary={

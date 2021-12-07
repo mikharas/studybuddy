@@ -13,6 +13,8 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
           isAdmin: payload.isAdmin,
           following: [],
           contact: payload.contact,
+          profileImage:
+            'https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg',
         },
       ];
     case 'ADD_FOLLOWING':
@@ -47,6 +49,7 @@ const usersReducer = (state = initialUsersData, { type, payload }) => {
             userSchool: payload.userSchool,
             fullName: payload.fullName,
             contact: payload.contact,
+            profileImage: payload.profileImage,
           };
         }
         return u;

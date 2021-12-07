@@ -51,10 +51,12 @@ const EventDashboard = ({
     date: undefined,
     attendees: [],
     questions: [],
+    image: '',
   });
   const [attendees, setAttendees] = useState([]);
   const [isAttending, setIsAttending] = useState();
   const [locationCoord, setLocationCoord] = useState();
+  const [hostimage, setHostimage] = useState();
   const {
     ready,
     value,
@@ -125,6 +127,9 @@ const EventDashboard = ({
     }
     setDateTime(refreshedEvent.date);
     const refreshedAttendees = await getManyUserData(refreshedEvent.attendees);
+    // setHostimage(
+    //   refreshedAttendees[refreshedAttendees.length - 1].profileImage,
+    // );
     if (isLoggedIn) {
       setIsAttending(refreshedEvent.attendees.includes(user));
     }
@@ -232,7 +237,7 @@ const EventDashboard = ({
         )}
         <div className="attendee">
           <div className="avatarContainer">
-            <Avatar alt={event.host} src={hostIcon} />
+            <Avatar alt={event.host} src={hostimage} />
           </div>
           <div className="attendeeName">Hosted by {event.host}</div>
         </div>
@@ -243,8 +248,12 @@ const EventDashboard = ({
             <CardContent>
               <div className="cardHeader">Attendees</div>
               <List>
-                {attendees.map(({ username, userSchool }) => (
-                  <StudentItem username={username} userSchool={userSchool} />
+                {attendees.map(({ username, userSchool, profileImage }) => (
+                  <StudentItem
+                    username={username}
+                    userSchool={userSchool}
+                    profileImage={profileImage}
+                  />
                 ))}
               </List>
             </CardContent>
@@ -252,7 +261,7 @@ const EventDashboard = ({
         </div>
         <div className="middleContainer">
           <div className="banner">
-            <img src={banner} className="bannerImg" alt="banner" />
+            <img src={event.image} className="bannerImg" alt="banner" />
           </div>
           <div className="eventDescription">
             <Card>
