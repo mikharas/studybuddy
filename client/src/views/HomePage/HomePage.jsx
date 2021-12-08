@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 const Homepage = ({ isLoggedIn, user, events, getEvents }) => {
   const classes = useStyles();
   useEffect(async () => {
-    console.log('hi');
     await getEvents();
   }, []);
   return (

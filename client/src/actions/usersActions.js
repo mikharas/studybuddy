@@ -2,12 +2,10 @@ const axios = require('axios');
 
 export const getUserData = (userID) => async (dispatch, getState) => {
   try {
-    console.log(userID);
     let res = await axios({
       method: 'get',
       url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${userID}`,
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error.response); // this is the main part. Use the response property from the error object
@@ -17,20 +15,16 @@ export const getUserData = (userID) => async (dispatch, getState) => {
 
 export const getUserAttendingEvents = (userID) => (dispatch, getState) => {
   const { events } = getState();
-  console.log(userID, events);
   return events.events.filter((e) => e.attendees.includes(userID));
 };
 
 export const addFollowing =
   (follower, following) => async (dispatch, getState) => {
     try {
-      console.log('here');
       const res = await axios({
         method: 'post',
         url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
       });
-
-      console.log(res.data);
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
@@ -43,8 +37,6 @@ export const removeFollowing = (follower, following) => async () => {
       method: 'delete',
       url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
     });
-
-    console.log(res.data);
   } catch (error) {
     console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
@@ -67,7 +59,6 @@ export const editProfileInfo =
         },
       });
 
-      console.log(res.data._id);
       return res.data._id;
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object

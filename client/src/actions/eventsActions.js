@@ -22,7 +22,6 @@ export const getEvents = () => async (dispatch, getState) => {
       method: 'get',
       url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard`,
     });
-    console.log(res.data);
 
     dispatch({
       type: 'SET_EVENTS',
@@ -54,7 +53,6 @@ export const createEvent =
         },
       });
 
-      console.log(res.data._id);
       alert('Event successfully created!');
       return res.data._id;
     } catch (error) {
@@ -82,7 +80,6 @@ export const editEvent =
         },
       });
 
-      console.log(res.data._id);
       return res.data._id;
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object
@@ -92,7 +89,6 @@ export const editEvent =
 
 export const addAttendee = (eventID, attendee) => async () => {
   try {
-    console.log('here');
     let res = await axios({
       method: 'post',
       url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}/attend`,
@@ -100,8 +96,6 @@ export const addAttendee = (eventID, attendee) => async () => {
         attendee,
       },
     });
-
-    console.log(res.data.event);
   } catch (error) {
     console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
@@ -117,8 +111,6 @@ export const removeAttendee = (eventID, attendee) => async () => {
         attendee,
       },
     });
-
-    console.log(res.data.event);
   } catch (error) {
     console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;

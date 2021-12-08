@@ -165,17 +165,14 @@ const EventDashboard = ({
     window.open(`https://maps.google.com?q=${event.location}`);
   };
   const toggleAttending = async () => {
-    console.log('here');
     if (!isLoggedIn) {
       alert('You must log in to perform this action.');
       history.push('/login');
     } else if (event.maxSpots - event.attendees.length === 0) {
       alert('No more space available!');
     } else if (!isAttending) {
-      console.log('addattendee');
       await addAttendee(eventID, user);
     } else {
-      console.log('removeattendee');
       await removeAttendee(eventID, user);
     }
     refreshEvent();
@@ -235,7 +232,10 @@ const EventDashboard = ({
         ) : (
           <h1>{event.title}</h1>
         )}
-        <div className="attendee">
+        <div
+          className="attendee"
+          onClick={() => history.push(`/profile/${event.host}`)}
+        >
           <div className="avatarContainer">
             <Avatar alt={event.host} src={hostimage} />
           </div>
@@ -281,63 +281,6 @@ const EventDashboard = ({
               </CardContent>
             </Card>
             {/* tags */}
-          </div>
-          <div className="questionsContainer">
-            <Card>
-              <CardContent>
-                <div className="cardHeader">Questions & Answers</div>
-                {user !== event.host && (
-                  <Box textAlign="center">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={questionPrompt}
-                    >
-                      Got a question?
-                    </Button>
-                  </Box>
-                )}
-                <List>
-                  {user === event.host &&
-                    event.questions.map(({ id, q, a }) => (
-                      <>
-                        <QuestionItem question={q} answer={a} />
-                        <Button
-                          size="small"
-                          onClick={() => {
-                            const newA = prompt(q);
-                            if (newA === null || newA === '') {
-                              return;
-                            }
-                            editQuestion(eventID, { id, q, a: newA });
-                            refreshEvent();
-                          }}
-                        >
-                          {a !== '' ? 'Edit Response' : 'Respond'}
-                        </Button>
-                        <Button
-                          size="small"
-                          onClick={() => {
-                            deleteQuestion(eventID, { id, q, a });
-                            refreshEvent();
-                          }}
-                        >
-                          Delete Question
-                        </Button>
-                      </>
-                    ))}
-                  {user !== event.host &&
-                    event.questions.map(({ q, a }) => (
-                      <QuestionItem
-                        question={q}
-                        answer={a}
-                        addQuestion={addQuestion}
-                        eventID={eventID}
-                      />
-                    ))}
-                </List>
-              </CardContent>
-            </Card>
           </div>
         </div>
         <div className="rightContainer">
