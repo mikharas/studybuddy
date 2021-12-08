@@ -152,7 +152,6 @@ Request body expects:
 }
 */
 app.post('/user', mongoChecker, async (req, res) => {
-  // console.log(req.body)
   const user = new User({
     username: req.body.username,
     password: req.body.password,
@@ -484,7 +483,6 @@ app.post('/event-dashboard/:eventID/attend', async (req, res) => {
       res.status(404).send('Resource not found');
     } else {
       event.attendees.push(req.body.attendee);
-      console.log(event)
       const newEvent = await event.save();
       res.send({
         event: newEvent,

@@ -60,7 +60,6 @@ const EventItem = ({
 }) => {
   const classes = useStyles();
   const history = useHistory();
-  console.log(image);
   return (
     <CardActionArea onClick={() => history.push(`/event-dashboard/${_id}`)}>
       <Card elevation={0} className={classes.eventCard}>

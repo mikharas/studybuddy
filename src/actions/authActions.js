@@ -14,7 +14,6 @@ export const register =
         },
       });
 
-      console.log(res.data);
       alert('Event successfully created!');
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object
@@ -34,7 +33,6 @@ export const login = (username, password) => async (dispatch, getState) => {
     });
 
     const data = res.data;
-    console.log(data);
     dispatch({
       type: 'LOGIN_SUCCESS',
       payload: { username: data.currentUser, isAdmin: data.isAdmin },

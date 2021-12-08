@@ -165,17 +165,14 @@ const EventDashboard = ({
     window.open(`https://maps.google.com?q=${event.location}`);
   };
   const toggleAttending = async () => {
-    console.log('here');
     if (!isLoggedIn) {
       alert('You must log in to perform this action.');
       history.push('/login');
     } else if (event.maxSpots - event.attendees.length === 0) {
       alert('No more space available!');
     } else if (!isAttending) {
-      console.log('addattendee');
       await addAttendee(eventID, user);
     } else {
-      console.log('removeattendee');
       await removeAttendee(eventID, user);
     }
     refreshEvent();
