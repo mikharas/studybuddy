@@ -1,97 +1,27 @@
 {
-  "name": "studybuddy",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@babel/eslint-parser": "^7.15.8",
-    "@babel/preset-react": "^7.14.5",
-    "@emotion/css": "^11.5.0",
-    "@emotion/react": "^11.5.0",
-    "@emotion/styled": "^11.3.0",
-    "@mui/icons-material": "^5.0.5",
-    "@mui/lab": "^5.0.0-alpha.59",
-    "@mui/material": "^5.0.6",
-    "@mui/styles": "^5.0.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "axios": "^0.24.0",
-    "bcryptjs": "^2.4.3",
-    "cloudinary-react": "^1.7.0",
-    "connect-mongo": "^4.6.0",
-    "cors": "^2.8.5",
-    "date-fns": "^2.27.0",
-    "express-session": "^1.17.2",
-    "formik": "^2.2.9",
-    "google-map-react": "^2.1.10",
-    "moment": "^2.29.1",
-    "mongodb": "^4.2.1",
-    "mongoose": "^6.0.14",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-geocode": "^0.2.3",
-    "react-redux": "^7.2.6",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
-    "redux": "^4.1.2",
-    "redux-thunk": "^2.4.0",
-    "use-places-autocomplete": "^1.11.0",
-    "web-vitals": "^1.0.1",
-    "yup": "^0.32.11"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "commit": "cz",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx|css)\" --write",
-    "postinstall": "husky install",
-    "prepare": "husky install"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.26.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^7.0.4",
-    "lint-staged": "^11.2.4",
-    "override-material-ui-css": "^1.1.4",
-    "prettier": "^2.4.1"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
+    "name": "studybuddy-mongoose",
+    "version": "1.0.0",
+    "main": "server.js",
+    "repository": "https://github.com/csc309-fall-2021/team21.git",
+    "author": "",
+    "license": "MIT",
+    "engines": {
+      "yarn": "1.22.17"
+    },
+    "dependencies": {
+      "axios": "^0.24.0",
+      "bcryptjs": "^2.4.3",
+      "cloudinary-react": "^1.7.0",
+      "connect-mongo": "^4.6.0",
+      "cors": "^2.8.5",
+      "express": "^4.17.1",
+      "express-session": "^1.17.2",
+      "mongodb": "^4.2.1",
+      "mongoose": "^6.0.14"
+    },
+    "scripts": {
+      "start": "node server.js",
+      "build-run": "cd client && yarn build && cd .. && node server.js",
+      "heroku-postbuild": "cd client && yarn && yarn build"
     }
-  },
-  "lint-staged": {
-    "./src/**/*.{ts,js,jsx,tsx}": [
-      "yarn lint --fix",
-      "yarn format"
-    ]
-  }
 }
