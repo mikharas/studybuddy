@@ -1,12 +1,28 @@
 Our application, StudyBuddy, aims to connect students who don't want to be alone in their stuggle for academic greatness.
 
+- [Heroku Deployed Link:](#heroku-deployed-link)
+- [How to use (for development purposes):](#how-to-use-for-development-purposes)
+- [Features:](#features)
+- [- Admins currently have the ability to edit any event they wish (while normal users can only edit if they are the host)](#--admins-currently-have-the-ability-to-edit-any-event-they-wish-while-normal-users-can-only-edit-if-they-are-the-host)
+- [Roles of Users](#roles-of-users)
+- [Third Party Libraries Used:](#third-party-libraries-used)
+- [Routes Overview](#routes-overview)
+- [- /event-dashboard/:eventid DELETE/GET/PATCH](#--event-dashboardeventid-deletegetpatch)
+- [(OLD!) Detailed Features Instructions:](#old-detailed-features-instructions)
+
 ========================================
 
-How to use:
+# Heroku Deployed Link: 
+https://immense-waters-03205.herokuapp.com/
+
+========================================
+# How to use (for development purposes):
 First clone the our repo onto your local machine
 then run the following commands in the terminal:
 
     yarn install
+
+    node server.js
 
     yarn start
 
@@ -14,46 +30,52 @@ Then you should be able to navigate to https://localhost:3000 to see our applica
 
 ========================================
 
-
-Login-Credentials:
-You may login by clicking the button on the top right.
-The currently configured login credentials are {admin;admin} and {user;user}
-but you may create your own if you wish.
-
-========================================
-
-Features:
+# Features:
 Our current features include:
 - Login System
 - Event Navigation
 - Event Creation
 - Event Editing
 - Event Map/location navigation
-- Event Joining/Leaving
+- Event Filtering (by time or keyword)
+- Event Attending/Event Leaving
 - Profile Editing
 - Profile Following/Unfollowing/Viewing
 
 Usage of the features should be self explanatory but for more detailed instructions
 see below.
 
-Admins currently have the ability to edit/create their special
-admin event meetings, edit any user event, view other users and ban users.
-The ban users is not fully implemented as it requires backend support.
+- Admins currently have the ability to edit any event they wish (while normal users can only edit if they are the host)
+========================================
+
+# Roles of Users
+The role of the users is to able to host or attend any events that they find interesting nearby. They would preform the features of the websites as follows:
+
+- Login System
+  - They would need to login in order to make their own profile to attend or create events (although you can still look at events if you aren't logged in)
+- Event Navigation
+  - Should they want to find more details of the event they can simply click on any event they find interesting and find out more detailed information
+- Event Creation
+  - Should they desire to create an event of their own they can click the "create event" button on the navigation bar and fill in the details to create their own event
+- Event Editing
+  - When looking at the event details, if you are the host or an Admin you can edit the details of the event at your leisure (in case plans change)
+- Event Map/location navigation
+  - For the more location conscious individuals they are able to click on the event explorer tab in the navbar to see a map of the events nearby
+  - The map has zoom in features as well feel free to try it out
+  - Should they desire to know the exact google location they can go to the event details by clicking on any event and click the location on the right to open up a new link to the google address
+- Event Filtering (by time or keyword)
+  - Should they want to find a specific event they need look no further than the event explorer, which can filter by time or keyword
+- Event Attending/Event Leaving
+  - If they find an event they wish to attend, they can just click the attend button in the event details page (so long as its not their own)
+- Profile Editing
+  - Should they want to add more information to their profile they can click the profile button in the nav bar, and click the edit profile button on the far right to change their information
+- Profile Following/Unfollowing/Viewing
+  - Should they like a particular individual's events they have the option to view their profile and event follow them
+  - To view their profile simply click where their profile may show up (i.e. the event details page)
 
 ========================================
 
-IMPORTANT:
-As our backend is not yet fully constructed, we have a 
-save state function in the frontend that keeps track of the user.
-As such refreshing the page will remove this state needing
-the user to log back in. The other features that still are incomplete
-due to lack of backend support are as follows:
-    - Event Creation: image uploading
-    - Google Map API: calls backend
-
-========================================
-
-Third Party Libraries Used:
+# Third Party Libraries Used:
 - emotion
 - material ui
 - react-router-dom
@@ -64,8 +86,19 @@ Third Party Libraries Used:
 For detailed list see "package.json" file
 
 ========================================
+# Routes Overview
+- /login POST
+- /logout GET
+- /check-session GET
+- /user POST
+- /profile/:userid DELETE/GET/PATCH
+- /users GET
+- /profile/:follower/:following POST/DELETE
+- /event-dashboard POST/GET
+- /event-dashboard/:eventid DELETE/GET/PATCH
+========================================
 
-Detailed Features Instructions:
+# (OLD!) Detailed Features Instructions:
 - Login System
     1. Click the Login Button on the top right
     2. You may sign in with {admin:admin} or {user:user}
