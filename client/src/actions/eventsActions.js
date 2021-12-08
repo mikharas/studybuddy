@@ -5,7 +5,7 @@ export const getEvent = (eventID) => async (dispatch, getState) => {
   try {
     let res = await axios({
       method: 'get',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}`,
+      url: `/event-dashboard/${eventID}`,
     });
     return res.data;
   } catch (error) {
@@ -20,7 +20,7 @@ export const getEvents = () => async (dispatch, getState) => {
   try {
     let res = await axios({
       method: 'get',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard`,
+      url: `/event-dashboard`,
     });
 
     dispatch({
@@ -41,7 +41,7 @@ export const createEvent =
     try {
       let res = await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard`,
+        url: `/event-dashboard`,
         data: {
           title,
           description,
@@ -69,7 +69,7 @@ export const editEvent =
     try {
       let res = await axios({
         method: 'patch',
-        url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}`,
+        url: `/event-dashboard/${eventID}`,
         data: {
           title,
           description,
@@ -91,7 +91,7 @@ export const addAttendee = (eventID, attendee) => async () => {
   try {
     let res = await axios({
       method: 'post',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}/attend`,
+      url: `/event-dashboard/${eventID}/attend`,
       data: {
         attendee,
       },
@@ -106,7 +106,7 @@ export const removeAttendee = (eventID, attendee) => async () => {
   try {
     let res = await axios({
       method: 'delete',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/event-dashboard/${eventID}/unattend`,
+      url: `/event-dashboard/${eventID}/unattend`,
       data: {
         attendee,
       },

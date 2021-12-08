@@ -4,7 +4,7 @@ export const getUserData = (userID) => async (dispatch, getState) => {
   try {
     let res = await axios({
       method: 'get',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${userID}`,
+      url: `/profile/${userID}`,
     });
     return res.data;
   } catch (error) {
@@ -23,7 +23,7 @@ export const addFollowing =
     try {
       const res = await axios({
         method: 'post',
-        url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
+        url: `/profile/${follower}/${following}`,
       });
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object
@@ -35,7 +35,7 @@ export const removeFollowing = (follower, following) => async () => {
   try {
     const res = await axios({
       method: 'delete',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${follower}/${following}`,
+      url: `/profile/${follower}/${following}`,
     });
   } catch (error) {
     console.log(error.response); // this is the main part. Use the response property from the error object
@@ -50,7 +50,7 @@ export const editProfileInfo =
     try {
       let res = await axios({
         method: 'patch',
-        url: `${process.env.REACT_APP_BACKEND_API_URL}/profile/${userID}`,
+        url: `/profile/${userID}`,
         data: {
           contact,
           fullName,
@@ -84,7 +84,7 @@ export const getManyUserData = (userIDs) => async () => {
   try {
     let res = await axios({
       method: 'get',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/users`,
+      url: `/users`,
     });
     const wantedUsers = res.data.filter((u) => userIDs.includes(u.username));
     return wantedUsers.map((u) => ({
