@@ -168,7 +168,11 @@ const StudentDashboard = ({
           </Button>
         )}
 
-        <img src={userData.profileImage} className="avatar" alt="Avatar" />
+        <img
+          src="https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg"
+          className="avatar"
+          alt="Avatar"
+        />
         <ul className="userInfo">
           <li className="userFullName">
             {isEditing ? (
