@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
   },
   eventsList: {
-    borderRadius: '50%',
     width: theme.spacing(80),
     padding: theme.spacing(5),
+    overflow: 'scroll',
   },
   eventsFilter: {
     display: 'flex',
