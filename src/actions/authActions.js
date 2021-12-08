@@ -14,7 +14,7 @@ export const register =
         },
       });
 
-      alert('Event successfully created!');
+      alert('User successfully created!');
     } catch (error) {
       console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
