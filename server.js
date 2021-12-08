@@ -531,9 +531,9 @@ app.delete('/event-dashboard/:eventID/unattend', async (req, res) => {
 app.use(express.static(`${__dirname}/../client/build`));
 
 // All routes other than above will go to index.html
-// app.get("*", (req, res) => {
-//     res.sendFile("C:/Users/leois/Desktop/csc309/team21/client/build/index.html");
-// });
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + "/client/build/index.html");
+});
 
 /** ********************************************** */
 // Express server listening...
