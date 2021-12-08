@@ -232,7 +232,10 @@ const EventDashboard = ({
         ) : (
           <h1>{event.title}</h1>
         )}
-        <div className="attendee">
+        <div
+          className="attendee"
+          onClick={() => history.push(`/profile/${event.host}`)}
+        >
           <div className="avatarContainer">
             <Avatar alt={event.host} src={hostimage} />
           </div>
