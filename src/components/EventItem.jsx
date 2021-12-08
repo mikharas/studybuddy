@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card, CardActionArea, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import Cat from '../images/amgry_catto.png';
+// import Cat from '../images/amgry_catto.png';
 
 const useStyles = makeStyles((theme) => ({
   eventDate: {
@@ -46,23 +46,34 @@ const useStyles = makeStyles((theme) => ({
     width: '70%',
   },
 }));
+
 const EventItem = ({
-  _id,
+  id,
   title,
   attendees,
   date,
   description,
   maxSpots,
+  image,
   isAttending,
   isHost,
 }) => {
   const classes = useStyles();
   const history = useHistory();
+  console.log(image);
   return (
-    <CardActionArea onClick={() => history.push(`/event-dashboard/${_id}`)}>
+    <CardActionArea onClick={() => history.push(`/event-dashboard/${id}`)}>
       <Card elevation={0} className={classes.eventCard}>
         <div className={classes.eventCardImageContainer}>
-          <img alt="cat" src={Cat} className={classes.eventCardImage} />
+          {typeof image === 'undefined' ? (
+            <img
+              alt="event"
+              src="https://res.cloudinary.com/dllebueou/image/upload/v1638921742/default_event_foihwz.png"
+              className={classes.eventCardImage}
+            />
+          ) : (
+            <img alt="event" src={image} className={classes.eventCardImage} />
+          )}
         </div>
         <div className={classes.eventCardInfo}>
           <Typography

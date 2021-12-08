@@ -52,7 +52,7 @@ export const removeFollowing = (follower, following) => async () => {
 };
 
 export const editProfileInfo =
-  (userID, userSchool, fullName, contact) => async () => {
+  (userID, userSchool, fullName, contact, profileImage) => async () => {
     // axios post on event
     // axios fetch all events again
     try {
@@ -63,6 +63,7 @@ export const editProfileInfo =
           contact,
           fullName,
           userSchool,
+          profileImage,
         },
       });
 

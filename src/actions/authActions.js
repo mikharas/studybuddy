@@ -1,24 +1,26 @@
 const axios = require('axios');
 
-export const register = (username, password, isAdmin) => async () => {
-  try {
-    let res = await axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_BACKEND_API_URL}/user`,
-      data: {
-        username,
-        password,
-        isAdmin,
-      },
-    });
+export const register =
+  (username, password, isAdmin, profileImage) => async () => {
+    try {
+      let res = await axios({
+        method: 'post',
+        url: `${process.env.REACT_APP_BACKEND_API_URL}/user`,
+        data: {
+          username,
+          password,
+          isAdmin,
+          profileImage,
+        },
+      });
 
-    console.log(res.data);
-    alert('Event successfully created!');
-  } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
-    return error.response;
-  }
-};
+      console.log(res.data);
+      alert('Event successfully created!');
+    } catch (error) {
+      console.log(error.response); // this is the main part. Use the response property from the error object
+      return error.response;
+    }
+  };
 
 export const login = (username, password) => async (dispatch, getState) => {
   try {

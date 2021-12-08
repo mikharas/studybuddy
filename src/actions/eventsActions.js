@@ -37,7 +37,7 @@ export const getEvents = () => async (dispatch, getState) => {
 };
 
 export const createEvent =
-  (title, description, host, date, location, maxSpots) =>
+  (title, description, host, date, location, maxSpots, image) =>
   async (dispatch, getState) => {
     try {
       let res = await axios({
@@ -50,6 +50,7 @@ export const createEvent =
           location,
           date,
           maxSpots,
+          image,
         },
       });
 

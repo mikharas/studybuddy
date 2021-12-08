@@ -147,7 +147,8 @@ Request body expects:
 {
 	"username": <username>,
     "password": <password>,
-    "isAdmin": <true or false>
+    "isAdmin": <true or false>,
+    "profileImage": <image>
 }
 */
 app.post('/user', mongoChecker, async (req, res) => {
@@ -160,6 +161,7 @@ app.post('/user', mongoChecker, async (req, res) => {
     contact: 'N/A',
     fullName: 'N/A',
     userSchool: 'N/A',
+    profileImage: req.body.profileImage
   });
 
   try {
@@ -336,7 +338,8 @@ Request body expects:
     "description": <description>,
     "location": <location>,
     "maxSpots": <number of spots>,
-    "date": <date>
+    "date": <date>,
+    "image": <image>
 }
 */
 app.post('/event-dashboard', async (req, res) => {
@@ -348,6 +351,7 @@ app.post('/event-dashboard', async (req, res) => {
     maxSpots: req.body.maxSpots,
     date: req.body.date,
     attendees: [],
+    image: req.body.image
   });
 
   try {
