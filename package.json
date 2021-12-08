@@ -1,27 +1,28 @@
 {
-    "name": "studybuddy-mongoose",
-    "version": "1.0.0",
-    "main": "server.js",
-    "repository": "https://github.com/csc309-fall-2021/team21.git",
-    "author": "",
-    "license": "MIT",
-    "engines": {
-      "yarn": "1.22.17"
-    },
-    "dependencies": {
-      "axios": "^0.24.0",
-      "bcryptjs": "^2.4.3",
-      "cloudinary-react": "^1.7.0",
-      "connect-mongo": "^4.6.0",
-      "cors": "^2.8.5",
-      "express": "^4.17.1",
-      "express-session": "^1.17.2",
-      "mongodb": "^4.2.1",
-      "mongoose": "^6.0.14"
-    },
-    "scripts": {
-      "start": "node server.js",
-      "build-run": "cd client && yarn build && cd .. && node server.js",
-      "heroku-postbuild": "cd client && yarn && yarn build"
-    }
+  "name": "studybuddy-mongoose",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/csc309-fall-2021/team21.git",
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "yarn": "1.22.17"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "bcryptjs": "^2.4.3",
+    "cloudinary-react": "^1.7.0",
+    "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mongodb": "^4.2.1",
+    "mongoose": "^6.0.14"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "build-run": "cd client && yarn build && cd .. && node server.js",
+    "heroku-postbuild": "cd client && yarn && yarn build"
+  }
 }
