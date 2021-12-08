@@ -151,23 +151,8 @@ const StudentDashboard = ({
             >
               Cancel
             </Button>
-            {/* Add remove user functionality in phase 2 */}
-            <Button
-              className="deleteBanButton" // onClick={removeUser}
-            >
-              Delete Account
-            </Button>
           </>
         )}
-        {/* Add remove user functionality in phase 2 */}
-        {!editable && activeUserData.isAdmin && !userData.isAdmin && (
-          <Button
-            className="deleteBanButton" // onClick={banUser}
-          >
-            Ban
-          </Button>
-        )}
-
         <img
           src="https://res.cloudinary.com/dllebueou/image/upload/v1638861739/default_p5jwjn.jpg"
           className="avatar"

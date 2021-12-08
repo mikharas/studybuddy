@@ -76,9 +76,6 @@ const EventsExplorer = ({ user, events, setFilter, getEvents }) => {
       <Box className={classes.eventsList}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Box className={classes.eventsFilter}>
-            <Button className={classes.eventsFilterItem}>
-              <Typography variant="body1">Near me</Typography>
-            </Button>
             <Box className={classes.eventsFilterItem}>
               <Button onClick={(event) => setAnchorEl(event.currentTarget)}>
                 <Typography variant="body1">Time</Typography>
