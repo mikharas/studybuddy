@@ -20,6 +20,7 @@
     "date-fns": "^2.27.0",
     "formik": "^2.2.9",
     "google-map-react": "^2.1.10",
+    "husky": "^7.0.4",
     "moment": "^2.29.1",
     "mongodb": "^4.2.1",
     "mongoose": "^6.0.14",
@@ -74,7 +75,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^7.0.4",
     "lint-staged": "^11.2.4",
     "override-material-ui-css": "^1.1.4",
     "prettier": "^2.4.1"
