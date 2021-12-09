@@ -9,6 +9,8 @@ Features added:
 - profile editing
 - full backend implmentation
 
+# Table of Contents
+- [Table of Contents](#table-of-contents)
 - [1. Heroku Deployed Link:](#1-heroku-deployed-link)
 - [2. How to use (for development purposes):](#2-how-to-use-for-development-purposes)
 - [3. Features:](#3-features)
