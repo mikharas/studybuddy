@@ -1,4 +1,6 @@
-Our application, StudyBuddy, aims to connect students who don't want to be alone in their stuggle for academic greatness.
+Our application, StudyBuddy, aims to connect students who don't want to be alone in their stuggle for academic greatness. 
+
+To view this README properly, please open this up in VSCode if possible (as github does not load certain aspects of it)
 
 Features added:
 - event filtering
