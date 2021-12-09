@@ -13,7 +13,7 @@ Our application, StudyBuddy, aims to connect students who don't want to be alone
 ========================================
 
 # Heroku Deployed Link: 
-https://immense-waters-03205.herokuapp.com/
+https://secure-badlands-91737.herokuapp.com/
 
 ========================================
 # How to use (for development purposes):
