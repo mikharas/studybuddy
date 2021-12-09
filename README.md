@@ -1,36 +1,50 @@
 Our application, StudyBuddy, aims to connect students who don't want to be alone in their stuggle for academic greatness.
 
-- [Heroku Deployed Link:](#heroku-deployed-link)
-- [How to use (for development purposes):](#how-to-use-for-development-purposes)
-- [Features:](#features)
-- [- Admins currently have the ability to edit any event they wish (while normal users can only edit if they are the host)](#--admins-currently-have-the-ability-to-edit-any-event-they-wish-while-normal-users-can-only-edit-if-they-are-the-host)
-- [Roles of Users](#roles-of-users)
-- [Third Party Libraries Used:](#third-party-libraries-used)
-- [Routes Overview](#routes-overview)
-- [- /event-dashboard/:eventid DELETE/GET/PATCH](#--event-dashboardeventid-deletegetpatch)
-- [(OLD!) Detailed Features Instructions:](#old-detailed-features-instructions)
+Features added:
+- event filtering
+- detailed event location creation
+- detailed event time creation
+- image uploading
+- map updates (now shows actual locations rather than fixed locations although there is a limit)
+- profile editing
+- full backend implmentation
+
+- [1. Heroku Deployed Link:](#1-heroku-deployed-link)
+- [2. How to use (for development purposes):](#2-how-to-use-for-development-purposes)
+- [3. Features:](#3-features)
+- [4. Roles of Users/Instructions to use](#4-roles-of-usersinstructions-to-use)
+- [5. Third Party Libraries Used:](#5-third-party-libraries-used)
+- [6. Routes Overview](#6-routes-overview)
+- [7. (OLD! DO NOT READ) Detailed Features Instructions:](#7-old-do-not-read-detailed-features-instructions)
 
 ========================================
 
-# Heroku Deployed Link: 
-https://secure-badlands-91737.herokuapp.com/
+# 1. Heroku Deployed Link: 
+
+https://studybuddy309.herokuapp.com/
 
 ========================================
-# How to use (for development purposes):
+# 2. How to use (for development purposes):
+
 First clone the our repo onto your local machine
-then run the following commands in the terminal:
+then run the following commands in the terminal: (in this order)
+
+    cd client
+
+    yarn install
+    
+    yarn start
 
     yarn install
 
     node server.js
 
-    yarn start
-
 Then you should be able to navigate to https://localhost:3000 to see our application
 
 ========================================
 
-# Features:
+# 3. Features:
+
 Our current features include:
 - Login System
 - Event Navigation
@@ -41,15 +55,20 @@ Our current features include:
 - Event Attending/Event Leaving
 - Profile Editing
 - Profile Following/Unfollowing/Viewing
-
+- Admins currently have the ability to edit any event they wish (while normal users can only edit if they are the host)
+   
 Usage of the features should be self explanatory but for more detailed instructions
 see below.
 
-- Admins currently have the ability to edit any event they wish (while normal users can only edit if they are the host)
 ========================================
 
-# Roles of Users
-The role of the users is to able to host or attend any events that they find interesting nearby. They would preform the features of the websites as follows:
+# 4. Roles of Users/Instructions to use
+
+The role of the users is to able to host or attend any events that they find interesting nearby. 
+
+Note that since Admin and Users have very similar ways of interacting we have included them in the same instructions (we also specified what is different about the admin).
+
+They would preform the features of the websites as follows:
 
 - Login System
   - They would need to login in order to make their own profile to attend or create events (although you can still look at events if you aren't logged in)
@@ -57,8 +76,8 @@ The role of the users is to able to host or attend any events that they find int
   - Should they want to find more details of the event they can simply click on any event they find interesting and find out more detailed information
 - Event Creation
   - Should they desire to create an event of their own they can click the "create event" button on the navigation bar and fill in the details to create their own event
-- Event Editing
-  - When looking at the event details, if you are the host or an Admin you can edit the details of the event at your leisure (in case plans change)
+- (ADMIN DIFFERENCE) Event Editing
+  - When looking at the event details, if you are the host (i.e. the person who made the event) or an Admin you can edit the details of the event at your leisure (in case plans change)
 - Event Map/location navigation
   - For the more location conscious individuals they are able to click on the event explorer tab in the navbar to see a map of the events nearby
   - The map has zoom in features as well feel free to try it out
@@ -75,7 +94,8 @@ The role of the users is to able to host or attend any events that they find int
 
 ========================================
 
-# Third Party Libraries Used:
+# 5. Third Party Libraries Used:
+
 - emotion
 - material ui
 - react-router-dom
@@ -83,22 +103,125 @@ The role of the users is to able to host or attend any events that they find int
 - formik
 - google-map-react
 - yup
-For detailed list see "package.json" file
+- bcryptjs
+- axios
+- cors
+- mongodb
+- express
+- mongoose
+
+For detailed list see the two "package.json" files (there is another one in client folder)
 
 ========================================
-# Routes Overview
-- /login POST
-- /logout GET
-- /check-session GET
-- /user POST
-- /profile/:userid DELETE/GET/PATCH
-- /users GET
-- /profile/:follower/:following POST/DELETE
-- /event-dashboard POST/GET
-- /event-dashboard/:eventid DELETE/GET/PATCH
+# 6. Routes Overview
+
+Note: all returns are in JSON unless specified otherwise
+
+- https://studybuddy309.herokuapp.com/login POST
+  - expects: { 
+        "username": <username>
+        "password": <password> 
+    } 
+  - returns: the currentUser's username and whether they are admin or not
+  - usage: to log people in
+- https://studybuddy309.herokuapp.com/logout GET
+  - expects: N/A
+  - returns: no response, but it does log you out
+  - usage: to log people out
+- https://studybuddy309.herokuapp.com/check-session GET
+  - expects: N/A
+  - returns: the username of the currentUser if you are logged in, unauthorized if you are not
+  - usage: checks the current user and session
+- https://studybuddy309.herokuapp.com/user POST
+  - expects: {
+      "username": <username>,
+      "password": <password>,
+      "isAdmin": <true or false>,
+      "profileImage": <image> 
+    }
+  - returns: full detail JSON about the created user
+  - usage: to create new users
+- https://studybuddy309.herokuapp.com/profile/:userid GET
+  - expects: no body but for :userid to be a valid username
+  - returns: full detail JSON about the user
+  - usage: to get user information
+- https://studybuddy309.herokuapp.com/profile/:userid PATCH
+  - expects: {
+      "contact": <contact details>
+      "fullName": <fullName>
+      "school": <userSchool>
+    }
+  - returns: full updated JSON detail about the user
+  - usage: to edit user information
+- https://studybuddy309.herokuapp.com/users GET
+  - expects: N/A
+  - returns: all users in our database
+  - usage: checking login information as well as event attendance, following, and other important information 
+- https://studybuddy309.herokuapp.com/profile/:follower/:following POST
+  - expects: no body but :follower and :following to be valid users
+  - returns: updated user info about the follower
+  - usage: for following people
+- https://studybuddy309.herokuapp.com/profile/:follower/:following DELETE
+  - expects: no body but :follower and :following to be valid users
+  - returns: updated user info about the follower
+  - usage: for unfollowing people
+- https://studybuddy309.herokuapp.com/event-dashboard POST
+  - expects: {
+	  "title": <title>,
+    "description": <description>,
+    "location": <location>,
+    "maxSpots": <number of spots>,
+    "date": <date>,
+    "image": <image>
+}
+  note: our image uses a custom image database, for postman, try to create the event without the image
+    you can see how it works via inspect element -> network -> payload, when creating an event
+
+  - returns: full updated JSON detail about the event
+  - usage: to create events
+- https://studybuddy309.herokuapp.com/event-dashboard GET
+  - expects: N/A
+  - returns: all event information in database
+  - usage: querying events for filtering and other important tasks
+- https://studybuddy309.herokuapp.com/event-dashboard/:eventid GET
+  - expects: no body but :eventid to be a valid eventid
+  - returns: full details about the event
+  - usage: displaying events
+- https://studybuddy309.herokuapp.com/event-dashboard/:eventID PATCH
+  - expects: expects: {
+    "title": <title>,
+    "description": <description>,
+    "host": <host>
+    "location": <location>,
+    "maxSpots": <number of spots>,
+    "date": <date>,
+    }
+  - returns: full updated event information
+  - usage: editing event/updating event information
+- https://studybuddy309.herokuapp.com/event-dashboard/:eventid DELETE
+  - expects: no body but :eventid to be a valid eventid
+  - returns: full details about the event deleted
+  - usage: deleting events
+- https://studybuddy309.herokuapp.com/event-dashboard/:eventID/attend POST
+  - expects:{
+    "attendee": <attendee ID>
+  }
+  - returns: full details about the updated event
+  - usage: for users attending events
+- https://studybuddy309.herokuapp.com/event-dashboard/:eventID/unattend DELETE
+  - expects:{
+    "attendee": <attendee ID>
+  }
+  - returns: full details about the updated event
+  - usage: for users unattending events
+
+  
 ========================================
 
-# (OLD!) Detailed Features Instructions:
+
+
+# 7. (OLD! DO NOT READ) Detailed Features Instructions:
+
 - Login System
     1. Click the Login Button on the top right
     2. You may sign in with {admin:admin} or {user:user}
