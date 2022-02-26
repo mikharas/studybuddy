@@ -8,7 +8,6 @@ export const getUserData = (userID) => async (dispatch, getState) => {
     });
     return res.data;
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
@@ -26,7 +25,6 @@ export const addFollowing =
         url: `/profile/${follower}/${following}`,
       });
     } catch (error) {
-      console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
     }
   };
@@ -38,7 +36,6 @@ export const removeFollowing = (follower, following) => async () => {
       url: `/profile/${follower}/${following}`,
     });
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
@@ -61,7 +58,6 @@ export const editProfileInfo =
 
       return res.data._id;
     } catch (error) {
-      console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
     }
   };
@@ -92,7 +88,6 @@ export const getManyUserData = (userIDs) => async () => {
       userSchool: u.userSchool,
     }));
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };

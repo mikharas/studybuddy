@@ -9,7 +9,6 @@ export const getEvent = (eventID) => async (dispatch, getState) => {
     });
     return res.data;
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
@@ -30,7 +29,6 @@ export const getEvents = () => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
@@ -56,7 +54,6 @@ export const createEvent =
       alert('Event successfully created!');
       return res.data._id;
     } catch (error) {
-      console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
     }
   };
@@ -82,7 +79,6 @@ export const editEvent =
 
       return res.data._id;
     } catch (error) {
-      console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
     }
   };
@@ -97,7 +93,6 @@ export const addAttendee = (eventID, attendee) => async () => {
       },
     });
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
@@ -112,7 +107,6 @@ export const removeAttendee = (eventID, attendee) => async () => {
       },
     });
   } catch (error) {
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };

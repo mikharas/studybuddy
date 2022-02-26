@@ -16,7 +16,6 @@ export const register =
 
       alert('User successfully created!');
     } catch (error) {
-      console.log(error.response); // this is the main part. Use the response property from the error object
       return error.response;
     }
   };
@@ -43,7 +42,6 @@ export const login = (username, password) => async (dispatch, getState) => {
     dispatch({
       type: 'LOGIN_FAIL',
     });
-    console.log(error.response); // this is the main part. Use the response property from the error object
     return error.response;
   }
 };
