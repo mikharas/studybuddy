@@ -110,7 +110,7 @@ const GoogleMap = ({ user, events }) => {
     <div className={classes.container}>
       <GoogleMapReact
         // move this out this later
-        bootstrapURLKeys={{ key: 'AIzaSyB_RUPihF4_K2RXvpCKHYB7GPwd2Nb7Y_U' }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_MAPS_KEY }}
         yesIWantToUseGoogleMapApiInternals
         onChildClick={handleChildClick}
         center={curLoc}
